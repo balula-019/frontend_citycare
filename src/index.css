@@ -1,0 +1,72 @@
+/* @import "tailwindcss";
+
+/* Custom theme (replaces tailwind.config.js) */
+/* @theme {
+  --color-primary: #1a56db;
+  --color-primary-hover: #1649c4;
+  --color-secondary: #e11d48;
+  --color-secondary-hover: #be123c;
+  --color-dark: #0f172a;
+  --color-surface: #f8fafc;
+  --color-border: #e2e8f0;
+  --color-success: #10b981;
+}
+
+/* Glass navbar utility */
+/* .glass-nav {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+} */ 
+
+/* Gradient text */
+/* .text-gradient {
+  background: linear-gradient(135deg, #1a56db, #e11d48);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+} */
+
+/* Floating animation for Hero */
+/* @keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+} */ 
+
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-primary: #1a56db;
+  --color-primary-hover: #1649c4;
+  --color-secondary: #e11d48;
+  --color-secondary-hover: #be123c;
+  --color-dark: #0f172a;
+  --color-surface: #f8fafc;
+  --color-border: #e2e8f0;
+  --color-success: #10b981;
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #1a56db, #e11d48);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
