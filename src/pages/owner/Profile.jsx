@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, User, Mail, Phone, MapPin, Save, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
-import { updateProfile } from '../../api/auth';   // ✅ correct import
+import {
+  ArrowLeft, User, Mail, Phone, MapPin, Save, CheckCircle2,
+  AlertCircle, Loader2
+} from 'lucide-react';
+import { updateProfile } from '../../api/auth';
 import { useAuth } from '../../context/AuthContext';
+import LocationPicker from '../../components/shared/LocationPicker/components/LocationPicker';
 
 function Field({ label, icon: Icon, error, children }) {
   return (
@@ -60,6 +64,24 @@ export default function Profile() {
     setSuccess(false);
   };
 
+  // Update location fields from LocationPicker
+  const handleLocationChange = ({ locationName, lat, lng }) => {
+    setForm(prev => ({
+      ...prev,
+      location_name: locationName || '',
+      location_lat: lat != null ? String(lat) : '',
+      location_long: lng != null ? String(lng) : '',
+    }));
+    // Clear any location errors
+    setFieldErrors(prev => {
+      const next = { ...prev };
+      delete next.location_lat;
+      delete next.location_long;
+      return next;
+    });
+    setSuccess(false);
+  };
+
   const validate = () => {
     const errs = {};
     if (!form.name.trim()) errs.name = 'Name is required';
@@ -87,7 +109,7 @@ export default function Profile() {
         ...(form.location_lat && { location_lat: parseFloat(form.location_lat) }),
         ...(form.location_long && { location_long: parseFloat(form.location_long) }),
       };
-      await updateProfile(user.id, payload);   // ✅ uses the correct function
+      await updateProfile(user.id, payload);
 
       // Update stored user
       const stored = JSON.parse(localStorage.getItem('user') || '{}');
@@ -107,9 +129,11 @@ export default function Profile() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-8">
-        <Link to="/owner/search"
-              className="p-2 rounded-xl border border-[#e2e8f0] text-gray-500
-                         hover:bg-gray-50 hover:text-gray-800 transition-all">
+        <Link
+          to="/owner/search"
+          className="p-2 rounded-xl border border-[#e2e8f0] text-gray-500
+                     hover:bg-gray-50 hover:text-gray-800 transition-all"
+        >
           <ArrowLeft size={18} />
         </Link>
         <div>
@@ -138,36 +162,57 @@ export default function Profile() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field label="Full name" icon={User} error={fieldErrors.name}>
-            <input value={form.name} onChange={e => set('name', e.target.value)}
-                   placeholder="Your full name" className={cls} />
+            <input
+              value={form.name}
+              onChange={e => set('name', e.target.value)}
+              placeholder="Your full name"
+              className={cls}
+            />
           </Field>
           <Field label="Email address" icon={Mail} error={fieldErrors.email}>
-            <input value={form.email} onChange={e => set('email', e.target.value)}
-                   type="email" placeholder="you@example.com" className={cls} />
+            <input
+              value={form.email}
+              onChange={e => set('email', e.target.value)}
+              type="email"
+              placeholder="you@example.com"
+              className={cls}
+            />
           </Field>
           <Field label="Mobile number" icon={Phone}>
-            <input value={form.mobile} onChange={e => set('mobile', e.target.value)}
-                   type="tel" placeholder="+255 7XX XXX XXX" className={cls} />
-          </Field>
-          <Field label="Location name" icon={MapPin}>
-            <input value={form.location_name} onChange={e => set('location_name', e.target.value)}
-                   placeholder="e.g., Dar es Salaam" className={cls} />
+            <input
+              value={form.mobile}
+              onChange={e => set('mobile', e.target.value)}
+              type="tel"
+              placeholder="+255 7XX XXX XXX"
+              className={cls}
+            />
           </Field>
         </div>
 
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider pt-1">
-          GPS coordinates <span className="font-normal normal-case">(optional)</span>
-        </p>
-
-        <div className="grid grid-cols-2 gap-5">
-          <Field label="Latitude" error={fieldErrors.location_lat}>
-            <input value={form.location_lat} onChange={e => set('location_lat', e.target.value)}
-                   placeholder="-6.7924" className={cls} />
-          </Field>
-          <Field label="Longitude" error={fieldErrors.location_long}>
-            <input value={form.location_long} onChange={e => set('location_long', e.target.value)}
-                   placeholder="39.2083" className={cls} />
-          </Field>
+        {/* Location section with OpenStreetMap picker */}
+        <div>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider pt-1">
+            Your Location <span className="font-normal normal-case">(optional)</span>
+          </p>
+          <div className="mt-2 rounded-xl overflow-hidden border border-[#e2e8f0]">
+            <LocationPicker
+              locationName={form.location_name}
+              onChange={handleLocationChange}
+              initialLat={form.location_lat ? parseFloat(form.location_lat) : undefined}
+              initialLng={form.location_long ? parseFloat(form.location_long) : undefined}
+              placeholder="Search your area…"
+              disabled={saving}
+            />
+          </div>
+          {(fieldErrors.location_lat || fieldErrors.location_long) && (
+            <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+              <AlertCircle size={11} />
+              {fieldErrors.location_lat || fieldErrors.location_long}
+            </p>
+          )}
+          <p className="text-[11px] text-gray-400 mt-1">
+            Drag the map or search to set your coordinates.
+          </p>
         </div>
 
         {apiError && (
@@ -198,6 +243,15 @@ export default function Profile() {
           </button>
         </div>
       </div>
+
+      {/* Style override for compact map height */}
+      <style>{`
+        .leaflet-container {
+          height: 180px !important;
+          min-height: 180px !important;
+          max-height: 180px !important;
+        }
+      `}</style>
     </div>
   );
 }

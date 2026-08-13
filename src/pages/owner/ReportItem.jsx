@@ -247,13 +247,43 @@ export default function ReportItem() {
 
         {step === 0 && (
           <div className="space-y-5 fade-in-up bg-white border border-[#e2e8f0] rounded-2xl p-6 shadow-sm">
-            <Input label="Item Name" name="itemName" placeholder="e.g., Samsung Galaxy S22" value={form.itemName} onChange={handleChange} required />
-            <SelectField label="Category" name="category" value={form.category} onChange={handleChange} options={categoryOptions} placeholder="Select a category" required />
+            <Input 
+              label="Item Name" 
+              name="itemName" 
+              placeholder="e.g., Samsung Galaxy S22 Ultra, HP Pavilion Laptop, National ID" 
+              value={form.itemName} 
+              onChange={handleChange} 
+              required 
+            />
+            <SelectField 
+              label="Category" 
+              name="category" 
+              value={form.category} 
+              onChange={handleChange} 
+              options={categoryOptions} 
+              placeholder="Select a category" 
+              required 
+            />
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description <span className="text-red-500">*</span></label>
-              <textarea name="description" rows={4} placeholder="Describe the lost item..." className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-gray-800 transition-all text-sm" value={form.description} onChange={handleChange} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description <span className="text-red-500">*</span>
+              </label>
+              <textarea 
+                name="description" 
+                rows={5} 
+                placeholder="Include key features for accurate AI matching:&#10;• Brand, model, or make&#10;• Distinct marks (scratches, stickers, cracked screen)&#10;• Case/cover color or style&#10;• ID details (Name, NIDA/Student ID Number if applicable)&#10;• Contents inside (if bag or wallet)" 
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-gray-800 transition-all text-sm placeholder:text-gray-400 placeholder:text-xs sm:placeholder:text-sm" 
+                value={form.description} 
+                onChange={handleChange} 
+              />
             </div>
-            <Input label="Dominant Color" name="dominantColor" placeholder="e.g., Black, Silver" value={form.dominantColor} onChange={handleChange} />
+            <Input 
+              label="Dominant Color" 
+              name="dominantColor" 
+              placeholder="e.g., Black, Silver, Dark Blue" 
+              value={form.dominantColor} 
+              onChange={handleChange} 
+            />
           </div>
         )}
 
@@ -261,7 +291,14 @@ export default function ReportItem() {
           <div className="space-y-5 fade-in-up bg-white border border-[#e2e8f0] rounded-2xl p-6 shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <SelectField label="Region" name="region" value={form.region} onChange={handleChange} options={regionOptions} placeholder="Select a region" required />
-              <Input label="Area" name="area" placeholder="e.g., Kijitonyama" value={form.area} onChange={handleChange} required />
+              <Input 
+                label="Area / Sub-locality" 
+                name="area" 
+                placeholder="e.g., Magufuli Hostel, Block B234" 
+                value={form.area} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Date Lost" type="date" name="lostDate" value={form.lostDate} onChange={handleChange} required max={new Date().toISOString().split('T')[0]} />
@@ -269,7 +306,7 @@ export default function ReportItem() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Lost Location <span className="text-red-500">*</span>
+                Lost Location (Map Pin) <span className="text-red-500">*</span>
               </label>
               <LocationPicker
                 locationName={form.lostLocation}
@@ -283,7 +320,7 @@ export default function ReportItem() {
                 }}
                 initialLat={form.latitude ? parseFloat(form.latitude) : undefined}
                 initialLng={form.longitude ? parseFloat(form.longitude) : undefined}
-                placeholder="Search where the item was lost…"
+                placeholder="Search building, street, or nearby landmark..."
               />
             </div>
           </div>
@@ -291,7 +328,7 @@ export default function ReportItem() {
 
         {step === 2 && (
           <div className="space-y-4 fade-in-up bg-white border border-[#e2e8f0] rounded-2xl p-6 shadow-sm">
-            <p className="text-sm text-gray-500">Upload photos of the lost item to improve AI matching accuracy. <span className="text-gray-400">(optional)</span></p>
+            <p className="text-sm text-gray-500">Upload photos of the lost item or similar sample photos to improve AI matching accuracy. <span className="text-gray-400">(optional)</span></p>
             <div
               onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
               onDragLeave={() => setIsDragOver(false)}
