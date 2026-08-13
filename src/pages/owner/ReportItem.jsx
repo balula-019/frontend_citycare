@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertCircle, CheckCircle, Brain, Upload, Trash2,
-  LayoutDashboard, List, ArrowLeft
+  LayoutDashboard, List, ArrowLeft, Database, SearchCheck, Sparkles
 } from 'lucide-react';
 import { createLostReport } from '../../api/items';
 import Button from '../../components/shared/Button';
@@ -30,9 +30,14 @@ const animStyles = `
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+  @keyframes spin-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
   @keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
+    0% { transform: scale(0.85); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 0.3; }
+    100% { transform: scale(0.85); opacity: 0.8; }
   }
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -42,8 +47,9 @@ const animStyles = `
     0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
     40% { transform: scale(1); opacity: 1; }
   }
-  .ai-spinner-outer { animation: spin-slow 1.4s linear infinite; }
-  .ai-spinner-inner { animation: spin-slow 1s linear infinite reverse; }
+  .ai-spinner-outer { animation: spin-slow 2s linear infinite; }
+  .ai-spinner-inner { animation: spin-reverse 1.5s linear infinite; }
+  .pulse-ring-anim { animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
   .dot-bounce { animation: dotBounce 1.2s ease-in-out infinite; }
 `;
@@ -69,6 +75,30 @@ function SelectField({ label, name, value, onChange, options, placeholder, requi
   );
 }
 
+const SIMULATION_STAGES = [
+  {
+    step: 1,
+    title: 'Initializing AI Matching Engine...',
+    subtitle: 'Parsing report details and normalizing visual characteristics',
+    icon: Brain,
+    badge: 'Step 1/3'
+  },
+  {
+    step: 2,
+    title: 'Lost Report Saved Successfully!',
+    subtitle: 'Indexing database and preparing location radius matching',
+    icon: Database,
+    badge: 'Step 2/3'
+  },
+  {
+    step: 3,
+    title: 'Scanning Found Item Registry...',
+    subtitle: 'Executing visual and text semantic comparison',
+    icon: SearchCheck,
+    badge: 'Step 3/3'
+  }
+];
+
 export default function ReportItem() {
   const navigate = useNavigate();
 
@@ -85,6 +115,10 @@ export default function ReportItem() {
   const [reportId, setReportId] = useState(null);
   const [matchResult, setMatchResult] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
+
+  // Simulation State
+  const [simStageIdx, setSimStageIdx] = useState(0);
+  const pendingResponseRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -149,10 +183,40 @@ export default function ReportItem() {
     setStep(prev => Math.max(prev - 1, 0));
   };
 
+  // Progression of simulation stages during Step 3
+  useEffect(() => {
+    if (step !== 3) return;
+
+    setSimStageIdx(0);
+    const stage1Timer = setTimeout(() => {
+      setSimStageIdx(1);
+    }, 1800);
+
+    const stage2Timer = setTimeout(() => {
+      setSimStageIdx(2);
+    }, 3600);
+
+    const completeTimer = setTimeout(() => {
+      if (pendingResponseRef.current) {
+        const data = pendingResponseRef.current;
+        setReportId(data.id || null);
+        setMatchResult(data);
+        setStep(4);
+      }
+    }, 5400);
+
+    return () => {
+      clearTimeout(stage1Timer);
+      clearTimeout(stage2Timer);
+      clearTimeout(completeTimer);
+    };
+  }, [step]);
+
   const handleSubmit = async () => {
     if (!validateStep()) return;
     setSubmitting(true);
     setError('');
+    pendingResponseRef.current = null;
     setStep(3);
 
     try {
@@ -172,9 +236,7 @@ export default function ReportItem() {
 
       const response = await createLostReport(payload);
       const data = response?.data || response;
-      setReportId(data.id || null);
-      setMatchResult(data);
-      setStep(4);
+      pendingResponseRef.current = data;
     } catch (err) {
       setError(err.message || 'Something went wrong.');
       setStep(0);
@@ -202,6 +264,8 @@ export default function ReportItem() {
     return { bg: '#dbeafe', text: '#1e40af', label: 'Potential Match' };
   };
   const matchBadge = getMatchBadge(displayedScore);
+
+  const CurrentStageIcon = SIMULATION_STAGES[simStageIdx].icon;
 
   return (
     <div className="min-h-screen bg-surface flex flex-col">
@@ -360,25 +424,43 @@ export default function ReportItem() {
           </div>
         )}
 
+        {/* Enhanced AI Simulation Stage */}
         {step === 3 && (
-          <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
-            <div className="relative w-40 h-40 mb-10">
-              <div className="absolute inset-0 rounded-full border-4 border-[#1a56db]/10 animate-pulse-ring"></div>
-              <div className="absolute inset-4 rounded-full border-4 border-[#e11d48]/20 animate-spin-slow"></div>
-              <div className="absolute inset-8 rounded-full border-4 border-[#1a56db]/30 animate-spin-slow-reverse"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Brain size={48} className="text-[#1a56db] animate-pulse" />
+          <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 fade-in-up">
+            <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-4 border-[#1a56db]/20 pulse-ring-anim" />
+              <div className="absolute inset-2 rounded-full border-2 border-dashed border-[#1a56db]/40 ai-spinner-outer" />
+              <div className="absolute inset-6 rounded-full border-2 border-dashed border-[#e11d48]/40 ai-spinner-inner" />
+              
+              <div className="relative z-10 w-24 h-24 rounded-full bg-blue-50/80 backdrop-blur border border-blue-100 flex items-center justify-center shadow-inner">
+                <CurrentStageIcon size={44} className="text-[#1a56db] transition-all duration-500 animate-pulse" />
               </div>
             </div>
-            <h2 className="text-4xl font-black text-gray-900 mb-4">Analyzing your report</h2>
-            <p className="text-lg text-gray-600 max-w-md mb-8">Our intelligent matching system is comparing your report with available found items.</p>
-            <div className="flex gap-2 mb-12">
-              {[0,1,2].map(i => (
-                <div key={i} className="w-3 h-3 rounded-full bg-[#1a56db] dot-bounce"
-                     style={{ animationDelay: `${i * 0.2}s` }} />
+
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-[#1a56db] text-xs font-semibold mb-3">
+              <Sparkles size={14} />
+              <span>{SIMULATION_STAGES[simStageIdx].badge}</span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2 transition-all duration-300">
+              {SIMULATION_STAGES[simStageIdx].title}
+            </h2>
+            <p className="text-base text-gray-600 max-w-md mb-8 transition-all duration-300">
+              {SIMULATION_STAGES[simStageIdx].subtitle}
+            </p>
+
+            <div className="flex gap-2 mb-8">
+              {[0, 1, 2].map(i => (
+                <div
+                  key={i}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    i === simStageIdx ? 'bg-[#1a56db] scale-125' : 'bg-gray-200'
+                  }`}
+                />
               ))}
             </div>
-            <p className="text-sm text-gray-400">Please wait while we process your request...</p>
+
+            <p className="text-xs text-gray-400">Please wait while our algorithms process your lost report...</p>
           </div>
         )}
 
