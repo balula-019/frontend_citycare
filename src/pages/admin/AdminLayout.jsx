@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, PlusCircle, Package, FileText, Bell,
-  BarChart3, User, Settings, LogOut,
-  ChevronLeft, ChevronRight, Search, Menu, X, Sparkles
+  LayoutDashboard, PlusCircle, Users, LogOut,
+  ChevronLeft, ChevronRight, Search, Menu, X, ShieldCheck,
+  UserCircle, Package   // ✅ Package icon added
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const NAV = [
-  { to: '/org/dashboard',        icon: LayoutDashboard, label: 'Dashboard'        },
-  { to: '/org/publish',          icon: PlusCircle,      label: 'Publish Item'     },
-  { to: '/org/items',            icon: Package,         label: 'My Items'         },
-  { to: '/org/claims',           icon: FileText,        label: 'Claims'           },  // ✅ single Claims
-  { to: '/org/notifications',    icon: Bell,            label: 'Notifications'    },
-  { to: '/org/analytics',        icon: BarChart3,       label: 'Analytics'        },
-  { to: '/org/profile',          icon: User,            label: 'Profile'          },
-  { to: '/org/settings',         icon: Settings,        label: 'Settings'         },
+  { to: '/admin/dashboard',    icon: LayoutDashboard, label: 'Dashboard'            },
+  { to: '/admin/create-org',   icon: PlusCircle,      label: 'Create Organisation'  },
+  { to: '/admin/manage-users', icon: Users,           label: 'Manage Users'         },
+  { to: '/admin/items',        icon: Package,         label: 'Manage Items'         },   // ✅ new
 ];
 
 const STYLES = `
@@ -30,8 +26,6 @@ const STYLES = `
   .slide-in { animation: slideIn 0.32s ease-out forwards; }
   @keyframes scaleIn { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
   .scale-in { animation: scaleIn 0.28s ease-out forwards; }
-  @keyframes countUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-  .count-up { animation: countUp 0.5s ease-out forwards; }
   .glass {
     background: rgba(255,255,255,0.85);
     backdrop-filter: blur(12px);
@@ -41,27 +35,28 @@ const STYLES = `
   .nav-link:hover .nav-icon { transform: scale(1.12); }
   .card-hover { transition: all 0.22s ease; }
   .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
-  .btn-primary { transition: all 0.18s ease; }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,86,219,0.35); }
-  .btn-primary:active { transform: scale(0.97); }
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
 `;
 
-export default function OrgLayout() {
-  const { user, logout, loggingOut } = useAuth();
+export default function AdminLayout() {
+  const { user, logout } = useAuth();
   const navigate  = useNavigate();
   const location  = useLocation();
-  const [collapsed,    setCollapsed]    = useState(false);
-  const [mobileOpen,   setMobileOpen]   = useState(false);
-  const [searchQuery,  setSearchQuery]  = useState('');
-  const [notifCount,   setNotifCount]   = useState(5);
+  const [collapsed,   setCollapsed]   = useState(false);
+  const [mobileOpen,  setMobileOpen]  = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const orgName   = user?.organizationName || user?.name || 'Organisation';
-  const initials  = orgName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  const adminName = user?.name || 'Administrator';
+  const initials  = adminName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
-  const handleLogout = async () => { await logout(); navigate('/login'); };
+  const handleLogout = () => {
+    logout();
+    setTimeout(() => navigate('/login', { replace: true }), 200);
+  };
+
+  const goToProfile = () => navigate('/admin/profile');
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
@@ -80,12 +75,12 @@ export default function OrgLayout() {
                         ${collapsed && !mobile ? 'justify-center px-2' : ''}`}>
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db] to-[#6366f1]
                         flex items-center justify-center shrink-0 shadow-lg">
-          <Sparkles size={17} className="text-white" />
+          <ShieldCheck size={17} className="text-white" />
         </div>
         {(!collapsed || mobile) && (
           <div className="slide-in min-w-0">
-            <p className="font-black text-sm text-white truncate">{orgName}</p>
-            <p className="text-[10px] text-white/40 font-medium">Organization Portal</p>
+            <p className="font-black text-sm text-white truncate">PataChako</p>
+            <p className="text-[10px] text-white/40 font-medium">Admin Control Panel</p>
           </div>
         )}
         {!mobile && (
@@ -101,7 +96,7 @@ export default function OrgLayout() {
 
       <nav className="flex-1 py-3 overflow-y-auto px-2 space-y-0.5">
         {NAV.map(({ to, icon: Icon, label }) => {
-          const active = location.pathname === to || (to !== '/org/dashboard' && location.pathname.startsWith(to));
+          const active = location.pathname === to || (to !== '/admin/dashboard' && location.pathname.startsWith(to));
           return (
             <NavLink key={to} to={to}
               className={`nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl group relative
@@ -112,33 +107,34 @@ export default function OrgLayout() {
             >
               <Icon size={18} className="nav-icon shrink-0 transition-transform duration-200" />
               {(!collapsed || mobile) && <span className="text-sm font-medium truncate">{label}</span>}
-              {label === 'Notifications' && notifCount > 0 && (
-                <span className={`${collapsed && !mobile ? 'absolute top-1 right-1' : 'ml-auto'} w-5 h-5 rounded-full bg-[#ef4444] text-white text-[10px] font-black flex items-center justify-center`}>
-                  {notifCount}
-                </span>
-              )}
             </NavLink>
           );
         })}
       </nav>
 
+      {/* User section – now clickable to go to profile */}
       <div className={`border-t border-white/8 p-3 ${collapsed && !mobile ? 'flex justify-center' : ''}`}>
         {collapsed && !mobile ? (
-          <button onClick={handleLogout} className="w-9 h-9 rounded-xl bg-white/8 hover:bg-red-500/20 flex items-center justify-center transition-all">
-            <LogOut size={16} className="text-white/60" />
+          <button onClick={goToProfile} className="w-9 h-9 rounded-xl bg-white/8 hover:bg-white/15 flex items-center justify-center transition-all">
+            <UserCircle size={16} className="text-white/60" />
           </button>
         ) : (
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db]/60 to-[#6366f1]/60 flex items-center justify-center text-white text-xs font-black shrink-0">
-              {initials}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-white truncate">{orgName}</p>
-              <p className="text-[10px] text-white/40">Organization</p>
-            </div>
-            <button onClick={handleLogout} disabled={loggingOut}
+            <button
+              onClick={goToProfile}
+              className="flex items-center gap-3 flex-1 min-w-0 text-left hover:bg-white/5 rounded-lg p-1 -m-1 transition-all"
+            >
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db]/60 to-[#6366f1]/60 flex items-center justify-center text-white text-xs font-black shrink-0">
+                {initials}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold text-white truncate">{adminName}</p>
+                <p className="text-[10px] text-white/40">View profile</p>
+              </div>
+            </button>
+            <button onClick={handleLogout}
                     className="w-7 h-7 rounded-lg hover:bg-red-500/20 flex items-center justify-center transition-all group shrink-0">
-              <LogOut size={14} className={`group-hover:text-red-400 transition-colors ${loggingOut ? 'animate-spin text-white/30' : 'text-white/40'}`} />
+              <LogOut size={14} className="text-white/40 group-hover:text-red-400 transition-colors" />
             </button>
           </div>
         )}
@@ -178,26 +174,16 @@ export default function OrgLayout() {
               <input
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search items, claims, owners…"
+                placeholder="Search organisations, users…"
                 className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-[#e2e8f0] bg-white/70 focus:bg-white focus:ring-2 focus:ring-[#1a56db]/20 focus:border-[#1a56db] outline-none transition-all"
               />
             </div>
 
             <div className="flex items-center gap-2 ml-auto">
-              <button className="relative w-9 h-9 rounded-xl border border-[#e2e8f0] flex items-center justify-center hover:bg-gray-50 transition-all"
-                      onClick={() => navigate('/org/notifications')}>
-                <Bell size={17} className="text-gray-600" />
-                {notifCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#ef4444] text-white text-[9px] font-black flex items-center justify-center min-w-[18px] min-h-[18px] px-1">
-                    {notifCount}
-                  </span>
-                )}
-              </button>
-
-              <button onClick={() => navigate('/org/profile')}
-                      className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db] to-[#6366f1] flex items-center justify-center text-white text-xs font-black hover:opacity-90 transition-all shadow-sm">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db] to-[#6366f1]
+                              flex items-center justify-center text-white text-xs font-black shadow-sm">
                 {initials}
-              </button>
+              </div>
             </div>
           </header>
 

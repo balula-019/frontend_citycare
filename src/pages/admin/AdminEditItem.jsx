@@ -4,7 +4,7 @@ import {
   ArrowLeft, Save, Loader2, Package, AlignLeft, CalendarDays,
   Palette, MapPin, Phone, ShieldCheck, AlertCircle
 } from 'lucide-react';
-import { updatePublishedItem } from '../../api/organization.js';
+import { updatePublishedItem } from '../../api/adminApi.js';   // ← admin API
 import Input from '../../components/shared/Input';
 import Button from '../../components/shared/Button';
 import LocationPicker from '../../components/shared/LocationPicker/components/LocationPicker';
@@ -27,6 +27,7 @@ const REGIONS = [
   'UNGUJA_MJINI_MAGHARIBI','PEMBA'
 ];
 
+// Statuses that can be assigned (from the API spec)
 const STATUSES = ['REPORTED', 'MATCHED', 'CLAIMED', 'CLOSED', 'FOUND'];
 
 const selectClasses =
@@ -46,7 +47,7 @@ function SectionCard({ title, icon, children }) {
   );
 }
 
-export default function EditItem() {
+export default function AdminEditItem() {
   const { itemId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -116,7 +117,8 @@ export default function EditItem() {
       };
       await updatePublishedItem(itemId, payload);
       setSuccess(true);
-      setTimeout(() => navigate('/org/items', { replace: true }), 900);
+      // Return to previous page after a short delay
+      setTimeout(() => navigate(-1), 900);
     } catch (err) {
       setError(err.message || 'Failed to update item.');
     } finally {
@@ -140,10 +142,10 @@ export default function EditItem() {
           <AlertCircle size={16} className="shrink-0" /> {error}
         </div>
         <button
-          onClick={() => navigate('/org/items')}
+          onClick={() => navigate(-1)}
           className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#1a56db] to-[#1547c0] text-white text-sm font-bold shadow-lg shadow-blue-100"
         >
-          Back to My Items
+          Go back
         </button>
       </div>
     );
@@ -153,11 +155,11 @@ export default function EditItem() {
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Back button */}
       <button
-        onClick={() => navigate('/org/items')}
+        onClick={() => navigate(-1)}
         className="group flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-[#1a56db] transition-colors mb-6"
       >
         <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-0.5" />
-        Back to My Items
+        Back
       </button>
 
       <div className="max-w-3xl mx-auto">
@@ -173,7 +175,7 @@ export default function EditItem() {
               <h1 className="text-xl sm:text-2xl font-black text-white truncate">
                 {form.itemName || 'Edit Published Item'}
               </h1>
-              <p className="text-sm text-white/70 mt-0.5">Update the details of your found item</p>
+              <p className="text-sm text-white/70 mt-0.5">Admin – Update any field including status</p>
             </div>
           </div>
         </div>
@@ -293,7 +295,7 @@ export default function EditItem() {
             </div>
           </SectionCard>
 
-          {/* Exact found location — search-based, no manual lat/long */}
+          {/* Exact found location */}
           <SectionCard title="Exact Found Location" icon={<MapPin size={15} />}>
             <LocationPicker
               locationName={form.foundLocation}
@@ -321,19 +323,20 @@ export default function EditItem() {
             />
           </SectionCard>
 
-          {/* Status — view-only for organisations */}
+          {/* Status – ENABLED for admin */}
           <SectionCard title="Status" icon={<ShieldCheck size={15} />}>
             <select
               name="status"
               value={form.status}
-              disabled
-              className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] bg-slate-100 text-sm font-medium text-slate-500 cursor-not-allowed"
+              onChange={handleChange}
+              className={selectClasses}
+              required
             >
               {STATUSES.map(s => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            <p className="text-xs text-slate-400 mt-1.5">Only admins can change the status.</p>
+            <p className="text-xs text-slate-400 mt-1.5">Admin can change the item’s status.</p>
           </SectionCard>
 
           <div className="pt-2">

@@ -1,37 +1,3 @@
-// import { useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
-// import { useAuth } from '../../context/AuthContext';
-
-// export default function OwnerDashboard() {
-//   const { getStoredUser } = useAuth();
-//   const user = getStoredUser();
-//   const [greeting, setGreeting] = useState('');
-
-//   useEffect(() => {
-//     if (user) setGreeting(`Hi, ${user.name}! Welcome to PataChako.`);
-//   }, [user]);
-
-//   return (
-//     <div className="min-h-screen bg-surface p-8">
-//       <h1 className="text-3xl font-bold">{greeting}</h1>
-//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-//         <Link to="/owner/search" className="p-6 bg-white rounded-2xl shadow-sm border hover:shadow-md transition-shadow">
-//           <h2 className="text-xl font-semibold">Search Found Items</h2>
-//           <p className="text-gray-600 mt-2">Filter by region and find your lost items.</p>
-//         </Link>
-//         <Link to="/owner/report" className="p-6 bg-white rounded-2xl shadow-sm border hover:shadow-md transition-shadow">
-//           <h2 className="text-xl font-semibold">Report Lost Item</h2>
-//           <p className="text-gray-600 mt-2">Submit a new lost report.</p>
-//         </Link>
-//         <Link to="/owner/history" className="p-6 bg-white rounded-2xl shadow-sm border hover:shadow-md transition-shadow">
-//           <h2 className="text-xl font-semibold">My Reports</h2>
-//           <p className="text-gray-600 mt-2">View your previous reports.</p>
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { Link } from 'react-router-dom';
 import Button from '../../components/shared/Button';
 import FloatingReportButton from '../../components/shared/FloatingReportButton';

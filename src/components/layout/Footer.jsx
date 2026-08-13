@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FaInstagram, FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
 import logoSrc from '/src/assets/pata-logo.png';
 
 const Footer = () => {
@@ -29,7 +29,7 @@ const Footer = () => {
     {
       title: 'Company',
       links: [
-        { label: 'About Us', path: '/#about', protected: false },   // ← now scrolls to #about
+        { label: 'About Us', path: '/#about', protected: false },
         { label: 'Contact', path: '/#footer', protected: false },
         { label: 'Careers', path: '/careers', protected: false },
         { label: 'Blog', path: '/blog', protected: false },
@@ -47,8 +47,9 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { Icon: FaInstagram, href: 'https://instagram.com/yudhassif_0019', label: 'Instagram', color: '#E1306C' },
-    { Icon: FaFacebook, href: 'https://facebook.com/YussufAli', label: 'Facebook', color: '#1877F2' },
+    { Icon: FaInstagram, href: 'https://www.instagram.com/pata.chako', label: 'Instagram', color: '#E1306C' },
+    { Icon: FaFacebook, href: 'https://www.facebook.com/share/1DT9uyErB5/', label: 'Facebook', color: '#1877F2' },
+    { Icon: FaLinkedin, href: 'https://www.linkedin.com/in/pata-chako-2a6a46442', label: 'LinkedIn', color: '#0A66C2' },
     { Icon: FaWhatsapp, href: 'https://wa.me/255659819040', label: 'WhatsApp', color: '#25D366' },
   ];
 
@@ -123,3 +124,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
