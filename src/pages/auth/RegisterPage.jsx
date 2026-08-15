@@ -114,14 +114,27 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
+
     try {
       const payload = {
         ...form,
         location_lat: parseFloat(form.location_lat) || 0,
         location_long: parseFloat(form.location_long) || 0,
       };
-      await createAccount(payload);
-      navigate('/verify-otp', { state: { email: form.email } });
+
+      const res = await createAccount(payload);
+
+      const code = String(res?.statusCode);
+
+      // Check if backend returned success (600, 200, 201)
+      if (code === '600' || code === '200' || code === '201') {
+        // Success -> navigate to verify OTP screen
+        navigate('/verify-otp', { state: { email: form.email } });
+        return;
+      }
+
+      // If backend returned an error status code (like 705)
+      setError(res?.message || 'Email is already registered.');
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
