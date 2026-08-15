@@ -168,7 +168,7 @@ export default function LoginPage() {
               <Input
                 label="Email or phone number"
                 type="text"
-                placeholder="you@example.com or 255XXXXXXXXX"
+                placeholder="255XXXXXXXXX"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
