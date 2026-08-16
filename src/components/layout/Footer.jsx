@@ -1,11 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FaInstagram, FaFacebook, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
+import { MapPin } from 'lucide-react';
 import logoSrc from '/src/assets/pata-logo.png';
 
 const Footer = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleProtectedClick = (e, path) => {
     e.preventDefault();
@@ -16,34 +18,29 @@ const Footer = () => {
     }
   };
 
-  const footerColumns = [
-    {
-      title: 'Platform',
-      links: [
-        { label: 'Search Items', path: '/owner/search', protected: true },
-        { label: 'Report Lost Item', path: '/owner/report', protected: true },
-        { label: 'How it Works', path: '/#how-it-works', protected: false },
-        { label: 'Pricing', path: '/pricing', protected: false },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About Us', path: '/#about', protected: false },
-        { label: 'Contact', path: '/#footer', protected: false },
-        { label: 'Careers', path: '/careers', protected: false },
-        { label: 'Blog', path: '/blog', protected: false },
-      ],
-    },
-    {
-      title: 'Legal',
-      links: [
-        { label: 'Privacy Policy', path: '/privacy', protected: false },
-        { label: 'Terms of Service', path: '/terms', protected: false },
-        { label: 'Cookie Policy', path: '/cookies', protected: false },
-        { label: 'FAQs', path: '/faqs', protected: false },
-      ],
-    },
+  const handleHashClick = (e, targetId) => {
+    e.preventDefault();
+    const elementId = targetId.replace('#', '');
+
+    if (location.pathname !== '/') {
+      navigate('/', { replace: false });
+      setTimeout(() => {
+        const el = document.getElementById(elementId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', targetId);
+      }
+    }
+  };
+
+  const platformLinks = [
+    { label: 'Search Items', path: '/owner/search', protected: true },
+    { label: 'Report Lost Item', path: '/owner/report', protected: true },
+    { label: 'How it Works', path: '#how-it-works', isHash: true },
   ];
 
   const socialLinks = [
@@ -56,66 +53,117 @@ const Footer = () => {
   return (
     <footer id="footer" className="bg-dark text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          <div>
-            <div className="flex items-center gap-2 mb-6">
+        {/* Balanced Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 mb-12">
+          
+          {/* Column 1: Brand & Socials */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
               <img src={logoSrc} alt="PataChako" className="w-10 h-10 object-contain" />
-              <span className="text-xl font-bold">
+              <span className="text-2xl font-bold tracking-tight">
                 Pata<span className="text-primary">Chako</span>
               </span>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
               Tanzania's most trusted platform for reporting, searching, and recovering lost items safely and efficiently.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-3 pt-2">
               {socialLinks.map(({ Icon, href, label, color }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors"
+                  className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-200 group"
                   aria-label={label}
                 >
-                  <Icon size={18} style={{ color }} />
+                  <Icon size={18} style={{ color }} className="group-hover:text-white transition-colors" />
                 </a>
               ))}
             </div>
           </div>
-          {footerColumns.map((col) => (
-            <div key={col.title}>
-              <h4 className="font-semibold mb-4 text-white">{col.title}</h4>
-              <ul className="space-y-3">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    {link.protected ? (
-                      <a
-                        href={link.path}
-                        onClick={(e) => handleProtectedClick(e, link.path)}
-                        className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        to={link.path}
-                        className="text-sm text-gray-400 hover:text-primary transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
+
+          {/* Column 2: Platform Navigation */}
+          <div className="md:pl-8">
+            <h4 className="text-xs font-mono font-semibold uppercase text-gray-400 tracking-wider mb-4">
+              Platform Navigation
+            </h4>
+            <ul className="space-y-3">
+              {platformLinks.map((link) => (
+                <li key={link.label}>
+                  {link.protected ? (
+                    <a
+                      href={link.path}
+                      onClick={(e) => handleProtectedClick(e, link.path)}
+                      className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
+                    >
+                      {link.label}
+                    </a>
+                  ) : link.isHash ? (
+                    <a
+                      href={link.path}
+                      onClick={(e) => handleHashClick(e, link.path)}
+                      className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <a
+                      href={link.path}
+                      className="text-sm text-gray-400 hover:text-primary transition-colors inline-block"
+                    >
+                      {link.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Company & FAQs */}
+          <div>
+            <h4 className="text-xs font-mono font-semibold uppercase text-gray-400 tracking-wider mb-4">
+              Company
+            </h4>
+            <ul className="space-y-3 mb-6">
+              <li>
+                <a
+                  href="#about"
+                  onClick={(e) => handleHashClick(e, '#about')}
+                  className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
+                >
+                  About Us
+                </a>
+              </li>
+              <li>
+                {/* ✅ FAQ link now uses hash navigation */}
+                <a
+                  href="#faq"
+                  onClick={(e) => handleHashClick(e, '#faq')}
+                  className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
+                >
+                  FAQs
+                </a>
+              </li>
+            </ul>
+
+            <div className="space-y-2.5 pt-4 border-t border-white/10">
+              <div className="flex items-center gap-3 text-sm text-gray-400">
+                <MapPin size={16} className="text-primary shrink-0" />
+                <span>Dar es Salaam, Tanzania</span>
+              </div>
             </div>
-          ))}
+          </div>
+
         </div>
+
+        {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} PataChako. All rights reserved.
           </p>
-          <p className="text-sm text-gray-500">
-            Designed with trust and security in mind.
+          <p className="text-xs text-gray-500">
+            Built with trust and security for Tanzania.
           </p>
         </div>
       </div>
@@ -124,4 +172,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

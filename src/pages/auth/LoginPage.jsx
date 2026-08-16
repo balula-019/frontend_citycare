@@ -166,7 +166,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4 flex-1">
               <Input
-                label="Email or phone number"
+                label="phone number"
                 type="text"
                 placeholder="255XXXXXXXXX"
                 value={username}

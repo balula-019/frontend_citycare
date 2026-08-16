@@ -25,7 +25,7 @@ const Hero = ({
               <span className="text-sm font-medium text-gray-600"> Lost & Found Platform</span>
             </span>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Bringing the lost item and <span className="text-gradient">Back to home</span>
+              Bringing the lost item <span className="text-gradient">Back to home</span>
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
               Tanzania's trusted platform for reporting, searching, and recovering lost items safely and efficiently through verified organizations.

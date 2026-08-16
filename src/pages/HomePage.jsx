@@ -506,7 +506,7 @@ function AboutSection() {
               system compares thousands of reports in seconds.
             </p>
             <p className="text-gray-500 leading-relaxed">
-              We partner with verified organisations across all 29 regions of
+              We partner with verified organisations across all 31 regions of
               Tanzania — from Dar es Salaam to Zanzibar — so no matter where
               you lost it, we can help you find it.
             </p>
