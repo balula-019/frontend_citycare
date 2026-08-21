@@ -16,6 +16,7 @@ const CATEGORIES = [
   'MEDICAL_ITEMS','SPORTS_ITEMS','PET_ITEMS','FOOD_CONTAINERS','UMBRELLAS',
   'CALCULATOR','OTHERS',
 ];
+
 const REGIONS = [
   'ARUSHA','DAR_ES_SALAAM','DODOMA','GEITA','IRINGA','KAGERA','KATAVI',
   'KIGOMA','KILIMANJARO','LINDI','MANYARA','MARA','MBEYA','MOROGORO',
@@ -23,6 +24,7 @@ const REGIONS = [
   'SIMIYU','SINGIDA','TABORA','TANGA','UNGUJA_KASKAZINI','UNGUJA_KUSINI',
   'UNGUJA_MJINI_MAGHARIBI','PEMBA'
 ];
+
 const STEP_TITLES = ['Basic Information', 'Location Details', 'Images'];
 
 const animStyles = `
@@ -64,7 +66,7 @@ function SelectField({ label, name, value, onChange, options, placeholder, requi
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white text-gray-800 transition-all"
+        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white text-gray-800 transition-all text-sm"
       >
         <option value="">{placeholder}</option>
         {options.map(o => (
@@ -198,9 +200,11 @@ export default function ReportItem() {
 
     const completeTimer = setTimeout(() => {
       if (pendingResponseRef.current) {
-        const data = pendingResponseRef.current;
-        setReportId(data.id || null);
-        setMatchResult(data);
+        const rawData = pendingResponseRef.current;
+        // Unwrap nested API data response if present
+        const actualData = rawData?.data ? rawData.data : rawData;
+        setReportId(actualData?.id || null);
+        setMatchResult(actualData);
         setStep(4);
       }
     }, 5400);
@@ -254,9 +258,15 @@ export default function ReportItem() {
   }));
   const regionOptions = REGIONS.map(r => ({ value: r, label: r.replace(/_/g, ' ') }));
 
-  const hasMatch = Array.isArray(matchResult?.matches) && matchResult.matches.length > 0;
-  const matchDetails = hasMatch ? matchResult.matches[0] : {};
-  const displayedScore = matchResult?.bestScore ?? matchResult?.finalScore ?? matchDetails?.finalScore;
+  // Safely extract payload values
+  const responseData = matchResult?.data || matchResult;
+  const activeReportId = responseData?.id || reportId;
+  const matchesList = responseData?.matches || [];
+  const hasMatch = Array.isArray(matchesList) && matchesList.length > 0;
+
+  const matchDetails = hasMatch ? matchesList[0] : null;
+  const rawScore = responseData?.bestScore ?? responseData?.finalScore ?? matchDetails?.finalScore;
+  const displayedScore = rawScore ? Math.round(rawScore) : 0;
 
   const getMatchBadge = (score) => {
     if (!score) return null;
@@ -287,15 +297,15 @@ export default function ReportItem() {
           </div>
           <div className="max-w-3xl mx-auto px-4 pb-3">
             <div className="flex gap-2">
-              {[0,1,2].map(i => (
+              {[0, 1, 2].map(i => (
                 <div key={i} className="flex-1 h-1.5 rounded-full transition-all duration-500"
-                     style={{ backgroundColor: i <= step ? '#1a56db' : '#e2e8f0' }} />
+                  style={{ backgroundColor: i <= step ? '#1a56db' : '#e2e8f0' }} />
               ))}
             </div>
             <div className="flex justify-between mt-1.5">
               {STEP_TITLES.map((title, i) => (
                 <span key={i} className="text-xs transition-colors duration-300"
-                      style={{ color: i <= step ? '#1a56db' : '#94a3b8' }}>{title}</span>
+                  style={{ color: i <= step ? '#1a56db' : '#94a3b8' }}>{title}</span>
               ))}
             </div>
           </div>
@@ -464,6 +474,7 @@ export default function ReportItem() {
           </div>
         )}
 
+        {/* Step 4: Decision State */}
         {step === 4 && (
           <div className="fade-in-up">
             {hasMatch ? (
@@ -479,20 +490,18 @@ export default function ReportItem() {
                 </div>
                 <p className="text-gray-600">Our AI found a potential match for your lost item.</p>
 
-                {displayedScore !== undefined && (
-                  <div className="flex justify-center">
-                    <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm w-full max-w-xs">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Confidence Match Score</p>
-                      <p className="text-4xl font-black text-[#1a56db]">{displayedScore}%</p>
-                      <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#1a56db] rounded-full" style={{ width: `${displayedScore}%` }}></div>
-                      </div>
+                <div className="flex justify-center">
+                  <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm w-full max-w-xs">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Confidence Match Score</p>
+                    <p className="text-4xl font-black text-[#1a56db]">{displayedScore}%</p>
+                    <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-[#1a56db] rounded-full" style={{ width: `${displayedScore}%` }}></div>
                     </div>
                   </div>
-                )}
+                </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button variant="primary" onClick={() => navigate(`/owner/claim/${reportId}`)}>
+                  <Button variant="primary" onClick={() => navigate(`/owner/claim/${activeReportId}`)}>
                     Claim Item
                   </Button>
                   <Button variant="outline" onClick={() => navigate('/owner/reports')}>
@@ -502,12 +511,12 @@ export default function ReportItem() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="w-16 h-16 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4">
                   <AlertCircle size={32} />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">No Matching Item Found</h3>
                 <p className="text-gray-500 mb-8 max-w-md mx-auto">
-                  We couldn't find a match for your lost item at this time. Your report has been saved, and future found items may still be matched automatically.
+                  Your report was saved successfully! We couldn't find an immediate match in our registry, but our AI will automatically match future found items with your report.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button variant="primary" onClick={() => navigate('/owner/dashboard')}>
