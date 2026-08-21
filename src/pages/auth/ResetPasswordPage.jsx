@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { resetPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
@@ -11,6 +11,7 @@ export default function ResetPasswordPage() {
   const email = location.state?.email || '';
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -99,17 +100,28 @@ export default function ResetPasswordPage() {
               autoComplete="one-time-code"
               disabled={loading}
             />
-            <Input
-              label="New Password"
-              type="password"
-              placeholder="••••••••"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-              minLength={8}
-              autoComplete="new-password"
-              disabled={loading}
-            />
+
+            <div className="relative">
+              <Input
+                label="New Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                minLength={8}
+                autoComplete="new-password"
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 bottom-3.5 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
 
             <Button
               variant="primary"

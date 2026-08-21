@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -118,8 +119,9 @@ export default function ReportItem() {
   const [matchResult, setMatchResult] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
 
-  // Simulation State
+  // Simulation & API State Handling
   const [simStageIdx, setSimStageIdx] = useState(0);
+  const [apiFinished, setApiFinished] = useState(false);
   const pendingResponseRef = useRef(null);
 
   const handleChange = (e) => {
@@ -185,41 +187,38 @@ export default function ReportItem() {
     setStep(prev => Math.max(prev - 1, 0));
   };
 
-  // Progression of simulation stages during Step 3
+  // Stage progression timers for Step 3 animation
   useEffect(() => {
     if (step !== 3) return;
 
     setSimStageIdx(0);
-    const stage1Timer = setTimeout(() => {
-      setSimStageIdx(1);
-    }, 1800);
+    const stage1Timer = setTimeout(() => setSimStageIdx(1), 1800);
+    const stage2Timer = setTimeout(() => setSimStageIdx(2), 3600);
 
-    const stage2Timer = setTimeout(() => {
-      setSimStageIdx(2);
-    }, 3600);
+    return () => {
+      clearTimeout(stage1Timer);
+      clearTimeout(stage2Timer);
+    };
+  }, [step]);
 
-    const completeTimer = setTimeout(() => {
-      if (pendingResponseRef.current) {
-        const rawData = pendingResponseRef.current;
-        // Unwrap nested API data response if present
+  // Transition to Step 4 when API call is complete and minimum stage 3 reached
+  useEffect(() => {
+    if (step === 3 && apiFinished && simStageIdx === 2) {
+      const rawData = pendingResponseRef.current;
+      if (rawData) {
         const actualData = rawData?.data ? rawData.data : rawData;
         setReportId(actualData?.id || null);
         setMatchResult(actualData);
         setStep(4);
       }
-    }, 5400);
-
-    return () => {
-      clearTimeout(stage1Timer);
-      clearTimeout(stage2Timer);
-      clearTimeout(completeTimer);
-    };
-  }, [step]);
+    }
+  }, [step, apiFinished, simStageIdx]);
 
   const handleSubmit = async () => {
     if (!validateStep()) return;
     setSubmitting(true);
     setError('');
+    setApiFinished(false);
     pendingResponseRef.current = null;
     setStep(3);
 
@@ -241,9 +240,10 @@ export default function ReportItem() {
       const response = await createLostReport(payload);
       const data = response?.data || response;
       pendingResponseRef.current = data;
+      setApiFinished(true);
     } catch (err) {
-      setError(err.message || 'Something went wrong.');
-      setStep(0);
+      setError(err.message || 'Something went wrong while submitting the report.');
+      setStep(2);
     } finally {
       setSubmitting(false);
     }
@@ -434,7 +434,7 @@ export default function ReportItem() {
           </div>
         )}
 
-        {/* Enhanced AI Simulation Stage */}
+        {/* Dynamic AI Processing Stage */}
         {step === 3 && (
           <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 fade-in-up">
             <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
