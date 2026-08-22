@@ -261,6 +261,25 @@ const handleSessionExpiry = () => {
 };
 
 /* ─────────────────────────────────────────────
+   Business-level status codes
+   Your backend signals success/failure with its own `statusCode` field
+   in the JSON body (as a STRING, e.g. "600", "619", "702") — sometimes
+   alongside an HTTP 200. We can't rely on response.ok alone.
+───────────────────────────────────────────── */
+
+const SUCCESS_STATUS_CODES = new Set(['600']);
+
+// Builds a normal Error but attaches the backend's business statusCode
+// and the raw body, so callers (LoginPage, etc.) can branch on the exact
+// code instead of guessing from message text alone.
+function makeApiError(message, statusCode, body) {
+  const err = new Error(message || 'Something went wrong.');
+  err.statusCode = statusCode != null ? String(statusCode) : undefined;
+  err.data = body;
+  return err;
+}
+
+/* ─────────────────────────────────────────────
    Core API client
 ───────────────────────────────────────────── */
 
@@ -316,27 +335,25 @@ export const apiClient = async (endpoint, options = {}) => {
     }
   }
 
-  // ── Non-2xx responses ───────────────────────────────────────
+  // ── Non-2xx HTTP responses ──────────────────────────────────
   if (!response.ok) {
     const errBody = await response.json().catch(() => ({
       message: response.statusText || 'Request failed',
     }));
 
     const message = errBody?.message || errBody?.error || 'Something went wrong.';
-
-    if (response.status >= 500) {
-      showToast({
-        type:    'error',
-        title:   'Server error',
-        message: 'Something went wrong on our end. Please try again.',
-        duration: 6000,
-      });
-    }
-
-    throw new Error(message);
+    throw makeApiError(message, errBody?.statusCode, errBody);
   }
 
-  return response.json();
+  // ── HTTP 200, but the body itself may signal a business-level
+  //    failure via its own statusCode (e.g. "619", "702") ───────
+  const data = await response.json();
+
+  if (data?.statusCode !== undefined && !SUCCESS_STATUS_CODES.has(String(data.statusCode))) {
+    throw makeApiError(data?.message, data.statusCode, data);
+  }
+
+  return data;
 };
 
 export default apiClient;
