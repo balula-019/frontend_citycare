@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import { forgotPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
@@ -34,7 +33,7 @@ export default function ForgotPasswordPage() {
     try {
       const response = await forgotPassword(trimmed);
 
-      // Extract data depending on whether your API helper unwarps Axios responses or not
+      // Extract data depending on whether your API helper unwraps Axios responses or not
       const data = response?.data || response;
 
       // Intercept custom backend error status codes (like 804) wrapped inside a 200 OK
@@ -60,91 +59,94 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 py-8 relative">
-      <button
-        onClick={() => navigate('/')}
-        className="absolute top-6 right-6 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#1a56db] transition-colors bg-white border border-gray-200 hover:border-[#1a56db] rounded-xl px-4 py-2.5 shadow-sm hover:shadow-md"
-      >
-        <ArrowLeft size={15} />
-        Back
-      </button>
+    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 py-8">
+      {/* Spacer to keep card centered visually while keeping footer at bottom */}
+      <div className="flex-1 flex items-center justify-center my-auto">
+        <div className="w-full max-w-[440px] bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-gray-100 overflow-hidden min-h-[520px] flex flex-col">
+          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
 
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-blue-100/40 border border-gray-100 overflow-hidden">
-        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
-
-        <div className="px-8 py-8">
-          <div className="flex flex-col items-center mb-6">
-            <img
-              src={logoSrc}
-              alt="PataChako"
-              className="w-24 h-24 object-contain drop-shadow-md mb-4"
-            />
-            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
-              Forgot password?
-            </h1>
-            <p className="text-sm text-gray-500 mt-1 text-center">
-              Enter your email and we'll send you an OTP to reset it.
-            </p>
-          </div>
-
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-2">
-              <span className="text-red-500 font-bold shrink-0">!</span>
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-2">
-              <span className="text-green-500 font-bold shrink-0">✓</span>
-              {success}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <Input
-              label="Email address"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-              autoComplete="email"
-            />
-
-            <Button
-              variant="primary"
-              type="submit"
-              className="w-full py-3.5 text-base font-semibold tracking-wide rounded-xl"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Sending…
-                </span>
-              ) : (
-                'Send OTP'
-              )}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">
-              Remember your password?{' '}
+          <div className="px-8 pt-8 pb-8 flex-1 flex flex-col">
+            <div className="flex flex-col items-center mb-6">
               <button
-                onClick={() => navigate('/login')}
-                className="font-semibold text-[#1a56db] hover:underline"
+                type="button"
+                onClick={() => navigate('/')}
+                className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+                title="Go to home"
               >
-                Sign in
+                <img
+                  src={logoSrc}
+                  alt="PataChako"
+                  className="w-36 h-36 object-contain drop-shadow-xl cursor-pointer"
+                />
               </button>
-            </p>
+              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight mt-4" style={{ fontFamily: "'Sora', sans-serif" }}>
+                Forgot password?
+              </h1>
+              <p className="text-sm text-gray-500 mt-1 text-center leading-relaxed">
+                Enter your email and we'll send you an OTP to reset it.
+              </p>
+            </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-xs flex items-center gap-2.5">
+                <span className="text-red-500 font-bold shrink-0">!</span>
+                <span>{error}</span>
+              </div>
+            )}
+
+            {success && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-5 text-xs flex items-center gap-2.5">
+                <span className="text-green-500 font-bold shrink-0">✓</span>
+                <span>{success}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col justify-center">
+              <Input
+                label="Email address"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                autoComplete="email"
+              />
+
+              <Button
+                variant="primary"
+                type="submit"
+                className="w-full py-3.5 text-sm font-semibold tracking-wide rounded-xl mt-2"
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Sending…
+                  </span>
+                ) : (
+                  'Send OTP'
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-auto pt-6 text-center">
+              <p className="text-sm text-gray-500">
+                Remember your password?{' '}
+                <button
+                  type="button"
+                  onClick={() => navigate('/login')}
+                  className="font-bold text-[#1a56db] hover:underline transition-colors"
+                >
+                  Sign in
+                </button>
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <p className="absolute bottom-6 text-xs text-gray-400 text-center w-full">
+      <p className="text-xs text-gray-400 text-center w-full pt-4">
         If you didn't receive the email, check your spam folder or try again.
       </p>
     </div>

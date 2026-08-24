@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Eye, EyeOff, MapPin, ChevronRight, ChevronLeft,
+  Eye, EyeOff, MapPin, ChevronRight, ChevronLeft,
   UserCircle, Lock
 } from 'lucide-react';
 import { createAccount } from '../../api/auth';
@@ -169,7 +169,7 @@ export default function RegisterPage() {
   const strength = getPasswordStrength();
 
   const inputClass = (fieldName) =>
-    `w-full px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 bg-[#f8fafc] border rounded-xl outline-none transition-all focus:ring-2 focus:bg-white disabled:opacity-50 ${
+    `w-full px-4 py-3 text-sm text-gray-900 placeholder-gray-400 bg-[#f8fafc] border rounded-xl outline-none transition-all focus:ring-2 focus:bg-white disabled:opacity-50 ${
       fieldErrors[fieldName]
         ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
         : 'border-gray-200 focus:border-[#1a56db] focus:ring-[#1a56db]/15'
@@ -252,25 +252,20 @@ export default function RegisterPage() {
 
       {/* ── RIGHT PANEL ── */}
       <div
-        className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 overflow-y-auto relative"
+        className="flex-1 flex flex-col items-center justify-between p-4 sm:p-6 overflow-y-auto"
         style={{ background: '#f4f7fd' }}
       >
-        <button
-          onClick={() => navigate('/')}
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-[#1a56db] transition-colors bg-white border border-gray-200 hover:border-[#1a56db] rounded-xl px-3 py-1.5 shadow-sm z-20"
-        >
-          <ArrowLeft size={12} /> Back
-        </button>
-
-        <div className="w-full max-w-[440px] max-h-[92vh] bg-white rounded-3xl border border-gray-100 shadow-2xl shadow-blue-100/30 overflow-y-auto flex flex-col my-auto">
+        {/* Card Container */}
+        <div className="w-full max-w-[460px] bg-white rounded-3xl border border-gray-100 shadow-2xl shadow-blue-100/30 overflow-hidden flex flex-col my-auto">
           <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
 
-          <div className="flex items-center justify-center gap-2 pt-3 pb-1 px-6 flex-shrink-0">
+          {/* Stepper Header */}
+          <div className="flex items-center justify-center gap-2 pt-6 pb-2 px-6 flex-shrink-0">
             {STEPS.map(({ id, label }) => (
               <div key={id} className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5">
                   <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 transition-all"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all"
                     style={{
                       background: step > id ? '#10b981' : step === id ? '#1a56db' : '#e8eef8',
                       color: step >= id ? '#fff' : '#94a3b8',
@@ -282,7 +277,7 @@ export default function RegisterPage() {
                     }
                   </div>
                   <span
-                    className="text-[11px] font-bold tracking-wide uppercase hidden sm:block"
+                    className="text-xs font-bold tracking-wide uppercase hidden sm:block"
                     style={{ color: step === id ? '#1a56db' : step > id ? '#10b981' : '#94a3b8' }}
                   >
                     {label}
@@ -298,26 +293,34 @@ export default function RegisterPage() {
             ))}
           </div>
 
-          <div className="px-5 py-3 flex-1 flex flex-col">
+          <div className="px-6 sm:px-8 py-6 flex-1 flex flex-col">
             <div className="flex-1 flex flex-col">
-              <div className="flex justify-center mb-1">
-                <img
-                  src={logoSrc}
-                  alt="PataChako"
-                  className={`object-contain drop-shadow-md transition-all ${step === 2 ? 'w-10 h-10' : 'w-24 h-24'}`}
-                />
+              {/* Interactive Large Logo */}
+              <div className="flex justify-center mb-3">
+                <button
+                  type="button"
+                  onClick={() => navigate('/')}
+                  className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+                  title="Go to home"
+                >
+                  <img
+                    src={logoSrc}
+                    alt="PataChako"
+                    className="w-32 h-32 sm:w-36 sm:h-36 object-contain drop-shadow-xl cursor-pointer"
+                  />
+                </button>
               </div>
 
-              <div className="mb-2 text-center">
+              <div className="mb-4 text-center">
                 <h1
-                  className="text-lg font-extrabold text-gray-900 tracking-tight"
+                  className="text-2xl font-extrabold text-gray-900 tracking-tight"
                   style={{ fontFamily: "'Sora', sans-serif" }}
                 >
                   {step === 0 && 'Personal Details'}
                   {step === 1 && 'Secure Your Account'}
                   {step === 2 && 'Your Location'}
                 </h1>
-                <p className="text-[11px] text-gray-400 mt-0.5">
+                <p className="text-sm text-gray-500 mt-1">
                   {step === 0 && 'Tell us your basic info to get started.'}
                   {step === 1 && 'Set a strong password to protect your account.'}
                   {step === 2 && 'Optional — helps match you with nearby lost items.'}
@@ -325,7 +328,7 @@ export default function RegisterPage() {
               </div>
 
               {error && (
-                <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-600 text-xs px-3 py-2 rounded-xl mb-2">
+                <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-600 text-xs px-4 py-3 rounded-xl mb-4">
                   <span className="font-bold shrink-0">!</span>
                   <span>{error}</span>
                 </div>
@@ -333,7 +336,7 @@ export default function RegisterPage() {
 
               {/* Step 0: Personal Details */}
               {step === 0 && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div>
                     <label className={labelClass}>Full Name</label>
                     <input
@@ -380,17 +383,17 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="w-full mt-1 py-2.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95 active:scale-[0.99]"
+                    className="w-full mt-2 py-3.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95 active:scale-[0.99]"
                     style={{ background: 'linear-gradient(135deg, #1a56db, #1240a8)', boxShadow: '0 4px 12px rgba(26,86,219,0.2)' }}
                   >
-                    Continue <ChevronRight size={14} />
+                    Continue <ChevronRight size={16} />
                   </button>
                 </div>
               )}
 
               {/* Step 1: Security */}
               {step === 1 && (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div>
                     <label className={labelClass}>Password</label>
                     <div className={`flex items-center bg-[#f8fafc] border rounded-xl overflow-hidden transition-all focus-within:ring-2 focus-within:bg-white ${
@@ -404,7 +407,7 @@ export default function RegisterPage() {
                         placeholder="Min. 8 characters, 1 upper, 1 lower, 1 digit"
                         value={form.password}
                         onChange={handleChange}
-                        className="flex-1 bg-transparent px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none"
+                        className="flex-1 bg-transparent px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none"
                         required
                       />
                       <button
@@ -413,7 +416,7 @@ export default function RegisterPage() {
                         tabIndex={-1}
                         className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors"
                       >
-                        {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                        {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
                     {fieldErrors.password && <p className={errorTextClass}>{fieldErrors.password}</p>}
@@ -424,33 +427,33 @@ export default function RegisterPage() {
                       {[1, 2, 3, 4].map(i => (
                         <div
                           key={i}
-                          className="flex-1 h-1 rounded-full transition-all"
+                          className="flex-1 h-1.5 rounded-full transition-all"
                           style={{
                             background: i <= strength.level ? strength.color : '#e2e8f0'
                           }}
                         />
                       ))}
                     </div>
-                    <p className="text-[11px] font-medium" style={{ color: strength.color }}>
+                    <p className="text-xs font-medium" style={{ color: strength.color }}>
                       {strength.label}
                     </p>
                   </div>
 
-                  <div className="flex gap-3 pt-1">
+                  <div className="flex gap-3 pt-2">
                     <button
                       type="button"
                       onClick={() => { setStep(0); setError(''); setFieldErrors({}); }}
-                      className="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all"
+                      className="flex items-center gap-1.5 px-4 py-3.5 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all"
                     >
-                      <ChevronLeft size={14} /> Back
+                      <ChevronLeft size={16} /> Back
                     </button>
                     <button
                       type="button"
                       onClick={nextStep}
-                      className="flex-1 py-2.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95"
+                      className="flex-1 py-3.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95"
                       style={{ background: 'linear-gradient(135deg, #1a56db, #1240a8)', boxShadow: '0 4px 12px rgba(26,86,219,0.2)' }}
                     >
-                      Continue <ChevronRight size={14} />
+                      Continue <ChevronRight size={16} />
                     </button>
                   </div>
                 </div>
@@ -458,10 +461,10 @@ export default function RegisterPage() {
 
               {/* Step 2: Location */}
               {step === 2 && (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                  <div className="flex items-start gap-2 p-2 rounded-xl text-xs bg-blue-50/60 border border-blue-100">
-                    <MapPin size={13} className="text-[#1a56db] mt-0.5 flex-shrink-0" />
-                    <p className="text-blue-700 leading-snug text-[11px]">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  <div className="flex items-start gap-2 p-3 rounded-xl text-xs bg-blue-50/60 border border-blue-100">
+                    <MapPin size={15} className="text-[#1a56db] mt-0.5 flex-shrink-0" />
+                    <p className="text-blue-700 leading-snug text-xs">
                       Adding your location helps match you with nearby items. This is entirely optional.
                     </p>
                   </div>
@@ -487,23 +490,23 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  <div className="flex gap-3 pt-2 mt-auto">
+                  <div className="flex gap-3 pt-3 mt-auto">
                     <button
                       type="button"
                       onClick={() => { setStep(1); setError(''); }}
-                      className="flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all"
+                      className="flex items-center gap-1.5 px-4 py-3.5 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all"
                     >
-                      <ChevronLeft size={14} /> Back
+                      <ChevronLeft size={16} /> Back
                     </button>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="flex-1 py-2.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95 disabled:opacity-70"
+                      className="flex-1 py-3.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95 disabled:opacity-70"
                       style={{ background: 'linear-gradient(135deg, #10b981, #059669)', boxShadow: '0 4px 12px rgba(16,185,129,0.2)' }}
                     >
                       {loading ? (
                         <>
-                          <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                           Creating…
                         </>
                       ) : (
@@ -514,9 +517,9 @@ export default function RegisterPage() {
 
                   <style>{`
                     .location-picker-compact .leaflet-container {
-                      height: 100px !important;
-                      min-height: 100px !important;
-                      max-height: 100px !important;
+                      height: 140px !important;
+                      min-height: 140px !important;
+                      max-height: 140px !important;
                     }
                   `}</style>
                 </form>
@@ -524,8 +527,8 @@ export default function RegisterPage() {
             </div>
 
             {step !== 2 && (
-              <div className="mt-auto pt-2 border-t border-gray-100 text-center">
-                <p className="text-xs text-gray-500">
+              <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+                <p className="text-sm text-gray-500">
                   Already have an account?{' '}
                   <button
                     type="button"
@@ -540,7 +543,7 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        <p className="text-[11px] text-gray-400 mt-2 text-center">
+        <p className="text-xs text-gray-400 text-center w-full pt-4 pb-2">
           By registering you agree to our Terms & Privacy Policy.
         </p>
       </div>

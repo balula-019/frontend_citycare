@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Eye, EyeOff, Shield, MapPin, Search, Lock } from 'lucide-react';
+import { Eye, EyeOff, Shield, MapPin, Search, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
@@ -23,7 +23,7 @@ function classifyAndValidate(rawValue) {
   const value = rawValue.trim();
 
   if (!value) {
-    return { valid: false, error: 'Enter your mobile number, email, or username.' };
+    return { valid: false, error: 'Enter your username.' };
   }
 
   // Looks like an email attempt
@@ -74,10 +74,6 @@ export default function LoginPage() {
   const [attempts, setAttempts] = useState(0);
   const [lockedUntil, setLockedUntil] = useState(null); // epoch ms
   const [remainingMs, setRemainingMs] = useState(0);
-  // Exact message the backend sent when IT decided to lock the account
-  // (e.g. "Too many failed login attempts. Your account has been
-  // temporarily locked."). Falls back to a generic message if the lock
-  // was only triggered by our own client-side attempt counter.
   const [backendLockMessage, setBackendLockMessage] = useState('');
   const tickRef = useRef(null);
 
@@ -94,7 +90,6 @@ export default function LoginPage() {
           setAttempts(stored.attempts ?? MAX_ATTEMPTS);
           setBackendLockMessage(stored.message ?? '');
         } else if (stored.lockedUntil && stored.lockedUntil <= Date.now()) {
-          // Lock already expired since last visit — reset
           localStorage.removeItem(LOCK_STORAGE_KEY);
         } else {
           setAttempts(stored.attempts ?? 0);
@@ -140,17 +135,11 @@ export default function LoginPage() {
     );
   };
 
-  // The backend uses statusCode 619 for both "wrong password" AND "account
-  // locked from too many attempts" — the only way to tell them apart is the
-  // message text, so we match on that.
   const isAccountLockedMessage = (message = '') => {
     const lower = message.toLowerCase();
     return lower.includes('locked') || lower.includes('too many');
   };
 
-  // Backend has confirmed the account is locked — trust its exact wording
-  // and start our own 15-minute countdown on top of it (the backend doesn't
-  // send back a remaining-time value, so 15 minutes is our best estimate).
   const activateBackendLock = (message) => {
     const until = Date.now() + LOCK_DURATION_MS;
     setAttempts(MAX_ATTEMPTS);
@@ -182,15 +171,10 @@ export default function LoginPage() {
   };
 
   const handleUsernameChange = (e) => {
-    // Strip whitespace as the user types — spaces are what triggered the
-    // backend's "Invalid username format" (702) response.
     setUsername(e.target.value.replace(/\s/g, ''));
   };
 
   const extractBackendError = (err) => ({
-    // apiClient throws a plain Error with .statusCode (string, e.g. "619")
-    // and .message set directly from the backend body — there is no
-    // err.response.data wrapper in this codebase.
     code: err?.statusCode != null ? String(err.statusCode) : undefined,
     message: err?.message || 'Login failed.',
   });
@@ -201,7 +185,6 @@ export default function LoginPage() {
 
     if (isLocked) return;
 
-    // Client-side validation before ever hitting the network
     const check = classifyAndValidate(username);
     if (!check.valid) {
       setError('Invalid username or password.');
@@ -213,7 +196,6 @@ export default function LoginPage() {
       const result = await login(check.value, password);
       const role = result.user.user_type;
 
-      // Successful login (backend statusCode 600) — clear rate-limit state
       clearAttemptState();
 
       if (result.passwordChangeRequired) {
@@ -227,21 +209,12 @@ export default function LoginPage() {
     } catch (err) {
       const { code, message } = extractBackendError(err);
 
-      // 702: bad format for whatever the user typed. Don't count this
-      // against the rate limit — it isn't a credential guess — and don't
-      // reveal that it was a format issue, just show the generic message.
       if (code === '702') {
         setError('Invalid username or password.');
         setLoading(false);
         return;
       }
 
-      // The backend sends statusCode 619 for two different situations,
-      // distinguished only by message text:
-      //   - "Invalid username or password."  -> a normal wrong-credentials guess
-      //   - "Too many failed login attempts. Your account has been
-      //      temporarily locked."             -> the backend itself has
-      //      already locked the account
       if (code === '619' && isAccountLockedMessage(message)) {
         activateBackendLock(message);
         setLoading(false);
@@ -261,8 +234,6 @@ export default function LoginPage() {
         if (attempts + 1 < MAX_ATTEMPTS) {
           setError('Invalid username or password.');
         }
-        // if we've now hit MAX_ATTEMPTS, registerFailedAttempt() already set
-        // the lockout message — don't overwrite it with the generic one.
         setLoading(false);
         return;
       }
@@ -349,26 +320,26 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* RIGHT PANEL – scrollable, card tall enough to always show the link */}
+      {/* RIGHT PANEL – scrollable */}
       <div className="flex-1 flex flex-col items-center justify-start pt-6 px-6 pb-8 overflow-y-auto" style={{ background: '#f8fafd' }}>
-        <button
-          onClick={() => navigate('/')}
-          className="absolute top-4 right-6 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#1a56db] transition-colors bg-white border border-gray-200 hover:border-[#1a56db] rounded-xl px-4 py-2 z-20 shadow-sm"
-        >
-          <ArrowLeft size={14} />
-          Back
-        </button>
 
-        <div className="w-full max-w-[440px] bg-white rounded-3xl border border-gray-100 shadow-xl shadow-slate-200/60 overflow-hidden min-h-[580px] flex flex-col">
+        <div className="w-full max-w-[440px] bg-white rounded-3xl border border-gray-100 shadow-xl shadow-slate-200/60 overflow-hidden min-h-[580px] flex flex-col mt-4">
           <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
 
           <div className="px-8 pt-6 pb-6 flex-1 flex flex-col">
             <div className="flex flex-col items-center mb-5">
-              <img
-                src={logoSrc}
-                alt="PataChako"
-                className="w-36 h-36 object-contain drop-shadow-xl"
-              />
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+                title="Go to home"
+              >
+                <img
+                  src={logoSrc}
+                  alt="PataChako"
+                  className="w-36 h-36 object-contain drop-shadow-xl cursor-pointer"
+                />
+              </button>
               <h1
                 className="text-2xl font-extrabold text-gray-900 tracking-tight mt-4"
                 style={{ fontFamily: "'Sora', sans-serif" }}

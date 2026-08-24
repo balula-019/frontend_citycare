@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { resetPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
@@ -49,44 +49,55 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 py-8 relative">
-      {/* Back button */}
-      <button
-        onClick={() => navigate('/')}
-        className="absolute top-6 right-6 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#1a56db] transition-colors bg-white border border-gray-200 hover:border-[#1a56db] rounded-xl px-4 py-2.5 shadow-sm hover:shadow-md"
-      >
-        <ArrowLeft size={15} />
-        Back
-      </button>
+    <div
+      className="min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 overflow-y-auto"
+      style={{ background: '#f4f7fd' }}
+    >
+      {/* Card Container */}
+      <div className="w-full max-w-[460px] bg-white rounded-3xl shadow-2xl shadow-blue-100/30 border border-gray-100 overflow-hidden flex flex-col my-auto">
+        <div
+          className="h-1.5 w-full flex-shrink-0"
+          style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }}
+        />
 
-      {/* Main card */}
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-blue-100/40 border border-gray-100 overflow-hidden">
-        <div className="h-1.5 w-full" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
+        <div className="px-6 sm:px-8 py-8 flex-1 flex flex-col justify-center">
+          {/* Interactive Large Logo */}
+          <div className="flex justify-center mb-3">
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+              title="Go to home"
+            >
+              <img
+                src={logoSrc}
+                alt="PataChako"
+                className="w-32 h-32 sm:w-36 sm:h-36 object-contain drop-shadow-xl cursor-pointer"
+              />
+            </button>
+          </div>
 
-        <div className="px-8 py-8">
-          {/* Logo + branding */}
-          <div className="flex flex-col items-center mb-6">
-            <img
-              src={logoSrc}
-              alt="PataChako"
-              className="w-24 h-24 object-contain drop-shadow-md mb-4"
-            />
-            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+          <div className="mb-6 text-center">
+            <h1
+              className="text-2xl font-extrabold text-gray-900 tracking-tight"
+              style={{ fontFamily: "'Sora', sans-serif" }}
+            >
               Reset your password
             </h1>
-            <p className="text-sm text-gray-500 mt-1 text-center">
-              Enter the OTP sent to <strong className="text-gray-700">{email}</strong>
+            <p className="text-sm text-gray-500 mt-1">
+              Enter the OTP sent to{' '}
+              <strong className="text-gray-700">{email || 'your email'}</strong>
             </p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm flex items-center gap-2">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-xs sm:text-sm flex items-start gap-2">
               <span className="text-red-500 font-bold shrink-0">!</span>
-              {error}
+              <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               label="OTP Code"
               type="text"
@@ -116,7 +127,7 @@ export default function ResetPasswordPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 bottom-3.5 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
+                className="absolute right-3.5 bottom-3.5 text-gray-400 hover:text-[#1a56db] transition-colors focus:outline-none"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -126,8 +137,12 @@ export default function ResetPasswordPage() {
             <Button
               variant="primary"
               type="submit"
-              className="w-full py-3.5 text-base font-semibold tracking-wide rounded-xl"
+              className="w-full py-3.5 text-sm sm:text-base font-bold tracking-wide rounded-xl mt-2"
               disabled={loading}
+              style={{
+                background: 'linear-gradient(135deg, #1a56db, #1240a8)',
+                boxShadow: '0 4px 12px rgba(26,86,219,0.2)',
+              }}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -140,12 +155,13 @@ export default function ResetPasswordPage() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 pt-4 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-500">
               Remember your password?{' '}
               <button
+                type="button"
                 onClick={() => navigate('/login')}
-                className="font-semibold text-[#1a56db] hover:underline"
+                className="font-bold text-[#1a56db] hover:underline"
               >
                 Sign in
               </button>
@@ -154,7 +170,7 @@ export default function ResetPasswordPage() {
         </div>
       </div>
 
-      <p className="absolute bottom-6 text-xs text-gray-400 text-center w-full">
+      <p className="text-xs text-gray-400 text-center w-full pt-4 pb-2">
         For security, use a strong password with at least 8 characters.
       </p>
     </div>
