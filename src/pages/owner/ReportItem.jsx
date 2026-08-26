@@ -1,9 +1,8 @@
-
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  AlertCircle, CheckCircle, Brain, Upload, Trash2,
-  LayoutDashboard, List, ArrowLeft, Database, SearchCheck, Sparkles
+  AlertCircle, Brain, Upload, Trash2,
+  LayoutDashboard, List, ArrowLeft, CheckCircle2, Sparkles, BellRing
 } from 'lucide-react';
 import { createLostReport } from '../../api/items';
 import Button from '../../components/shared/Button';
@@ -46,15 +45,10 @@ const animStyles = `
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes dotBounce {
-    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-    40% { transform: scale(1); opacity: 1; }
-  }
   .ai-spinner-outer { animation: spin-slow 2s linear infinite; }
   .ai-spinner-inner { animation: spin-reverse 1.5s linear infinite; }
   .pulse-ring-anim { animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
-  .dot-bounce { animation: dotBounce 1.2s ease-in-out infinite; }
 `;
 
 function SelectField({ label, name, value, onChange, options, placeholder, required }) {
@@ -78,30 +72,6 @@ function SelectField({ label, name, value, onChange, options, placeholder, requi
   );
 }
 
-const SIMULATION_STAGES = [
-  {
-    step: 1,
-    title: 'Initializing AI Matching Engine...',
-    subtitle: 'Parsing report details and normalizing visual characteristics',
-    icon: Brain,
-    badge: 'Step 1/3'
-  },
-  {
-    step: 2,
-    title: 'Lost Report Saved Successfully!',
-    subtitle: 'Indexing database and preparing location radius matching',
-    icon: Database,
-    badge: 'Step 2/3'
-  },
-  {
-    step: 3,
-    title: 'Scanning Found Item Registry...',
-    subtitle: 'Executing visual and text semantic comparison',
-    icon: SearchCheck,
-    badge: 'Step 3/3'
-  }
-];
-
 export default function ReportItem() {
   const navigate = useNavigate();
 
@@ -115,14 +85,7 @@ export default function ReportItem() {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [reportId, setReportId] = useState(null);
-  const [matchResult, setMatchResult] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
-
-  // Simulation & API State Handling
-  const [simStageIdx, setSimStageIdx] = useState(0);
-  const [apiFinished, setApiFinished] = useState(false);
-  const pendingResponseRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -187,40 +150,11 @@ export default function ReportItem() {
     setStep(prev => Math.max(prev - 1, 0));
   };
 
-  // Stage progression timers for Step 3 animation
-  useEffect(() => {
-    if (step !== 3) return;
-
-    setSimStageIdx(0);
-    const stage1Timer = setTimeout(() => setSimStageIdx(1), 1800);
-    const stage2Timer = setTimeout(() => setSimStageIdx(2), 3600);
-
-    return () => {
-      clearTimeout(stage1Timer);
-      clearTimeout(stage2Timer);
-    };
-  }, [step]);
-
-  // Transition to Step 4 when API call is complete and minimum stage 3 reached
-  useEffect(() => {
-    if (step === 3 && apiFinished && simStageIdx === 2) {
-      const rawData = pendingResponseRef.current;
-      if (rawData) {
-        const actualData = rawData?.data ? rawData.data : rawData;
-        setReportId(actualData?.id || null);
-        setMatchResult(actualData);
-        setStep(4);
-      }
-    }
-  }, [step, apiFinished, simStageIdx]);
-
   const handleSubmit = async () => {
     if (!validateStep()) return;
     setSubmitting(true);
     setError('');
-    setApiFinished(false);
-    pendingResponseRef.current = null;
-    setStep(3);
+    setStep(3); // Show real-time submission animation
 
     try {
       const payload = {
@@ -237,10 +171,8 @@ export default function ReportItem() {
         imageUrls: form.imageUrls.length > 0 ? form.imageUrls : undefined,
       };
 
-      const response = await createLostReport(payload);
-      const data = response?.data || response;
-      pendingResponseRef.current = data;
-      setApiFinished(true);
+      await createLostReport(payload);
+      setStep(4); // Move directly to completion screen when done
     } catch (err) {
       setError(err.message || 'Something went wrong while submitting the report.');
       setStep(2);
@@ -257,25 +189,6 @@ export default function ReportItem() {
     label: c.replace(/_/g, ' ').charAt(0) + c.replace(/_/g, ' ').slice(1).toLowerCase()
   }));
   const regionOptions = REGIONS.map(r => ({ value: r, label: r.replace(/_/g, ' ') }));
-
-  // Safely extract payload values
-  const responseData = matchResult?.data || matchResult;
-  const activeReportId = responseData?.id || reportId;
-  const matchesList = responseData?.matches || [];
-  const hasMatch = Array.isArray(matchesList) && matchesList.length > 0;
-
-  const matchDetails = hasMatch ? matchesList[0] : null;
-  const rawScore = responseData?.bestScore ?? responseData?.finalScore ?? matchDetails?.finalScore;
-  const displayedScore = rawScore ? Math.round(rawScore) : 0;
-
-  const getMatchBadge = (score) => {
-    if (!score) return null;
-    if (score >= 80) return { bg: '#dcfce7', text: '#166534', label: 'Strong Match' };
-    return { bg: '#dbeafe', text: '#1e40af', label: 'Potential Match' };
-  };
-  const matchBadge = getMatchBadge(displayedScore);
-
-  const CurrentStageIcon = SIMULATION_STAGES[simStageIdx].icon;
 
   return (
     <div className="min-h-screen bg-surface flex flex-col">
@@ -434,100 +347,54 @@ export default function ReportItem() {
           </div>
         )}
 
-        {/* Dynamic AI Processing Stage */}
+        {/* Real-time Saving Animation */}
         {step === 3 && (
-          <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4 fade-in-up">
-            <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
+          <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4 fade-in-up">
+            <div className="relative w-36 h-36 mb-6 flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border-4 border-[#1a56db]/20 pulse-ring-anim" />
               <div className="absolute inset-2 rounded-full border-2 border-dashed border-[#1a56db]/40 ai-spinner-outer" />
-              <div className="absolute inset-6 rounded-full border-2 border-dashed border-[#e11d48]/40 ai-spinner-inner" />
-              
-              <div className="relative z-10 w-24 h-24 rounded-full bg-blue-50/80 backdrop-blur border border-blue-100 flex items-center justify-center shadow-inner">
-                <CurrentStageIcon size={44} className="text-[#1a56db] transition-all duration-500 animate-pulse" />
+              <div className="relative z-10 w-20 h-20 rounded-full bg-blue-50/80 backdrop-blur border border-blue-100 flex items-center justify-center shadow-inner">
+                <Brain size={36} className="text-[#1a56db] animate-pulse" />
               </div>
             </div>
-
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-[#1a56db] text-xs font-semibold mb-3">
-              <Sparkles size={14} />
-              <span>{SIMULATION_STAGES[simStageIdx].badge}</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2 transition-all duration-300">
-              {SIMULATION_STAGES[simStageIdx].title}
-            </h2>
-            <p className="text-base text-gray-600 max-w-md mb-8 transition-all duration-300">
-              {SIMULATION_STAGES[simStageIdx].subtitle}
-            </p>
-
-            <div className="flex gap-2 mb-8">
-              {[0, 1, 2].map(i => (
-                <div
-                  key={i}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    i === simStageIdx ? 'bg-[#1a56db] scale-125' : 'bg-gray-200'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <p className="text-xs text-gray-400">Please wait while our algorithms process your lost report...</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Saving Lost Report...</h2>
+            <p className="text-sm text-gray-500">Indexing details into our AI registry</p>
           </div>
         )}
 
-        {/* Step 4: Decision State */}
+        {/* Step 4: Final Confirmation Screen */}
         {step === 4 && (
-          <div className="fade-in-up">
-            {hasMatch ? (
-              <div className="space-y-6 text-center">
-                <div className="flex items-center justify-center gap-3">
-                  <CheckCircle size={28} className="text-green-500" />
-                  <h3 className="text-2xl font-bold text-gray-900">Strong Match Found!</h3>
-                  {matchBadge && (
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: matchBadge.bg, color: matchBadge.text }}>
-                      {matchBadge.label}
-                    </span>
-                  )}
-                </div>
-                <p className="text-gray-600">Our AI found a potential match for your lost item.</p>
+          <div className="fade-in-up py-8 text-center max-w-lg mx-auto">
+            <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-5 shadow-sm">
+              <CheckCircle2 size={36} />
+            </div>
 
-                <div className="flex justify-center">
-                  <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm w-full max-w-xs">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Confidence Match Score</p>
-                    <p className="text-4xl font-black text-[#1a56db]">{displayedScore}%</p>
-                    <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-[#1a56db] rounded-full" style={{ width: `${displayedScore}%` }}></div>
-                    </div>
-                  </div>
-                </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Lost Report Submitted Successfully!</h3>
 
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button variant="primary" onClick={() => navigate(`/owner/claim/${activeReportId}`)}>
-                    Claim Item
-                  </Button>
-                  <Button variant="outline" onClick={() => navigate('/owner/reports')}>
-                    <List size={18} className="mr-1" /> My Reports
-                  </Button>
-                </div>
+            <p className="text-gray-600 text-base leading-relaxed mb-6">
+              Our AI engine is actively searching. Once an organization registers a matching item, we will notify you immediately via your <strong className="text-gray-800">email or phone number</strong>.
+            </p>
+
+            <div className="bg-blue-50/70 border border-blue-100 rounded-2xl p-4 text-left mb-8 flex items-start gap-3">
+              <div className="p-2 bg-blue-100 rounded-xl text-[#1a56db] shrink-0 mt-0.5">
+                <BellRing size={20} />
               </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4">
-                  <AlertCircle size={32} />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">No Matching Item Found</h3>
-                <p className="text-gray-500 mb-8 max-w-md mx-auto">
-                  Your report was saved successfully! We couldn't find an immediate match in our registry, but our AI will automatically match future found items with your report.
+              <div>
+                <p className="text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-0.5">Automated AI Matching</p>
+                <p className="text-xs text-blue-900 leading-snug">
+                  You don't need to keep checking back continuously. Keep your notification preferences updated in your profile settings.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button variant="primary" onClick={() => navigate('/owner/dashboard')}>
-                    <LayoutDashboard size={18} className="mr-1" /> Dashboard
-                  </Button>
-                  <Button variant="outline" onClick={() => navigate('/owner/reports')}>
-                    <List size={18} className="mr-1" /> My Reports
-                  </Button>
-                </div>
               </div>
-            )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button variant="primary" onClick={() => navigate('/owner/dashboard')}>
+                <LayoutDashboard size={18} className="mr-2" /> Go to Dashboard
+              </Button>
+              <Button variant="outline" onClick={() => navigate('/owner/reports')}>
+                <List size={18} className="mr-2" /> View My Reports
+              </Button>
+            </div>
           </div>
         )}
       </div>
