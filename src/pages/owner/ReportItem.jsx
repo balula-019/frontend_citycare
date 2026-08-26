@@ -372,7 +372,7 @@ export default function ReportItem() {
             <h3 className="text-2xl font-bold text-gray-900 mb-3">Lost Report Submitted Successfully!</h3>
 
             <p className="text-gray-600 text-base leading-relaxed mb-6">
-              Our AI engine is actively searching. Once an organization registers a matching item, we will notify you immediately via your <strong className="text-gray-800">email or phone number</strong>.
+              Our AI engine is actively searching. Once an organization registers a matching item, we will notify you immediately via your <strong className="text-gray-800">email </strong>.
             </p>
 
             <div className="bg-blue-50/70 border border-blue-100 rounded-2xl p-4 text-left mb-8 flex items-start gap-3">
@@ -382,7 +382,7 @@ export default function ReportItem() {
               <div>
                 <p className="text-xs font-bold text-[#1a56db] uppercase tracking-wider mb-0.5">Automated AI Matching</p>
                 <p className="text-xs text-blue-900 leading-snug">
-                  You don't need to keep checking back continuously. Keep your notification preferences updated in your profile settings.
+                  You don't need to keep checking back continuously. We will notify you through your email. and once notified go to <strong className="text-gray-800">My Report </strong> for Claim your item.
                 </p>
               </div>
             </div>
