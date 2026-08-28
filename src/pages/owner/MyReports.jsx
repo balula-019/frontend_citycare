@@ -9,7 +9,7 @@ import {
   Banknote, Car, Zap, Droplets, Baby, Heart, Dog, UtensilsCrossed,
   Umbrella, Package, Globe
 } from 'lucide-react';
-import { getMyLostReportsWithMatches, deleteClaim, claimItem } from '../../api/items';
+import { getMyLostReportsWithMatches, deleteClaim } from '../../api/items';
 
 /* ─── Status & Claim Helpers ──────────────────────────────────── */
 const STATUS_CFG = {
@@ -162,13 +162,19 @@ function ScoreBar({ label, rawValue }) {
 }
 
 /* ─── Match detail panel ────────────────────────────────────── */
+// FIX: this used to navigate with `match.organizationItemId || reportId`.
+// ClaimItem.jsx looks up the report by *report id* (`r.id === reportId`),
+// so navigating with the organization's item id sent it to a dead page
+// ("Report not found") whenever a match had a real organizationItemId.
+// We now always navigate with the report's own id, and separately gate
+// the button on whether this match actually has a claimable org item.
 function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const scoreKeys = Object.keys(SCORE_LABELS).filter(k => match[k] != null);
   const isMatchClaimed = isReportClaimed || isItemClaimedOrUnavailable(match);
-  const claimTargetId = match.organizationItemId || reportId;
+  const canClaim = Boolean(match.organizationItemId) && !isMatchClaimed;
 
   return (
     <div className="border border-[#e2e8f0] rounded-xl overflow-hidden text-xs">
@@ -209,26 +215,6 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
           {scoreKeys.map(k => (
             <ScoreBar key={k} label={SCORE_LABELS[k]} rawValue={match[k]} />
           ))}
-          <div className="pt-2 border-t border-[#f1f5f9] space-y-1">
-            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider mb-1.5">
-              Reference IDs
-            </p>
-            {match.organizationItemId && (
-              <p className="text-[11px] text-gray-500 font-mono truncate">
-                Item: {match.organizationItemId}
-              </p>
-            )}
-            {match.organizationId && (
-              <p className="text-[11px] text-gray-500 font-mono truncate">
-                Org: {match.organizationId}
-              </p>
-            )}
-            {match.status && (
-              <p className="text-[11px] text-gray-500">
-                Status: <span className="font-semibold">{match.status}</span>
-              </p>
-            )}
-          </div>
           {isMatchClaimed ? (
             <div className="mt-2 w-full flex items-center justify-center py-2.5 rounded-lg
                            bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
@@ -236,10 +222,12 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
             </div>
           ) : (
             <button
-              onClick={() => navigate(`/owner/claim/${claimTargetId}`)}
+              onClick={() => navigate(`/owner/claim/${reportId}`)}
+              disabled={!canClaim}
               className="mt-2 w-full flex items-center justify-center gap-1.5 py-2 rounded-lg
                          bg-[#1a56db] text-white text-xs font-bold
-                         hover:bg-[#1547c0] transition-all active:scale-95"
+                         hover:bg-[#1547c0] transition-all active:scale-95
+                         disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Claim This Item
             </button>
@@ -250,30 +238,46 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
   );
 }
 
-/* ─── Report card (FINAL – delete icon visible after successful claim) ─── */
+/* ─── Report card ──────────────────────────────────────────────
+   FIX: this card used to run its own inline `claimItem()` call from the
+   footer button, with its own (out-of-sync) success/error parsing. That's
+   why an unmatched/stale item could hit the API directly from the list
+   and surface a raw "Item is no longer available for claim" error instead
+   of ever reaching a real success screen. The list should only ever be
+   responsible for *entering* the claim flow — the actual claim submission
+   and success/failure handling now lives in one place: ClaimItem.jsx.
+   So this card just navigates to /owner/claim/:reportId, same as the
+   button inside MatchDetailPanel. */
 function ReportCard({ report, onDelete }) {
   const [imgErr, setImgErr] = useState(false);
   const [showMatches, setShowMatches] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [claiming, setClaiming] = useState(false);
-  const [claimResult, setClaimResult] = useState(null);
-  const [claimError, setClaimError] = useState('');
-
-  const isClaimed = isItemClaimedOrUnavailable(report);
-  const cfg = (isClaimed || claimResult)
-    ? { bg: '#dcfce7', text: '#166534', label: 'Already Claimed' }
-    : (STATUS_CFG[report.status] || { bg: '#f1f5f9', text: '#475569', label: 'Not Claimed' });
+  const navigate = useNavigate();
 
   const thumb        = report.imageUrls?.[0];
   const matches      = Array.isArray(report.matches) ? report.matches : [];
   const totalMatches = report.totalMatches ?? matches.length;
   const hasMatches   = totalMatches > 0;
   const best         = matches[0] ?? null;
+  const isMatched    = best?.finalScore != null;
 
-  // claimId can come from report data (if backend provides) or from the claim result
-  const claimIdFromReport = report.claimId || report.claimRequestId;
-  const claimIdForDelete = claimResult?.claimId || claimIdFromReport;
+  // FIX: report.status never changes to CLAIMED/FOUND on its own (confirmed
+  // from the real API response — it stays "REPORTED" forever), so checking
+  // only the report-level fields left the Claim button active even once the
+  // matched org item was actually claimed, letting people walk straight into
+  // a failure on the claim page. The matched item's own status DOES reflect
+  // this, so we check that too.
+  const isClaimed = isItemClaimedOrUnavailable(report) || matches.some(isItemClaimedOrUnavailable);
+  const cfg = isClaimed
+    ? { bg: '#dcfce7', text: '#166534', label: 'Already Claimed' }
+    : isMatched
+      ? STATUS_CFG.MATCHED
+      : (STATUS_CFG[report.status] || { bg: '#f1f5f9', text: '#475569', label: 'Not Claimed' });
 
+  const claimIdForDelete = report.claimId || report.claimRequestId;
+
+  // Only used to enable/disable the button client-side — the real
+  // source of truth for whether a claim can succeed is ClaimItem.jsx.
   const claimTargetId = best?.organizationItemId;
 
   const handleDelete = async () => {
@@ -281,49 +285,13 @@ function ReportCard({ report, onDelete }) {
     setDeleting(true);
     try {
       await deleteClaim(claimIdForDelete);
-      setClaimResult(null);       // clear pending claim info
-      onDelete?.(report.id);     // remove card or refresh
+      onDelete?.(report.id);
     } catch (err) {
       // silent
     } finally {
       setDeleting(false);
     }
   };
-
-  const handleClaim = async () => {
-    if (!claimTargetId) {
-      setClaimError('No matching organisation item to claim.');
-      return;
-    }
-    setClaiming(true);
-    setClaimError('');
-    setClaimResult(null);
-    try {
-      const res = await claimItem(claimTargetId);
-      const envelope = res?.data || res;
-
-      if (String(envelope?.statusCode) === '600') {
-        const claimData = envelope?.data || envelope;
-        setClaimResult({
-          organisationName: claimData.organisationName || 'Unknown organisation',
-          lostReportId: claimData.lostReportId || report.id,
-          claimId: claimData.id,      // ← capture the claim ID from the response
-        });
-        onDelete?.(null); // refresh list
-      } else {
-        setClaimError(envelope?.message || 'Item is no longer available for claim');
-        setClaimResult(null);
-      }
-    } catch (err) {
-      const serverMsg = err.response?.data?.message || err.message || 'Claim failed. Please try again.';
-      setClaimError(serverMsg);
-      setClaimResult(null);
-    } finally {
-      setClaiming(false);
-    }
-  };
-
-  const showClaimedInfo = isClaimed || claimResult;
 
   return (
     <div className="bg-white border border-[#e2e8f0] rounded-2xl overflow-hidden
@@ -351,8 +319,7 @@ function ReportCard({ report, onDelete }) {
                   style={{ backgroundColor: cfg.bg, color: cfg.text }}>
               {cfg.label}
             </span>
-            {/* Delete button visible only when we have a claim ID (from successful claim) */}
-            {showClaimedInfo && claimIdForDelete && (
+            {isClaimed && claimIdForDelete && (
               <button
                 onClick={handleDelete}
                 disabled={deleting}
@@ -422,45 +389,29 @@ function ReportCard({ report, onDelete }) {
                 match={m}
                 index={i}
                 reportId={report.id}
-                isReportClaimed={showClaimedInfo}
+                isReportClaimed={isClaimed}
               />
             ))}
           </div>
         )}
 
-        {/* Claim error notice */}
-        {claimError && (
-          <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg p-2.5 flex items-start gap-1.5 mt-1">
-            <AlertCircle size={14} className="shrink-0 mt-0.5 text-red-500" />
-            <span>{claimError}</span>
-          </div>
-        )}
-
         {/* Footer actions */}
         <div className="mt-auto pt-2 border-t border-[#f1f5f9]
-                        flex items-center justify-between gap-2">
-          <p className="text-[10px] text-gray-400 font-mono">
-            ID: {report.id?.slice(0, 10)}…
-          </p>
-
-          {showClaimedInfo ? (
-            <div className="flex flex-col items-end">
-              <span className="px-3 py-1.5 rounded-lg text-xs font-semibold
-                               bg-emerald-50 text-emerald-800 border border-emerald-200">
-                {claimResult
-                  ? `Pending – ${claimResult.organisationName} | ${claimResult.lostReportId?.slice(0, 10)}…`
-                  : 'Already Claimed'}
-              </span>
-            </div>
+                        flex items-center justify-end gap-2">
+          {isClaimed ? (
+            <span className="px-3 py-1.5 rounded-lg text-xs font-semibold
+                             bg-emerald-50 text-emerald-800 border border-emerald-200">
+              Already Claimed
+            </span>
           ) : (
             <button
-              onClick={handleClaim}
-              disabled={claiming || !claimTargetId}
+              onClick={() => navigate(`/owner/claim/${report.id}`)}
+              disabled={!claimTargetId}
               className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold
                          bg-[#1a56db] text-white hover:bg-[#1547c0]
                          transition-all active:scale-95 disabled:opacity-60"
             >
-              {claiming ? 'Claiming…' : 'Claim Item'}
+              Claim Item
             </button>
           )}
         </div>
@@ -486,11 +437,11 @@ export default function MyReports() {
     try {
       const res      = await getMyLostReportsWithMatches(pageNum, PAGE_SIZE);
       const pageData = res?.data;
-      
-      const items = Array.isArray(pageData) 
-        ? pageData 
-        : Array.isArray(pageData?.content) 
-          ? pageData.content 
+
+      const items = Array.isArray(pageData)
+        ? pageData
+        : Array.isArray(pageData?.content)
+          ? pageData.content
           : Array.isArray(res?.content)
             ? res.content
             : [];
