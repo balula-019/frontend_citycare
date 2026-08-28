@@ -10,11 +10,6 @@ import { claimItem, getMyLostReportsWithMatches } from '../../api/items';
 // sync here so this page can tell the difference between:
 //  - the user already claimed THIS report (isOwnClaimed)
 //  - the matched org item is no longer available to anyone (isMatchUnavailable)
-// Previously this page only checked report.status === 'CLAIMED' / 'FOUND',
-// so a stale match (already claimed by the process on the backend) would
-// fall through to the claim button, the API call would fail with something
-// like "Item is no longer available for claim", and that error only showed
-// up as a plain red banner instead of a clear state.
 const isItemClaimedOrUnavailable = (item) => {
   if (!item) return false;
   const code = String(item.statusCode || item.code || item.errorCode || '');
@@ -59,11 +54,6 @@ export default function ClaimItem() {
     fetchReport();
   }, [reportId]);
 
-  // FIX: claimItem() returns the envelope directly — { statusCode, message, data }.
-  // The previous code did `result?.data || result` which drilled one level too
-  // deep, landing on the *inner* claim object (no statusCode field), so the
-  // success check always failed and fell through to the error branch — even
-  // on a real successful claim. That was the original bug.
   const handleClaim = async () => {
     if (!organizationItemId) {
       setError('No matched item to claim.');
@@ -78,8 +68,6 @@ export default function ClaimItem() {
         setClaimStatus(result?.data);
         setClaimed(true);
       } else {
-        // Backend already sends a clear message (e.g. "Item is no longer
-        // available for claim" with statusCode 702) — just surface it.
         setError(result?.message || 'Claim could not be completed. Please try again.');
       }
     } catch (err) {
@@ -103,7 +91,7 @@ export default function ClaimItem() {
           {isPending ? (
             <Clock size={40} className="text-amber-600" />
           ) : (
-            <CheckCircle size={40} className="text-green-600" />
+            <CheckCircle size={40} className="text-[#22c55e]" />
           )}
         </div>
         <h2 className="text-2xl font-black text-[#0f172a] mb-2">Claim Submitted!</h2>
@@ -145,11 +133,11 @@ export default function ClaimItem() {
         </p>
         <div className="flex gap-3">
           <Link to="/owner/reports"
-                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0]">
+                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0] transition-colors">
             My Reports
           </Link>
           <Link to="/owner/search"
-                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50">
+                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
             Back to Search
           </Link>
         </div>
@@ -172,15 +160,28 @@ export default function ClaimItem() {
   // ── Error / no match ──────────────────────────────────────
   if (error || !bestMatch) {
     return (
-      <div className="max-w-2xl mx-auto mt-20 p-8 text-center">
-        <AlertCircle size={32} className="text-red-400 mx-auto mb-4" />
-        <h2 className="text-xl font-black mb-2">No match available</h2>
-        <p className="text-sm text-gray-500 mb-6">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
+        <div className="w-20 h-20 rounded-2xl bg-red-50 flex items-center justify-center mb-6">
+          <AlertCircle size={40} className="text-red-500" />
+        </div>
+        <h2 className="text-2xl font-black text-[#0f172a] mb-2">Already claimed</h2>
+        <p className="text-sm text-gray-500 mb-6 max-w-sm">
           {error || 'This report has not been matched with any found item yet.'}
         </p>
-        <Link to="/owner/reports" className="text-[#1a56db] font-bold underline">
-          Back to My Reports
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            to="/owner/reports"
+            className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0] transition-colors"
+          >
+            Back to My Reports
+          </Link>
+          <Link
+            to="/owner/search"
+            className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            Go to Search
+          </Link>
+        </div>
       </div>
     );
   }
@@ -198,11 +199,11 @@ export default function ClaimItem() {
         </p>
         <div className="flex gap-3">
           <Link to="/owner/reports"
-                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0]">
+                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0] transition-colors">
             My Reports
           </Link>
           <Link to="/owner/search"
-                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50">
+                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
             Back to Search
           </Link>
         </div>
@@ -211,9 +212,6 @@ export default function ClaimItem() {
   }
 
   // ── Match no longer available (claimed/closed on the org side) ───
-  // This is the state that used to slip through: the button stayed
-  // active, the person clicked it, and only then did the API bounce
-  // back with "no longer available". Now it's caught up front.
   if (isMatchUnavailable) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
@@ -226,11 +224,11 @@ export default function ClaimItem() {
         </p>
         <div className="flex gap-3">
           <Link to="/owner/reports"
-                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0]">
+                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0] transition-colors">
             My Reports
           </Link>
           <Link to="/owner/search"
-                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50">
+                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors">
             Back to Search
           </Link>
         </div>
