@@ -1,14 +1,32 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft, CheckCircle, Loader2, AlertCircle,
-  Building2, Tag, Sparkles, Clock, Hash, Clipboard
+  Building2, Tag, Sparkles, Clock, Hash, Clipboard, XCircle
 } from 'lucide-react';
 import { claimItem, getMyLostReportsWithMatches } from '../../api/items';
 
+// Same "is this claimed/unavailable" logic used in MyReports.jsx, kept in
+// sync here so this page can tell the difference between:
+//  - the user already claimed THIS report (isOwnClaimed)
+//  - the matched org item is no longer available to anyone (isMatchUnavailable)
+// Previously this page only checked report.status === 'CLAIMED' / 'FOUND',
+// so a stale match (already claimed by the process on the backend) would
+// fall through to the claim button, the API call would fail with something
+// like "Item is no longer available for claim", and that error only showed
+// up as a plain red banner instead of a clear state.
+const isItemClaimedOrUnavailable = (item) => {
+  if (!item) return false;
+  const code = String(item.statusCode || item.code || item.errorCode || '');
+  if (code === '702') return true;
+  if (item.claimed === true || item.isClaimed === true) return true;
+  const rawStatus = String(item.status || item.claimStatus || item.itemStatus || '').toUpperCase();
+  const claimedStatuses = ['CLAIMED', 'UNAVAILABLE', 'APPROVED', 'FOUND', 'CLOSED', '702'];
+  return claimedStatuses.includes(rawStatus);
+};
+
 export default function ClaimItem() {
   const { reportId } = useParams();
-  const navigate = useNavigate();
 
   const [report, setReport]         = useState(null);
   const [loading, setLoading]       = useState(true);
@@ -19,7 +37,9 @@ export default function ClaimItem() {
 
   const bestMatch = report?.matches?.[0];
   const organizationItemId = bestMatch?.organizationItemId;
-  const isAlreadyClaimed = report?.status === 'CLAIMED' || report?.status === 'FOUND';
+
+  const isOwnClaimed      = isItemClaimedOrUnavailable(report);
+  const isMatchUnavailable = !isOwnClaimed && isItemClaimedOrUnavailable(bestMatch);
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -39,6 +59,11 @@ export default function ClaimItem() {
     fetchReport();
   }, [reportId]);
 
+  // FIX: claimItem() returns the envelope directly — { statusCode, message, data }.
+  // The previous code did `result?.data || result` which drilled one level too
+  // deep, landing on the *inner* claim object (no statusCode field), so the
+  // success check always failed and fell through to the error branch — even
+  // on a real successful claim. That was the original bug.
   const handleClaim = async () => {
     if (!organizationItemId) {
       setError('No matched item to claim.');
@@ -48,11 +73,18 @@ export default function ClaimItem() {
     setError('');
     try {
       const result = await claimItem(organizationItemId);
-      const claimResponse = result?.data?.data || result?.data || result;
-      setClaimStatus(claimResponse);
-      setClaimed(true);
+
+      if (String(result?.statusCode) === '600') {
+        setClaimStatus(result?.data);
+        setClaimed(true);
+      } else {
+        // Backend already sends a clear message (e.g. "Item is no longer
+        // available for claim" with statusCode 702) — just surface it.
+        setError(result?.message || 'Claim could not be completed. Please try again.');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Claim failed');
+      const body = err.response?.data;
+      setError(body?.message || err.message || 'Claim failed');
     } finally {
       setClaiming(false);
     }
@@ -153,8 +185,8 @@ export default function ClaimItem() {
     );
   }
 
-  // ── Already claimed screen ────────────────────────────────
-  if (isAlreadyClaimed) {
+  // ── Already claimed by the user ───────────────────────────
+  if (isOwnClaimed) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
         <div className="w-20 h-20 rounded-2xl bg-amber-100 flex items-center justify-center mb-6">
@@ -163,6 +195,34 @@ export default function ClaimItem() {
         <h2 className="text-2xl font-black text-[#0f172a] mb-2">Already Claimed</h2>
         <p className="text-sm text-gray-500 mb-6 max-w-sm">
           You have already claimed this item. You can view the status of your claim in My Reports.
+        </p>
+        <div className="flex gap-3">
+          <Link to="/owner/reports"
+                className="px-5 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0]">
+            My Reports
+          </Link>
+          <Link to="/owner/search"
+                className="px-5 py-2.5 rounded-xl border border-[#e2e8f0] text-sm font-bold text-gray-600 hover:bg-gray-50">
+            Back to Search
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Match no longer available (claimed/closed on the org side) ───
+  // This is the state that used to slip through: the button stayed
+  // active, the person clicked it, and only then did the API bounce
+  // back with "no longer available". Now it's caught up front.
+  if (isMatchUnavailable) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] p-8 text-center">
+        <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mb-6">
+          <XCircle size={40} className="text-gray-400" />
+        </div>
+        <h2 className="text-2xl font-black text-[#0f172a] mb-2">Item No Longer Available</h2>
+        <p className="text-sm text-gray-500 mb-6 max-w-sm">
+          This matched item is no longer available to claim. It may have already been picked up or closed by the organisation.
         </p>
         <div className="flex gap-3">
           <Link to="/owner/reports"
