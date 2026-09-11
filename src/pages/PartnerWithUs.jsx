@@ -23,6 +23,11 @@ const PARTNERSHIP_TYPES = [
   'OTHER',
 ];
 
+// Validation Regex patterns matching Java @Pattern annotations
+const ALPHA_SPACE_REGEX = /^[a-zA-Z\s]+$/;
+const PHONE_REGEX = /^(\+?[0-9]{1,3})?[0-9]{9,12}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const extractError = (err) => {
   const resp = err?.response?.data;
   return (
@@ -110,25 +115,75 @@ export default function PartnerWithUs() {
     }
   };
 
+  const validateForm = () => {
+    const errs = {};
+
+    // 1. Organization Name
+    const org = form.organizationName.trim();
+    if (!org) {
+      errs.organizationName = 'Organization name is required';
+    } else if (org.length < 2 || org.length > 100) {
+      errs.organizationName = 'Organization name must be between 2 and 100 characters';
+    } else if (!ALPHA_SPACE_REGEX.test(org)) {
+      errs.organizationName = 'Organization name must contain only letters and spaces';
+    }
+
+    // 2. Contact Person
+    const contact = form.contactPerson.trim();
+    if (!contact) {
+      errs.contactPerson = 'Contact person is required';
+    } else if (contact.length < 2 || contact.length > 50) {
+      errs.contactPerson = 'Contact person name must be between 2 and 50 characters';
+    } else if (!ALPHA_SPACE_REGEX.test(contact)) {
+      errs.contactPerson = 'Contact person name must contain only letters and spaces';
+    }
+
+    // 3. Email
+    const emailVal = form.email.trim();
+    if (!emailVal) {
+      errs.email = 'Email is required';
+    } else if (!EMAIL_REGEX.test(emailVal)) {
+      errs.email = 'Invalid email address';
+    }
+
+    // 4. Phone Number
+    const phone = form.phoneNumber.trim();
+    if (!phone) {
+      errs.phoneNumber = 'Phone number is required';
+    } else if (!PHONE_REGEX.test(phone)) {
+      errs.phoneNumber = 'Invalid mobile number format';
+    }
+
+    // 5. Message
+    const msg = form.message.trim();
+    if (!msg) {
+      errs.message = 'Message is required';
+    } else if (msg.length < 10 || msg.length > 1000) {
+      errs.message = 'Message must be between 10 and 1000 characters';
+    } else if (!ALPHA_SPACE_REGEX.test(msg)) {
+      errs.message = 'Message must contain only letters and spaces';
+    }
+
+    // 6. OTP Code
+    const otp = form.otpCode.trim();
+    if (!otp) {
+      errs.otpCode = 'OTP code is required';
+    } else if (!/^\d{6}$/.test(otp)) {
+      errs.otpCode = 'Enter a valid 6-digit OTP code';
+    }
+
+    return errs;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLocked) return;
 
-    // Field validation
-    const errs = {};
-    if (!form.organizationName.trim())
-      errs.organizationName = 'Organization name is required.';
-    if (!form.contactPerson.trim())
-      errs.contactPerson = 'Contact person is required.';
-    if (!form.phoneNumber.trim())
-      errs.phoneNumber = 'Phone number is required.';
-    if (!form.message.trim()) errs.message = 'Message is required.';
-    if (!form.otpCode.trim() || !/^\d{6}$/.test(form.otpCode.trim()))
-      errs.otpCode = 'Enter the 6-digit OTP code.';
+    const errs = validateForm();
 
-    if (Object.keys(errs).length) {
+    if (Object.keys(errs).length > 0) {
       setFieldErrors(errs);
-      setError('Please fill all fields correctly.');
+      setError('Please resolve validation errors before submitting.');
       triggerShake();
       return;
     }
@@ -142,6 +197,13 @@ export default function PartnerWithUs() {
       setSuccess(true);
     } catch (err) {
       const msg = extractError(err);
+      
+      // Map server-side field errors if returned as an object
+      const serverFieldErrors = err?.response?.data?.data?.fieldErrors;
+      if (serverFieldErrors) {
+        setFieldErrors(serverFieldErrors);
+      }
+      
       setError(msg);
       if (isLockError(msg)) setIsLocked(true);
       triggerShake();
@@ -202,7 +264,6 @@ export default function PartnerWithUs() {
         <div className="bg-white rounded-3xl border border-gray-100 shadow-xl shadow-blue-100/30 overflow-hidden">
           <div className="h-1.5 w-full bg-gradient-to-r from-[#1a56db] to-[#10b981]" />
           <div className="p-8">
-            {/* Logo — BIG, clickable → home */}
             <div className="flex flex-col items-center mb-8">
               <button
                 type="button"
@@ -298,6 +359,7 @@ export default function PartnerWithUs() {
                   disabled
                   required
                   placeholder="you@example.com"
+                  error={fieldErrors.email}
                 />
                 <Input
                   label="Phone Number"
