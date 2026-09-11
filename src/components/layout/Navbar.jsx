@@ -21,12 +21,15 @@ export default function Navbar() {
   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
   const userType = storedUser.user_type;
 
+  // ✅ PUBLIC (guest) — sees Partner With Us
   const publicLinks = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '#about', isHash: true },
+    { name: 'Partner With Us', href: '/partner-with-us' }, // ✅ only guests
     { name: 'Contact', href: '#footer', isHash: true },
   ];
 
+  // ✅ OWNER — no Partner With Us
   const ownerLinks = [
     { name: 'Dashboard', href: '/owner/dashboard' },
     { name: 'Search Items', href: '/owner/search' },
@@ -35,6 +38,7 @@ export default function Navbar() {
     { name: 'Profile', href: '/owner/profile' },
   ];
 
+  // ✅ ORGANISATION — no Partner With Us
   const orgLinks = [
     { name: 'Dashboard', href: '/org/dashboard' },
     { name: 'Publish Item', href: '/org/publish' },
@@ -43,42 +47,49 @@ export default function Navbar() {
     { name: 'Profile', href: '/org/profile' },
   ];
 
+  // ✅ ADMIN — dedicated review section (approve / reject)
+  const adminLinks = [
+    { name: 'Dashboard', href: '/admin/dashboard' },
+    { name: 'Manage Users', href: '/admin/manage-users' },
+    { name: 'Create Org', href: '/admin/create-org' },
+    { name: 'Items', href: '/admin/items' },
+    { name: 'Partner Requests', href: '/admin/partner-requests' }, // ✅ approve / reject
+    { name: 'Profile', href: '/admin/profile' },
+  ];
+
   let navLinks = publicLinks;
   if (userType === 'OWNER') {
     navLinks = ownerLinks;
   } else if (userType === 'ORGANISATION') {
     navLinks = orgLinks;
+  } else if (userType === 'ADMIN') {
+    navLinks = adminLinks;
   }
 
   const handleLogout = async () => {
     await logout();
   };
 
-  // Handle Home Click explicitly
   const handleHomeClick = (e) => {
     e.preventDefault();
     setIsMenuOpen(false);
-    
+
     if (location.pathname === '/' && location.hash) {
-      // Clear hash and scroll to top if already on homepage with hash
       window.history.pushState('', document.title, window.location.pathname);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (location.pathname === '/') {
-      // Scroll to top if on home page
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Navigate to home page root
       navigate('/');
     }
   };
 
-  // Handle Hash Section Navigation
   const handleHashClick = (e, targetId) => {
     e.preventDefault();
     setIsMenuOpen(false);
 
     const elementId = targetId.replace('#', '');
-    
+
     if (location.pathname !== '/') {
       navigate('/', { replace: false });
       setTimeout(() => {
@@ -154,7 +165,7 @@ export default function Navbar() {
           </a>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map(renderLink)}
           </nav>
 
@@ -200,7 +211,7 @@ export default function Navbar() {
       {/* Mobile Nav */}
       <div
         className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${
-          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'max-h-[36rem] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="bg-white border-b border-border px-4 py-6 space-y-4">

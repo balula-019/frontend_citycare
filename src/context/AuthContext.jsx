@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   // Initialise user from localStorage
-  useEffect(() => {
+  useEffect(() => {   
     try {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {

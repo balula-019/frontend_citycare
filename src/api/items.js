@@ -40,16 +40,29 @@ export const claimItem = (organizationItemId) =>
 export const getClaimPayment = (organizationItemId) =>
   apiClient(`/v1/services/lost-reports/${organizationItemId}/payment`);
 
+// **
+//  * Publish an organisation found item
+//  * POST /v1/services/lost-reports/publish
+//  * 
+//  * NOTE: This endpoint expects multipart/form-data with:
+//  *   - request (JSON string)
+//  *   - photos (file array)
+//  *   - reporterPhotos (file array)
+//  */
 /**
  * Publish an organisation found item
  * POST /v1/services/lost-reports/publish
+ * 
+ * This endpoint requires multipart/form-data with:
+ *   - request (JSON string)
+ *   - photos (file array)
+ *   - reporterPhotos (file array)
  */
-export const publishOrganizationItem = (data) =>
+export const publishOrganizationItem = (formData) =>
   apiClient('/v1/services/lost-reports/publish', {
     method: 'POST',
-    body:   JSON.stringify(data),
+    body: formData,   // ✅ FormData goes directly, no JSON.stringify
   });
-
 /**
  * Update a published organisation item
  * PUT /v1/services/lost-reports/publish/{itemId}

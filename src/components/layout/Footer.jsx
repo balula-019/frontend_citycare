@@ -38,9 +38,10 @@ const Footer = () => {
   };
 
   const platformLinks = [
-    { label: 'Search Items', path: '/owner/search', protected: true },
-    { label: 'Report Lost Item', path: '/owner/report', protected: true },
-    { label: 'How it Works', path: '#how-it-works', isHash: true },
+    { label: 'Search Items',      path: '/owner/search',    protected: true },
+    { label: 'Report Lost Item',  path: '/owner/report',    protected: true },
+    { label: 'Partner With Us',   path: '/partner-with-us' }, // ✅ public — no protected flag
+    { label: 'How it Works',      path: '#how-it-works',    isHash: true },
   ];
 
   const socialLinks = [
@@ -55,7 +56,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Balanced Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16 mb-12">
-          
+
           {/* Column 1: Brand & Socials */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -110,7 +111,11 @@ const Footer = () => {
                   ) : (
                     <a
                       href={link.path}
-                      className="text-sm text-gray-400 hover:text-primary transition-colors inline-block"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(link.path);
+                      }}
+                      className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
                     >
                       {link.label}
                     </a>
@@ -136,7 +141,6 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                {/* ✅ FAQ link now uses hash navigation */}
                 <a
                   href="#faq"
                   onClick={(e) => handleHashClick(e, '#faq')}

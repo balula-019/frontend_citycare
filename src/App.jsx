@@ -10,7 +10,11 @@ import RegisterPage from './pages/auth/RegisterPage';
 import VerifyOtpPage from './pages/auth/VerifyOtpPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
-import ChangePasswordPage from './pages/ChangePasswordPage';   // ✅ forced password change
+import ChangePasswordPage from './pages/ChangePasswordPage';
+
+// ✅ Partner With Us (public, 2-step flow)
+import PartnerSendOtp from './pages/PartnerSendOtp';
+import PartnerWithUs from './pages/PartnerWithUs';
 
 // Owner
 import SearchItems from './pages/owner/SearchItems';
@@ -39,8 +43,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import CreateOrganisation from './pages/admin/CreateOrganisation';
 import ManageUsers from './pages/admin/ManageUsers';
 import AdminProfile from './pages/admin/AdminProfile';
-import AdminItems from './pages/admin/AdminItems';          // ✅ manage items list
-import AdminEditItem from './pages/admin/AdminEditItem';    // ✅ edit item (admin)
+import AdminItems from './pages/admin/AdminItems';
+import AdminEditItem from './pages/admin/AdminEditItem';
+import AdminPartnerRequests from './pages/admin/PartnerRequests';   // ✅ NEW
 
 function AppRoutes() {
   return (
@@ -53,12 +58,19 @@ function AppRoutes() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      {/* ✅ Change Password – accessible to any authenticated user */}
-      <Route path="/change-password" element={
-        <ProtectedRoute allowedRoles={['OWNER', 'ORGANISATION', 'ADMIN']}>
-          <ChangePasswordPage />
-        </ProtectedRoute>
-      } />
+      {/* ✅ Partner With Us — PUBLIC */}
+      <Route path="/partner-with-us" element={<PartnerSendOtp />} />
+      <Route path="/partner-with-us/form" element={<PartnerWithUs />} />
+
+      {/* ✅ Change Password */}
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute allowedRoles={['OWNER', 'ORGANISATION', 'ADMIN']}>
+            <ChangePasswordPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Owner */}
       <Route path="/owner/dashboard" element={<Navigate to="/owner/search" replace />} />
@@ -71,7 +83,14 @@ function AppRoutes() {
       <Route path="/owner/notifications" element={<ProtectedRoute allowedRoles={['OWNER']}><Notifications /></ProtectedRoute>} />
 
       {/* Organisation */}
-      <Route path="/org" element={<ProtectedRoute allowedRoles={['ORGANISATION']}><OrgLayout /></ProtectedRoute>}>
+      <Route
+        path="/org"
+        element={
+          <ProtectedRoute allowedRoles={['ORGANISATION']}>
+            <OrgLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="dashboard" element={<OrgDashboard />} />
         <Route path="publish" element={<PublishItem />} />
         <Route path="items" element={<MyItems />} />
@@ -85,15 +104,26 @@ function AppRoutes() {
       </Route>
 
       {/* Admin */}
-      <Route path="/admin" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminLayout /></ProtectedRoute>}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="create-org" element={<CreateOrganisation />} />
         <Route path="manage-users" element={<ManageUsers />} />
         <Route path="profile" element={<AdminProfile />} />
-        <Route path="items" element={<AdminItems />} />                {/* ✅ manage items list */}
-        <Route path="edit-item/:itemId" element={<AdminEditItem />} />  {/* ✅ edit item (admin) */}
-        <Route path="settings" element={<div className="p-8 text-gray-500">Settings page coming soon.</div>} />
+        <Route path="items" element={<AdminItems />} />
+        <Route path="edit-item/:itemId" element={<AdminEditItem />} />
+        <Route path="partner-requests" element={<AdminPartnerRequests />} />   {/* ✅ NEW */}
+        <Route
+          path="settings"
+          element={<div className="p-8 text-gray-500">Settings page coming soon.</div>}
+        />
       </Route>
 
       {/* Fallback */}
