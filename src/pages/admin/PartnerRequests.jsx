@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   RefreshCw, Handshake, Loader2, CheckCircle2, XCircle, Clock,
   AlertCircle, Mail, Phone, Building2, User as UserIcon,
+  MessageSquare,
 } from 'lucide-react';
 import { getAllPartnerRequests, updatePartnerRequestStatus } from '../../api/partnerApi';
 
@@ -10,8 +11,11 @@ export default function AdminPartnerRequests() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [actionLoading, setActionLoading] = useState({}); // requestId -> true
-  const [filter, setFilter] = useState('ALL'); // ALL | PENDING | APPROVED | REJECTED
+  // ✅ requestId -> 'APPROVED' | 'REJECTED' (which button is currently processing)
+  const [actionLoading, setActionLoading] = useState({});
+  const [filter, setFilter] = useState('ALL');
+  const [notes, setNotes] = useState({});
+  const [noteErrors, setNoteErrors] = useState({});
 
   const fetchRequests = useCallback(async () => {
     setLoading(true);
@@ -19,7 +23,6 @@ export default function AdminPartnerRequests() {
     try {
       const res = await getAllPartnerRequests();
 
-      // Backend returns a plain array, but be defensive about wrappers
       const list = Array.isArray(res)
         ? res
         : Array.isArray(res?.data)
@@ -43,19 +46,50 @@ export default function AdminPartnerRequests() {
     fetchRequests();
   }, [fetchRequests]);
 
+  const handleNoteChange = (requestId, value) => {
+    setNotes((prev) => ({ ...prev, [requestId]: value }));
+    setNoteErrors((prev) => ({ ...prev, [requestId]: '' }));
+  };
+
   const handleStatusChange = async (requestId, status) => {
-    setActionLoading((prev) => ({ ...prev, [requestId]: true }));
+    const note = (notes[requestId] || '').trim();
+
+    if (!note) {
+      setNoteErrors((prev) => ({
+        ...prev,
+        [requestId]: 'Please write a note before approving or rejecting.',
+      }));
+      return;
+    }
+
+    // ✅ Mark WHICH action is processing for this request
+    setActionLoading((prev) => ({ ...prev, [requestId]: status }));
     setError('');
     setSuccess('');
     try {
-      await updatePartnerRequestStatus(requestId, { status });
+      await updatePartnerRequestStatus(requestId, {
+        status,
+        adminNote: note,
+      });
       setSuccess(`Request ${status.toLowerCase()} successfully.`);
+
+      setNotes((prev) => {
+        const next = { ...prev };
+        delete next[requestId];
+        return next;
+      });
+
       await fetchRequests();
       setTimeout(() => setSuccess(''), 3500);
     } catch (err) {
       setError(err?.message || 'Failed to update partner request.');
     } finally {
-      setActionLoading((prev) => ({ ...prev, [requestId]: false }));
+      // ✅ Clear only this request's loading flag
+      setActionLoading((prev) => {
+        const next = { ...prev };
+        delete next[requestId];
+        return next;
+      });
     }
   };
 
@@ -164,99 +198,149 @@ export default function AdminPartnerRequests() {
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
-              {filtered.map((req) => (
-                <div key={req.id} className="p-5 hover:bg-gray-50/50 transition-colors">
-                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                    {/* Left: org info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <h3 className="font-bold text-gray-900 text-base truncate">
-                          {req.organizationName}
-                        </h3>
-                        {statusBadge(req.status)}
-                        <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-full">
-                          {req.partnershipType}
-                        </span>
-                      </div>
+              {filtered.map((req) => {
+                const note = notes[req.id] || '';
+                const noteError = noteErrors[req.id];
+                const canSubmit = note.trim().length > 0;
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-gray-600 mb-3">
-                        <div className="flex items-center gap-2 truncate">
-                          <UserIcon size={14} className="text-gray-400 shrink-0" />
-                          <span className="truncate">{req.contactPerson}</span>
+                // ✅ Which action (if any) is currently processing for this request
+                const activeAction = actionLoading[req.id]; // undefined | 'APPROVED' | 'REJECTED'
+                const approvingThis = activeAction === 'APPROVED';
+                const rejectingThis = activeAction === 'REJECTED';
+                const anyActionInFlight = Boolean(activeAction);
+
+                return (
+                  <div key={req.id} className="p-5 hover:bg-gray-50/50 transition-colors">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                      {/* Left: org info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h3 className="font-bold text-gray-900 text-base truncate">
+                            {req.organizationName}
+                          </h3>
+                          {statusBadge(req.status)}
+                          <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-full">
+                            {req.partnershipType}
+                          </span>
                         </div>
-                        <div className="flex items-center gap-2 truncate">
-                          <Mail size={14} className="text-gray-400 shrink-0" />
-                          <span className="truncate">{req.email}</span>
-                        </div>
-                        <div className="flex items-center gap-2 truncate">
-                          <Phone size={14} className="text-gray-400 shrink-0" />
-                          <span className="truncate">{req.phoneNumber}</span>
-                        </div>
-                        {req.reviewedBy && (
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-gray-600 mb-3">
                           <div className="flex items-center gap-2 truncate">
-                            <Building2 size={14} className="text-gray-400 shrink-0" />
-                            <span className="truncate">Reviewed by {req.reviewedBy}</span>
+                            <UserIcon size={14} className="text-gray-400 shrink-0" />
+                            <span className="truncate">{req.contactPerson}</span>
                           </div>
+                          <div className="flex items-center gap-2 truncate">
+                            <Mail size={14} className="text-gray-400 shrink-0" />
+                            <span className="truncate">{req.email}</span>
+                          </div>
+                          <div className="flex items-center gap-2 truncate">
+                            <Phone size={14} className="text-gray-400 shrink-0" />
+                            <span className="truncate">{req.phoneNumber}</span>
+                          </div>
+                          {req.reviewedBy && (
+                            <div className="flex items-center gap-2 truncate">
+                              <Building2 size={14} className="text-gray-400 shrink-0" />
+                              <span className="truncate">Reviewed by {req.reviewedBy}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {req.message && (
+                          <div className="bg-gray-50 rounded-xl p-3 text-sm text-gray-600 border border-gray-100">
+                            <p className="line-clamp-3">{req.message}</p>
+                          </div>
+                        )}
+
+                        {req.adminNote && (
+                          <div className="mt-2 text-xs text-gray-500 italic flex items-start gap-1.5">
+                            <MessageSquare size={12} className="mt-0.5 shrink-0" />
+                            <span>Admin note: {req.adminNote}</span>
+                          </div>
+                        )}
+
+                        {req.createdDate && (
+                          <p className="text-[11px] text-gray-400 mt-2">
+                            Submitted {new Date(req.createdDate).toLocaleString()}
+                          </p>
                         )}
                       </div>
 
-                      {req.message && (
-                        <div className="bg-gray-50 rounded-xl p-3 text-sm text-gray-600 border border-gray-100">
-                          <p className="line-clamp-3">{req.message}</p>
-                        </div>
-                      )}
-
-                      {req.adminNote && (
-                        <p className="text-xs text-gray-500 mt-2 italic">
-                          Admin note: {req.adminNote}
-                        </p>
-                      )}
-
-                      {req.createdDate && (
-                        <p className="text-[11px] text-gray-400 mt-2">
-                          Submitted {new Date(req.createdDate).toLocaleString()}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Right: actions */}
-                    <div className="flex lg:flex-col gap-2 shrink-0">
-                      {req.status === 'PENDING' ? (
-                        <>
-                          <button
-                            onClick={() => handleStatusChange(req.id, 'APPROVED')}
-                            disabled={actionLoading[req.id]}
-                            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50 transition-all shadow-sm"
-                          >
-                            {actionLoading[req.id] ? (
-                              <Loader2 size={14} className="animate-spin" />
-                            ) : (
-                              <CheckCircle2 size={15} />
+                      {/* Right: note + actions */}
+                      <div className="lg:w-72 w-full shrink-0">
+                        {req.status === 'PENDING' ? (
+                          <>
+                            <label className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 mb-1.5">
+                              <MessageSquare size={12} className="text-[#1a56db]" />
+                              Admin Note <span className="text-red-500">*</span>
+                            </label>
+                            <textarea
+                              value={note}
+                              onChange={(e) => handleNoteChange(req.id, e.target.value)}
+                              rows={3}
+                              disabled={anyActionInFlight}
+                              placeholder="Write a note before approving or rejecting…"
+                              className={`w-full px-3 py-2 text-sm rounded-xl border outline-none resize-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed ${
+                                noteError
+                                  ? 'border-red-300 focus:ring-2 focus:ring-red-200'
+                                  : 'border-[#e2e8f0] focus:ring-2 focus:ring-[#1a56db]/20 focus:border-[#1a56db]'
+                              }`}
+                            />
+                            {noteError && (
+                              <p className="text-[11px] text-red-600 mt-1">{noteError}</p>
                             )}
-                            Approve
-                          </button>
-                          <button
-                            onClick={() => handleStatusChange(req.id, 'REJECTED')}
-                            disabled={actionLoading[req.id]}
-                            className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold bg-white text-red-600 border border-red-200 hover:bg-red-50 disabled:opacity-50 transition-all"
-                          >
-                            {actionLoading[req.id] ? (
-                              <Loader2 size={14} className="animate-spin" />
-                            ) : (
-                              <XCircle size={15} />
-                            )}
-                            Reject
-                          </button>
-                        </>
-                      ) : (
-                        <span className="text-xs text-gray-400 italic self-start lg:self-center">
-                          No actions
-                        </span>
-                      )}
+
+                            <div className="flex gap-2 mt-2.5">
+                              {/* ✅ Approve — spinner only when THIS button is clicked */}
+                              <button
+                                onClick={() => handleStatusChange(req.id, 'APPROVED')}
+                                disabled={anyActionInFlight || !canSubmit}
+                                title={!canSubmit ? 'Write a note first' : 'Approve'}
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                              >
+                                {approvingThis ? (
+                                  <>
+                                    <Loader2 size={14} className="animate-spin" />
+                                    Approving…
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle2 size={15} />
+                                    Approve
+                                  </>
+                                )}
+                              </button>
+
+                              {/* ✅ Reject — spinner only when THIS button is clicked */}
+                              <button
+                                onClick={() => handleStatusChange(req.id, 'REJECTED')}
+                                disabled={anyActionInFlight || !canSubmit}
+                                title={!canSubmit ? 'Write a note first' : 'Reject'}
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold bg-white text-red-600 border border-red-200 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                              >
+                                {rejectingThis ? (
+                                  <>
+                                    <Loader2 size={14} className="animate-spin" />
+                                    Rejecting…
+                                  </>
+                                ) : (
+                                  <>
+                                    <XCircle size={15} />
+                                    Reject
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="text-xs text-gray-400 italic self-start lg:text-right">
+                            No actions — request already {req.status.toLowerCase()}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

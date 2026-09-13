@@ -337,7 +337,7 @@ export default function PartnerWithUs() {
                 value={form.organizationName}
                 onChange={handleChange}
                 required
-                placeholder="e.g., Dar es Salaam University"
+                placeholder="e.g., Universities, Mall,..."
                 error={fieldErrors.organizationName}
               />
               <Input
