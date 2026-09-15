@@ -10,37 +10,71 @@ import {
 import { useNotifications } from '../../context/NotificationContext';   // ✅ new
 
 /* ── Confirm reject modal ─────────────────────────── */
+/* ── Reject modal ─────────────────────────────────── */
 function RejectModal({ claim, onClose, onConfirm, loading }) {
   const [reason, setReason] = useState('');
-  const handleConfirm = () => onConfirm(claim.id, reason.trim() || 'No reason provided');
+  const handleConfirm = () =>
+    onConfirm(claim.id, reason.trim() || 'No reason provided');
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-         style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+    >
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 scale-in">
-        <h3 className="text-lg font-black text-[#0f172a] mb-2">Reject Claim</h3>
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <XCircle size={18} className="text-red-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-black text-[#0f172a]">Reject Claim</h3>
+            <p className="text-xs text-gray-400">You can add a reason for the owner</p>
+          </div>
+        </div>
+
         <p className="text-sm text-gray-500 mb-4">
-          Reject claim by <span className="font-bold">{claim.claimantName || 'Owner'}</span> for
-          <span className="font-bold"> {claim.itemName}</span>?
+          Reject claim by{' '}
+          <span className="font-bold">{claim.claimantName || 'Owner'}</span> for{' '}
+          <span className="font-bold">{claim.itemName}</span>?
         </p>
+
+        {/* ✅ Reason field — clearly labeled */}
+        <label className="block text-xs font-bold text-gray-700 mb-1.5">
+          Reason for rejection{' '}
+          <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
         <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-          placeholder="Reason for rejection (optional)"
+          placeholder="e.g. Item does not match the reported description"
           rows={3}
-          className="w-full px-3 py-2 rounded-xl border border-[#e2e8f0] text-sm outline-none
-                     focus:ring-2 focus:ring-[#ef4444]/20 focus:border-[#ef4444] mb-4 resize-none"
+          className="w-full px-3 py-2.5 rounded-xl border-2 border-[#e2e8f0] text-sm text-gray-800
+                     bg-white outline-none resize-none mb-4
+                     placeholder:text-gray-400
+                     focus:ring-2 focus:ring-[#ef4444]/20 focus:border-[#ef4444]"
         />
+        <p className="text-[11px] text-gray-400 -mt-3 mb-4">
+          If left empty, the owner will see "No reason provided".
+        </p>
+
+        {/* Actions */}
         <div className="flex gap-3">
-          <button onClick={onClose}
-                  className="flex-1 px-4 py-2.5 rounded-xl border border-[#e2e8f0]
-                             text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-[#e2e8f0]
+                       text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all"
+          >
             Cancel
           </button>
-          <button onClick={handleConfirm} disabled={loading}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-[#ef4444] text-white
-                             text-sm font-bold hover:bg-red-600 transition-all
-                             disabled:opacity-70 flex items-center justify-center gap-2">
-            {loading ? <RefreshCw size={14} className="animate-spin" /> : null}
+          <button
+            onClick={handleConfirm}
+            disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl bg-[#ef4444] text-white
+                       text-sm font-bold hover:bg-red-600 transition-all
+                       disabled:opacity-70 flex items-center justify-center gap-2"
+          >
+            {loading ? <RefreshCw size={14} className="animate-spin" /> : <XCircle size={14} />}
             Confirm Reject
           </button>
         </div>
