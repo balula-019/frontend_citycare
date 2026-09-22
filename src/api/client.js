@@ -1,7 +1,7 @@
 // Updated BASE_URL to live deployment
-const BASE_URL = 'https://senior-auth-8.onrender.com/api';
+// const BASE_URL = 'https://senior-auth-8.onrender.com/api';
 
-// const BASE_URL = 'http://localhost:60200/api';
+const BASE_URL = 'http://localhost:60200/api';
 
 const getAccessToken  = () => localStorage.getItem('accessToken');
 const getRefreshToken = () => localStorage.getItem('refreshToken');
@@ -19,7 +19,7 @@ const clearTokens = () => {
 
 /* ─────────────────────────────────────────────
    Toast notification system (unchanged)
-───────────────────────────────────────────── */
+───────────────────────────────────────────── */  
 
 const TOAST_STYLES = `/* ...unchanged... */`;
 
