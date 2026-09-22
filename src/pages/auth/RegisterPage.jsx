@@ -128,13 +128,14 @@ export default function RegisterPage() {
 
       // Check if backend returned success (600, 200, 201)
       if (code === '600' || code === '200' || code === '201') {
-        // Success -> navigate to verify OTP screen
-        navigate('/verify-otp', { state: { email: form.email } });
+        // Success -> navigate to verify OTP screen passing the mobile number
+// ---> MODIFIED HERE: Pass mobile instead of email for OTP verification
+        navigate('/verify-otp', { state: { mobile: form.mobile, email: form.email } });
         return;
       }
 
       // If backend returned an error status code (like 705)
-      setError(res?.message || 'Email is already registered.');
+      setError(res?.message || 'Registration failed. Please try again.');
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
@@ -488,6 +489,12 @@ export default function RegisterPage() {
                         disabled={loading}
                       />
                     </div>
+                  </div>
+
+{/* ---> MODIFIED HERE: Added SMS OTP notice callout before submitting */}
+                  <div className="p-3 bg-emerald-50/80 border border-emerald-100 rounded-xl text-[11px] text-emerald-800 flex items-center gap-2">
+                    <span className="font-bold text-emerald-600">SMS OTP:</span>
+                    We will send a verification code via SMS to your mobile number (+255 {form.mobile}).
                   </div>
 
                   <div className="flex gap-3 pt-3 mt-auto">
