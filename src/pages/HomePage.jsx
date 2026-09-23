@@ -1,10 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/sections/Hero';
-import TrustStats from '../components/sections/TrustStats';
 import HowItWorks from '../components/sections/HowItWorks';
 import Categories from '../components/sections/Categories';
 import WhyChoose from '../components/sections/WhyChoose';
@@ -12,10 +11,10 @@ import Testimonials from '../components/sections/Testimonials';
 import FAQ from '../components/sections/FAQ';
 import FloatingReportButton from '../components/shared/FloatingReportButton';
 import { createLostReport } from '../api/items';
-import Button from '../components/shared/Button';
 import Input from '../components/shared/Input';
+import aboutImg from '../assets/about.png';
 import {
-  Search, Megaphone, ArrowRight, LogOut, Loader2,
+  Search, Megaphone, ArrowRight,
   X, AlertCircle, CheckCircle, Brain, Upload, Trash2,
   LayoutDashboard, List, MapPin, Building2, Calendar, Tag
 } from 'lucide-react';
@@ -28,7 +27,7 @@ const CATEGORIES = [
   'ELECTRONICS','CLOTHES','JEWELRY','WATCHES','MONEY','BOOKS','VEHICLE_ITEMS',
   'HEADPHONES','CHARGERS_PHONE','CHARGERS_OTHERS','WATER_BOTTLES','TOYS',
   'MEDICAL_ITEMS','SPORTS_ITEMS','PET_ITEMS','FOOD_CONTAINERS','UMBRELLAS',
-  'CALCULATOR','OTHERS'   // ← added CALCULATOR
+  'CALCULATOR','OTHERS'
 ];
 const REGIONS = [
   'ARUSHA','DAR_ES_SALAAM','DODOMA','GEITA','IRINGA','KAGERA','KATAVI',
@@ -94,7 +93,6 @@ function ReportItemModal({ onClose, onSuccess }) {
     area: '', lostLocation: '', dominantColor: '', latitude: '', longitude: '',
     imageUrls: [],
   });
-  const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -110,7 +108,6 @@ function ReportItemModal({ onClose, onSuccess }) {
   const addImageFiles = useCallback((files) => {
     const imageOnly = files.filter(f => f.type.startsWith('image/'));
     if (!imageOnly.length) return;
-    setImageFiles(prev => [...prev, ...imageOnly]);
     const newPreviews = imageOnly.map(file => URL.createObjectURL(file));
     setImagePreviews(prev => [...prev, ...newPreviews]);
     setForm(prev => ({ ...prev, imageUrls: [...prev.imageUrls, ...newPreviews] }));
@@ -129,7 +126,6 @@ function ReportItemModal({ onClose, onSuccess }) {
 
   const removeImage = (index) => {
     URL.revokeObjectURL(imagePreviews[index]);
-    setImageFiles(prev => prev.filter((_, i) => i !== index));
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
     setForm(prev => ({
       ...prev,
@@ -181,7 +177,7 @@ function ReportItemModal({ onClose, onSuccess }) {
       setMatchResult(data);
 
       setSubmitting(false);
-      setStep(3);                                          // AI processing animation
+      setStep(3);
       setTimeout(() => setStep(4), 1200);
     } catch (err) {
       setError(err.message || 'Something went wrong.');
@@ -215,7 +211,6 @@ function ReportItemModal({ onClose, onSuccess }) {
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}>
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '92vh' }}>
 
-          {/* Header */}
           <div className="flex items-center justify-between px-8 pt-7 pb-4 border-b border-gray-100 shrink-0">
             <div>
               <h2 className="text-xl font-bold text-gray-900">
@@ -232,7 +227,6 @@ function ReportItemModal({ onClose, onSuccess }) {
             </button>
           </div>
 
-          {/* Progress Bar */}
           {isFormStep && (
             <div className="px-8 pt-4 shrink-0">
               <div className="flex gap-2">
@@ -250,7 +244,6 @@ function ReportItemModal({ onClose, onSuccess }) {
             </div>
           )}
 
-          {/* Content */}
           <div className="overflow-y-auto flex-1 px-8 py-6">
             {error && isFormStep && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 flex items-center gap-2 text-sm">
@@ -258,7 +251,6 @@ function ReportItemModal({ onClose, onSuccess }) {
               </div>
             )}
 
-            {/* STEP 0 */}
             {step === 0 && (
               <div className="space-y-5 fade-in-up">
                 <Input label="Item Name" name="itemName" placeholder="Enter the name of the lost item" value={form.itemName} onChange={handleChange} required />
@@ -270,7 +262,6 @@ function ReportItemModal({ onClose, onSuccess }) {
               </div>
             )}
 
-            {/* STEP 1 */}
             {step === 1 && (
               <div className="space-y-5 fade-in-up">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -292,7 +283,6 @@ function ReportItemModal({ onClose, onSuccess }) {
               </div>
             )}
 
-            {/* STEP 2 */}
             {step === 2 && (
               <div className="space-y-4 fade-in-up">
                 <p className="text-sm text-gray-500">Upload photos of the lost item to improve AI matching accuracy. <span className="text-gray-400">(optional)</span></p>
@@ -327,7 +317,6 @@ function ReportItemModal({ onClose, onSuccess }) {
               </div>
             )}
 
-            {/* STEP 3: AI Processing */}
             {step === 3 && (
               <div className="flex flex-col items-center justify-center py-10 fade-in-up">
                 <div className="relative flex items-center justify-center mb-8" style={{ width: 120, height: 120 }}>
@@ -353,7 +342,6 @@ function ReportItemModal({ onClose, onSuccess }) {
               </div>
             )}
 
-            {/* STEP 4: Result */}
             {step === 4 && (
               <div className="flex flex-col py-4 fade-in-up">
                 {hasMatch ? (
@@ -400,7 +388,6 @@ function ReportItemModal({ onClose, onSuccess }) {
             )}
           </div>
 
-          {/* Footer (form steps only) */}
           {isFormStep && (
             <div className="px-8 py-5 border-t border-gray-100 flex justify-between items-center shrink-0">
               <button onClick={prevStep} disabled={step === 0} className="px-5 py-2.5 rounded-xl border font-medium text-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50" style={{ borderColor: '#e2e8f0', color: '#374151' }}>← Back</button>
@@ -490,58 +477,50 @@ function HomeCTA({ isOwner, onReportClick }) {
 ────────────────────────────────────────────── */
 function AboutSection() {
   return (
-    <section id="about" className="py-20 bg-[#f8fafc]">
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-[#1a56db] text-xs font-bold tracking-wider uppercase mb-4 border border-blue-100">
+    <section id="about" className="py-24 bg-[#f8fafc]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
+          {/* Left Content Side */}
+          <div className="lg:col-span-6 space-y-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#1a56db] text-xs font-bold tracking-wider uppercase border border-blue-100">
               About us
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#0f172a] mb-5 leading-tight">
-              Tanzania's most trusted<br /> lost &amp; found platform
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#0f172a] leading-[1.15] tracking-tight">
+              Tanzania's most trusted <br className="hidden sm:block" />
+              lost &amp; found platform
             </h2>
-            <p className="text-gray-500 leading-relaxed mb-4">
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
               PataChako connects people who have lost items with verified
               organisations that have found them. Our AI-powered matching
               system compares thousands of reports in seconds.
             </p>
-            <p className="text-gray-500 leading-relaxed">
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
               We partner with verified organisations across all 31 regions of
-              Tanzania — from Dar es Salaam to Zanzibar — so no matter where
-              you lost it, we can help you find it.
+              Tanzania — from Dar es Salaam to Zanzibar.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { value: '50K+',  label: 'Items recovered',      bg: '#eff6ff', color: '#1a56db' },
-              { value: '200+',  label: 'Partner organisations', bg: '#f0fdf4', color: '#10b981' },
-              { value: '29',    label: 'Regions covered',       bg: '#fef9c3', color: '#b45309' },
-              { value: '98%',   label: 'Customer satisfaction', bg: '#fce7f3', color: '#db2777' },
-            ].map(({ value, label, bg, color }) => (
-              <div
-                key={label}
-                className="rounded-2xl p-5 border border-[#e2e8f0]"
-                style={{ backgroundColor: bg }}
-              >
-                <p className="text-3xl font-bold mb-1" style={{ color }}>
-                  {value}
-                </p>
-                <p className="text-xs font-semibold text-gray-500">{label}</p>
-              </div>
-            ))}
+
+          {/* Right Image Side (Larger & Seamless) */}
+          <div className="lg:col-span-6 flex justify-center lg:justify-end items-center">
+            <img 
+              src={aboutImg} 
+              alt="About PataChako" 
+              className="w-full max-w-lg lg:max-w-xl h-auto max-h-[520px] object-contain mix-blend-multiply transition-transform duration-300 hover:scale-[1.02]"
+            />
           </div>
+
         </div>
       </div>
     </section>
   );
 }
-
 /* ──────────────────────────────────────────────
    HomePage (main export)
 ────────────────────────────────────────────── */
 export default function HomePage() {
   const navigate = useNavigate();
-  const { user, logout, loggingOut, isOwner: checkIsOwner } = useAuth();
+  const { user, isOwner: checkIsOwner } = useAuth();
 
   const storedUser = (() => {
     try { return JSON.parse(localStorage.getItem('user') || '{}'); }
@@ -558,7 +537,6 @@ export default function HomePage() {
 
   const [showModal, setShowModal] = useState(false);
 
-  // Loading states for Hero buttons
   const [loadingReportBtn, setLoadingReportBtn] = useState(false);
   const [loadingSearchBtn, setLoadingSearchBtn] = useState(false);
 
@@ -595,7 +573,6 @@ export default function HomePage() {
           isLoadingReport={loadingReportBtn}
           isLoadingSearch={loadingSearchBtn}
         />
-        <TrustStats />
         <HowItWorks />
         <Categories />
         <WhyChoose />
