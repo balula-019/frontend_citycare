@@ -7,7 +7,11 @@ import logoSrc from '/src/assets/pata-logo.png';
 
 export default function VerifyOtpPage() {
   const location = useLocation();
+  // Read mobile passed from RegisterPage state, falling back to email if missing
+  const mobile = location.state?.mobile || '';
   const email = location.state?.email || '';
+  const identifier = mobile || email;
+
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
@@ -21,7 +25,7 @@ export default function VerifyOtpPage() {
     setLoading(true);
 
     try {
-      const response = await verifyOtp(email, otp);
+      const response = await verifyOtp(identifier, otp);
       const data = response?.data || response;
 
       // Intercept custom backend errors wrapped inside a 200 OK
@@ -49,7 +53,7 @@ export default function VerifyOtpPage() {
     setMessage('');
 
     try {
-      const response = await resendOtp(email, 'ACCOUNT_VERIFICATION');
+      const response = await resendOtp(identifier, 'ACCOUNT_VERIFICATION');
       const data = response?.data || response;
 
       // Intercept custom backend errors during resend
@@ -58,7 +62,7 @@ export default function VerifyOtpPage() {
         return;
       }
 
-      setMessage('A new OTP has been sent to your email.');
+      setMessage(`A new OTP has been sent via SMS to ${mobile ? `+255 ${mobile}` : 'your mobile number'}.`);
     } catch (err) {
       const serverMessage =
         err.response?.data?.message ||
@@ -82,8 +86,8 @@ export default function VerifyOtpPage() {
         />
 
         <div className="px-6 sm:px-8 py-8 flex-1 flex flex-col justify-center">
-          {/* Interactive Large Logo */}
-          <div className="flex justify-center mb-3">
+          {/* Enlarged Interactive Logo */}
+          <div className="flex justify-center mb-2">
             <button
               type="button"
               onClick={() => navigate('/')}
@@ -93,7 +97,7 @@ export default function VerifyOtpPage() {
               <img
                 src={logoSrc}
                 alt="PataChako"
-                className="w-32 h-32 sm:w-36 sm:h-36 object-contain drop-shadow-xl cursor-pointer"
+                className="w-40 h-40 sm:w-48 sm:h-48 object-contain drop-shadow-xl cursor-pointer"
               />
             </button>
           </div>
@@ -103,11 +107,13 @@ export default function VerifyOtpPage() {
               className="text-2xl font-extrabold text-gray-900 tracking-tight"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
-              Verify your account
+              Verify your mobile number
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              We sent a 6‑digit code to{' '}
-              <strong className="text-gray-700">{email || 'your email'}</strong>
+              We sent a 6‑digit code via SMS to{' '}
+              <strong className="text-gray-700">
+                {mobile ? `+255 ${mobile}` : email || 'your mobile number'}
+              </strong>
             </p>
           </div>
 
@@ -127,7 +133,7 @@ export default function VerifyOtpPage() {
 
           <form onSubmit={handleVerify} className="space-y-4">
             <Input
-              label="OTP Code"
+              label="SMS OTP Code"
               type="text"
               placeholder="000000"
               value={otp}
@@ -167,7 +173,7 @@ export default function VerifyOtpPage() {
               onClick={handleResend}
               className="text-sm font-semibold text-[#1a56db] hover:underline"
             >
-              Resend OTP
+              Resend SMS OTP
             </button>
           </div>
 
@@ -187,7 +193,7 @@ export default function VerifyOtpPage() {
       </div>
 
       <p className="text-xs text-gray-400 text-center w-full pt-4 pb-2">
-        If you didn't receive the email, check your spam folder or request a new OTP.
+        If you didn't receive the SMS message, check your network signal or request a new OTP.
       </p>
     </div>
   );

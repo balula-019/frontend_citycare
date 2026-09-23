@@ -100,7 +100,7 @@ export default function PartnerWithUs() {
     setInfo('');
     try {
       await resendPartnerRequestOtp({
-        email: form.email,
+        identifier: form.email,   // ✅ spec: ResendOtpDTO now uses `identifier`
         purpose: 'PARTNER_REQUEST_EMAIL_VERIFICATION',
       });
       setInfo('A new OTP has been sent to your email.');
@@ -154,14 +154,13 @@ export default function PartnerWithUs() {
       errs.phoneNumber = 'Invalid mobile number format';
     }
 
-    // 5. Message
+    // 5. Message — only length is enforced now
+    //    (spec dropped the letters-and-spaces-only pattern)
     const msg = form.message.trim();
     if (!msg) {
       errs.message = 'Message is required';
     } else if (msg.length < 10 || msg.length > 1000) {
       errs.message = 'Message must be between 10 and 1000 characters';
-    } else if (!ALPHA_SPACE_REGEX.test(msg)) {
-      errs.message = 'Message must contain only letters and spaces';
     }
 
     // 6. OTP Code
@@ -197,13 +196,13 @@ export default function PartnerWithUs() {
       setSuccess(true);
     } catch (err) {
       const msg = extractError(err);
-      
+
       // Map server-side field errors if returned as an object
       const serverFieldErrors = err?.response?.data?.data?.fieldErrors;
       if (serverFieldErrors) {
         setFieldErrors(serverFieldErrors);
       }
-      
+
       setError(msg);
       if (isLockError(msg)) setIsLocked(true);
       triggerShake();

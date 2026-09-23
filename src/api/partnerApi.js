@@ -18,7 +18,8 @@ export const sendPartnerRequestOtp = (data) =>
   });
 
 // POST /v1/services/users/resend-otp
-// Body: { email, purpose: 'PARTNER_REQUEST_EMAIL_VERIFICATION' }
+// Body: { identifier, purpose: 'PARTNER_REQUEST_EMAIL_VERIFICATION' }
+// ✅ Spec now uses `identifier` (not `email`)
 export const resendPartnerRequestOtp = (data) =>
   apiClient('/v1/services/users/resend-otp', {
     method: 'POST',

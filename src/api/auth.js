@@ -12,16 +12,22 @@ export const createAccount = (data) =>
     body: JSON.stringify(data),
   });
 
-export const verifyOtp = (email, otpCode) =>
+export const verifyOtp = (mobile, otpCode) =>
   apiClient('/v1/services/users/verify-otp', {
     method: 'POST',
-    body: JSON.stringify({ email, otp_code: otpCode }),
+    body: JSON.stringify({
+      mobile,
+      otp_code: otpCode,
+    }),
   });
 
-export const resendOtp = (email, purpose) =>
+export const resendOtp = (identifier, purpose) =>
   apiClient('/v1/services/users/resend-otp', {
     method: 'POST',
-    body: JSON.stringify({ email, purpose }),
+    body: JSON.stringify({
+      identifier,
+      purpose,
+    }),
   });
 
 export const refreshToken = (refreshToken) =>
@@ -31,7 +37,9 @@ export const refreshToken = (refreshToken) =>
   });
 
 export const logout = () =>
-  apiClient('/v1/services/users/logout', { method: 'POST' });
+  apiClient('/v1/services/users/logout', {
+    method: 'POST',
+  });
 
 export const forgotPassword = (email) =>
   apiClient('/v1/services/users/forgot-password', {
@@ -42,19 +50,30 @@ export const forgotPassword = (email) =>
 export const verifyResetOtp = (email, otpCode) =>
   apiClient('/v1/services/users/forgot-verify-otp', {
     method: 'POST',
-    body: JSON.stringify({ email, otp_code: otpCode }),
+    body: JSON.stringify({
+      email,
+      otp_code: otpCode,
+    }),
   });
 
 export const resetPassword = (email, otpCode, newPassword) =>
   apiClient('/v1/services/users/reset-password', {
     method: 'POST',
-    body: JSON.stringify({ email, otp_code: otpCode, password: newPassword }),
+    body: JSON.stringify({
+      email,
+      otp_code: otpCode,
+      password: newPassword,
+    }),
   });
 
 export const changePassword = (currentPwd, newPwd, confirmPwd) =>
   apiClient('/v1/services/users/change-password', {
     method: 'POST',
-    body: JSON.stringify({ current_password: currentPwd, new_password: newPwd, confirm_password: confirmPwd }),
+    body: JSON.stringify({
+      current_password: currentPwd,
+      new_password: newPwd,
+      confirm_password: confirmPwd,
+    }),
   });
 
 export const updateProfile = (profileId, data) =>
