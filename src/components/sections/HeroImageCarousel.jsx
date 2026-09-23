@@ -24,7 +24,6 @@ const HeroImageCarousel = () => {
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
-  const [progress, setProgress] = useState(0);
   const [activeChapter, setActiveChapter] = useState(0);
 
   const togglePlay = useCallback(() => {
@@ -55,7 +54,6 @@ const HeroImageCarousel = () => {
     const onTimeUpdate = () => {
       if (!video.duration) return;
       const ratio = video.currentTime / video.duration;
-      setProgress(ratio);
 
       let current = 0;
       CHAPTERS.forEach((c, i) => {
@@ -134,12 +132,12 @@ const HeroImageCarousel = () => {
             aspect-[4/5] on phones (taller viewport, less letterboxing),
             aspect-video on larger screens. object-contain guarantees the
             full frame is always visible — nothing is ever cropped. */}
-        <div className="relative w-full max-w-3xl mx-auto aspect-[4/5] sm:aspect-video rounded-2xl md:rounded-3xl overflow-hidden bg-black border border-white/10 shadow-2xl shadow-black/40">
+        <div className="relative w-full max-w-3xl mx-auto rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40">
           <video
             ref={videoRef}
             src={patachakoVideo}
             // poster={patachakoPoster}
-            className="w-full h-full object-contain bg-black"
+            className="w-full h-auto block"
             autoPlay
             loop
             muted={isMuted}
@@ -147,8 +145,8 @@ const HeroImageCarousel = () => {
           />
         </div>
 
-        {/* Controls — a slim bar under the frame, never over the footage */}
-        <div className="flex items-center gap-3 md:gap-4 max-w-3xl mx-auto mt-4">
+        {/* Controls — just play/pause and mute, no progress line */}
+        <div className="flex items-center justify-center gap-3 md:gap-4 max-w-3xl mx-auto mt-4">
           <button
             onClick={togglePlay}
             aria-label={isPlaying ? 'Pause video' : 'Play video'}
@@ -156,17 +154,6 @@ const HeroImageCarousel = () => {
           >
             {isPlaying ? <Pause size={15} color="white" /> : <Play size={15} color="white" />}
           </button>
-
-          <div className="flex-1 h-1.5 rounded-full bg-white/15 overflow-hidden">
-            <div
-              className="h-full rounded-full"
-              style={{
-                width: `${progress * 100}%`,
-                background: `linear-gradient(90deg, ${BLUE}, ${GREEN})`,
-                transition: 'width 120ms linear',
-              }}
-            />
-          </div>
 
           <button
             onClick={toggleMute}
