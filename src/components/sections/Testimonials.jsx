@@ -7,7 +7,7 @@ const Testimonials = () => {
       name: 'Shinuna Khamis', 
       role: 'University Student', 
       text: 'I lost my student ID and laptop bag on the bus. Within 24 hours, I found it listed on PataChako by the transport company. The verification was smooth and secure.',
-      avatar: 'AH'
+      avatar: 'SH'
     },
     { 
       name: 'David Mwakasege', 
@@ -19,7 +19,7 @@ const Testimonials = () => {
       name: 'Seif Ali', 
       role: 'Business Professional', 
       text: 'As someone who travels frequently, losing a wallet is a nightmare. PataChako\'s secure verification gave me peace of mind that my sensitive documents were protected.',
-      avatar: 'SJ'
+      avatar: 'SA'
     }
   ];
 
