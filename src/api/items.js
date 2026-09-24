@@ -63,6 +63,21 @@ export const publishOrganizationItem = (formData) =>
     method: 'POST',
     body: formData,   // ✅ FormData goes directly, no JSON.stringify
   });
+
+  // PUT /v1/services/lost-reports/owner-report/{ownerId}
+// Owner can update a lost report ONLY when status is REPORTED
+export const updateLostReport = (reportId, data) =>
+  apiClient(`/v1/services/lost-reports/owner-report/${reportId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+
+  // DELETE /v1/services/lost-reports/owner-report/{id}
+// Owner deletes one of their own lost reports
+export const deleteOwnerLostReport = (reportId) =>
+  apiClient(`/v1/services/lost-reports/owner-report/${reportId}`, {
+    method: 'DELETE',
+  });
 /**
  * Update a published organisation item
  * PUT /v1/services/lost-reports/publish/{itemId}

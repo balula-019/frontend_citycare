@@ -3,13 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, RefreshCw, AlertCircle, FileText,
   MapPin, Calendar, Tag, ChevronDown,
-  CheckCircle2, Brain, Trash2,
+  CheckCircle2, Brain, Trash2, Pencil, Loader2, X,
   Smartphone, Laptop, FileText as DocIcon, CreditCard, BookOpen,
   ShoppingBag, Wallet, Key, Headphones, Shirt, Gem, Watch,
   Banknote, Car, Zap, Droplets, Baby, Heart, Dog, UtensilsCrossed,
   Umbrella, Package, Globe
 } from 'lucide-react';
-import { getMyLostReportsWithMatches, deleteClaim } from '../../api/items';
+import {
+  getMyLostReportsWithMatches,
+  deleteClaim,
+  deleteOwnerLostReport,
+} from '../../api/items';
 
 /* ─── Status & Claim Helpers ──────────────────────────────────── */
 const STATUS_CFG = {
@@ -162,12 +166,6 @@ function ScoreBar({ label, rawValue }) {
 }
 
 /* ─── Match detail panel ────────────────────────────────────── */
-// FIX: this used to navigate with `match.organizationItemId || reportId`.
-// ClaimItem.jsx looks up the report by *report id* (`r.id === reportId`),
-// so navigating with the organization's item id sent it to a dead page
-// ("Report not found") whenever a match had a real organizationItemId.
-// We now always navigate with the report's own id, and separately gate
-// the button on whether this match actually has a claimable org item.
 function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -238,17 +236,74 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
   );
 }
 
-/* ─── Report card ──────────────────────────────────────────────
-   FIX: this card used to run its own inline `claimItem()` call from the
-   footer button, with its own (out-of-sync) success/error parsing. That's
-   why an unmatched/stale item could hit the API directly from the list
-   and surface a raw "Item is no longer available for claim" error instead
-   of ever reaching a real success screen. The list should only ever be
-   responsible for *entering* the claim flow — the actual claim submission
-   and success/failure handling now lives in one place: ClaimItem.jsx.
-   So this card just navigates to /owner/claim/:reportId, same as the
-   button inside MatchDetailPanel. */
-function ReportCard({ report, onDelete }) {
+/* ─── Delete report confirmation modal ──────────────── */
+function DeleteReportModal({ report, onClose, onConfirm, loading }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div className="flex items-start gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <Trash2 size={18} className="text-red-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-black text-[#0f172a]">Delete Report</h3>
+            <p className="text-xs text-gray-400 mt-0.5">This action cannot be undone.</p>
+          </div>
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="text-gray-400 hover:text-gray-600 disabled:opacity-50"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <p className="text-sm text-gray-600 mb-4">
+          Permanently delete your report for{' '}
+          <span className="font-bold">{report.itemName}</span>? It will be removed
+          from your reports and stop any AI matching.
+        </p>
+
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-[#e2e8f0]
+                       text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all
+                       disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white
+                       text-sm font-bold hover:bg-red-700 transition-all
+                       disabled:opacity-70 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                Deleting…
+              </>
+            ) : (
+              <>
+                <Trash2 size={14} />
+                Delete
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Report card ────────────────────────────────────────────── */
+function ReportCard({ report, onDelete, onDeleteReport }) {
   const [imgErr, setImgErr] = useState(false);
   const [showMatches, setShowMatches] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -261,12 +316,6 @@ function ReportCard({ report, onDelete }) {
   const best         = matches[0] ?? null;
   const isMatched    = best?.finalScore != null;
 
-  // FIX: report.status never changes to CLAIMED/FOUND on its own (confirmed
-  // from the real API response — it stays "REPORTED" forever), so checking
-  // only the report-level fields left the Claim button active even once the
-  // matched org item was actually claimed, letting people walk straight into
-  // a failure on the claim page. The matched item's own status DOES reflect
-  // this, so we check that too.
   const isClaimed = isItemClaimedOrUnavailable(report) || matches.some(isItemClaimedOrUnavailable);
   const cfg = isClaimed
     ? { bg: '#dcfce7', text: '#166534', label: 'Already Claimed' }
@@ -275,12 +324,14 @@ function ReportCard({ report, onDelete }) {
       : (STATUS_CFG[report.status] || { bg: '#f1f5f9', text: '#475569', label: 'Not Claimed' });
 
   const claimIdForDelete = report.claimId || report.claimRequestId;
+  const claimTargetId    = best?.organizationItemId;
 
-  // Only used to enable/disable the button client-side — the real
-  // source of truth for whether a claim can succeed is ClaimItem.jsx.
-  const claimTargetId = best?.organizationItemId;
+  // ✅ Edit + Delete report both only allowed while status is REPORTED
+  const reportStatusUpper = String(report.status || '').toUpperCase();
+  const canEdit   = reportStatusUpper === 'REPORTED';
+  const canDelete = reportStatusUpper === 'REPORTED';
 
-  const handleDelete = async () => {
+  const handleDeleteClaim = async () => {
     if (!claimIdForDelete) return;
     setDeleting(true);
     try {
@@ -291,6 +342,18 @@ function ReportCard({ report, onDelete }) {
     } finally {
       setDeleting(false);
     }
+  };
+
+  const handleEdit = () => {
+    if (!canEdit) return;
+    navigate(`/owner/edit-report/${report.id}`, {
+      state: { report },
+    });
+  };
+
+  const handleDeleteReport = () => {
+    if (!canDelete) return;
+    onDeleteReport?.(report);
   };
 
   return (
@@ -309,7 +372,7 @@ function ReportCard({ report, onDelete }) {
       </div>
 
       <div className="p-4 flex flex-col flex-1 gap-2.5">
-        {/* Title + status badge + delete */}
+        {/* Title + status badge + delete claim */}
         <div className="flex items-start justify-between gap-2">
           <p className="font-bold text-[#0f172a] text-sm leading-snug line-clamp-2">
             {report.itemName}
@@ -321,7 +384,7 @@ function ReportCard({ report, onDelete }) {
             </span>
             {isClaimed && claimIdForDelete && (
               <button
-                onClick={handleDelete}
+                onClick={handleDeleteClaim}
                 disabled={deleting}
                 className="w-7 h-7 rounded-lg hover:bg-red-50 flex items-center justify-center transition-colors group"
                 title="Delete claim"
@@ -395,9 +458,37 @@ function ReportCard({ report, onDelete }) {
           </div>
         )}
 
-        {/* Footer actions */}
+        {/* Footer actions — Delete report + Edit + Claim */}
         <div className="mt-auto pt-2 border-t border-[#f1f5f9]
                         flex items-center justify-end gap-2">
+          {/* ✅ Delete report — enabled only when REPORTED */}
+          <button
+            onClick={handleDeleteReport}
+            disabled={!canDelete}
+            title={canDelete ? 'Delete this report' : 'Report can only be deleted when status is REPORTED'}
+            className="flex items-center justify-center w-7 h-7 rounded-lg text-xs font-semibold
+                       border border-red-200 text-red-600 bg-white
+                       hover:bg-red-50
+                       transition-all active:scale-95
+                       disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+          >
+            <Trash2 size={12} />
+          </button>
+
+          {/* ✅ Edit — enabled only when REPORTED */}
+          <button
+            onClick={handleEdit}
+            disabled={!canEdit}
+            title={canEdit ? 'Edit this report' : 'Report can only be edited when status is REPORTED'}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold
+                       border border-[#e2e8f0] text-gray-600 bg-white
+                       hover:bg-gray-50 hover:text-gray-900
+                       transition-all active:scale-95
+                       disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
+          >
+            <Pencil size={12} /> Edit
+          </button>
+
           {isClaimed ? (
             <span className="px-3 py-1.5 rounded-lg text-xs font-semibold
                              bg-emerald-50 text-emerald-800 border border-emerald-200">
@@ -425,9 +516,14 @@ export default function MyReports() {
   const [reports,     setReports]     = useState([]);
   const [loading,     setLoading]     = useState(true);
   const [error,       setError]       = useState('');
+  const [success,     setSuccess]     = useState('');
   const [page,        setPage]        = useState(0);
   const [totalPages,  setTotalPages]  = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  // ✅ Delete report state
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting,     setDeleting]     = useState(false);
 
   const PAGE_SIZE = 20;
 
@@ -459,13 +555,39 @@ export default function MyReports() {
 
   useEffect(() => { fetchReports(0, true); }, [fetchReports]);
 
-  const handleDeleteReport = useCallback((reportId) => {
+  /* Removes a report after claim deletion */
+  const handleDeleteAfterClaim = useCallback((reportId) => {
     if (reportId) {
       setReports(prev => prev.filter(r => r.id !== reportId));
     } else {
       fetchReports(0, true);
     }
   }, [fetchReports]);
+
+  /* ✅ Delete report handler */
+  const handleConfirmDeleteReport = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setError('');
+    setSuccess('');
+    try {
+      await deleteOwnerLostReport(deleteTarget.id);
+      setSuccess('Report deleted successfully.');
+      setReports(prev => prev.filter(r => r.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      setTimeout(() => setSuccess(''), 3500);
+    } catch (err) {
+      const resp = err?.response?.data;
+      setError(
+        resp?.data?.message ||
+        resp?.message ||
+        err.message ||
+        'Failed to delete report.'
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const hasMore = page + 1 < totalPages;
 
@@ -488,6 +610,15 @@ export default function MyReports() {
         .fade-up { animation: fadeUp 0.35s ease-out forwards; }
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
+
+      {deleteTarget && (
+        <DeleteReportModal
+          report={deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleConfirmDeleteReport}
+          loading={deleting}
+        />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 py-8">
 
@@ -526,6 +657,15 @@ export default function MyReports() {
             Refresh
           </button>
         </div>
+
+        {/* Success */}
+        {success && (
+          <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200
+                          text-emerald-700 px-4 py-3 rounded-xl mb-6 text-sm">
+            <CheckCircle2 size={16} className="shrink-0" />
+            <span className="flex-1">{success}</span>
+          </div>
+        )}
 
         {/* Error */}
         {error && (
@@ -571,7 +711,11 @@ export default function MyReports() {
               {reports.map((r, i) => (
                 <div key={r.id || i} className="fade-up"
                      style={{ animationDelay: `${Math.min(i * 30, 300)}ms` }}>
-                  <ReportCard report={r} onDelete={handleDeleteReport} />
+                  <ReportCard
+                    report={r}
+                    onDelete={handleDeleteAfterClaim}
+                    onDeleteReport={setDeleteTarget}
+                  />
                 </div>
               ))}
             </div>

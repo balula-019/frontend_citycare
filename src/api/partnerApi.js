@@ -26,6 +26,13 @@ export const resendPartnerRequestOtp = (data) =>
     body: JSON.stringify(data),
   });
 
+  // DELETE /v1/services/lost-reports/admin/partner-requests/{requestId}
+// Admin only — works only when status is APPROVED or REJECTED
+export const deletePartnerRequest = (requestId) =>
+  apiClient(`/v1/services/lost-reports/admin/partner-requests/${requestId}`, {
+    method: 'DELETE',
+  });
+
 // POST /v1/services/users/partner-request
 // Body: { organizationName, contactPerson, email, phoneNumber,
 //         partnershipType, message, otpCode }

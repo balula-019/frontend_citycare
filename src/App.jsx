@@ -22,6 +22,7 @@ import ReportItem from './pages/owner/ReportItem';
 import ClaimItem from './pages/owner/ClaimItem';
 import PaymentDemo from './pages/owner/PaymentDemo';
 import MyReports from './pages/owner/MyReports';
+import EditReport from './pages/owner/EditReport';       // ✅ NEW
 import OwnerProfile from './pages/owner/Profile';
 
 // Organisation
@@ -45,7 +46,7 @@ import ManageUsers from './pages/admin/ManageUsers';
 import AdminProfile from './pages/admin/AdminProfile';
 import AdminItems from './pages/admin/AdminItems';
 import AdminEditItem from './pages/admin/AdminEditItem';
-import AdminPartnerRequests from './pages/admin/PartnerRequests';   // ✅ NEW
+import AdminPartnerRequests from './pages/admin/PartnerRequests';
 
 function AppRoutes() {
   return (
@@ -79,6 +80,7 @@ function AppRoutes() {
       <Route path="/owner/claim/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><ClaimItem /></ProtectedRoute>} />
       <Route path="/owner/payment/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><PaymentDemo /></ProtectedRoute>} />
       <Route path="/owner/reports" element={<ProtectedRoute allowedRoles={['OWNER']}><MyReports /></ProtectedRoute>} />
+      <Route path="/owner/edit-report/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><EditReport /></ProtectedRoute>} />   {/* ✅ NEW */}
       <Route path="/owner/profile" element={<ProtectedRoute allowedRoles={['OWNER']}><OwnerProfile /></ProtectedRoute>} />
       <Route path="/owner/notifications" element={<ProtectedRoute allowedRoles={['OWNER']}><Notifications /></ProtectedRoute>} />
 
@@ -119,7 +121,7 @@ function AppRoutes() {
         <Route path="profile" element={<AdminProfile />} />
         <Route path="items" element={<AdminItems />} />
         <Route path="edit-item/:itemId" element={<AdminEditItem />} />
-        <Route path="partner-requests" element={<AdminPartnerRequests />} />   {/* ✅ NEW */}
+        <Route path="partner-requests" element={<AdminPartnerRequests />} />
         <Route
           path="settings"
           element={<div className="p-8 text-gray-500">Settings page coming soon.</div>}

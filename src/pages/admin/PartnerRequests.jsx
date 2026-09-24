@@ -2,9 +2,67 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   RefreshCw, Handshake, Loader2, CheckCircle2, XCircle, Clock,
   AlertCircle, Mail, Phone, Building2, User as UserIcon,
-  MessageSquare,
+  MessageSquare, Trash2,
 } from 'lucide-react';
-import { getAllPartnerRequests, updatePartnerRequestStatus } from '../../api/partnerApi';
+import {
+  getAllPartnerRequests,
+  updatePartnerRequestStatus,
+  deletePartnerRequest,
+} from '../../api/partnerApi';
+
+/* ── Delete confirmation modal ────────────────────── */
+function DeleteConfirmModal({ request, onClose, onConfirm, loading }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+    >
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <Trash2 size={18} className="text-red-600" />
+          </div>
+          <h3 className="text-lg font-black text-[#0f172a]">Delete Partner Request</h3>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">
+          Permanently delete the request from{' '}
+          <span className="font-bold">{request.organizationName}</span>?
+          This action cannot be undone.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-[#e2e8f0]
+                       text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all
+                       disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white
+                       text-sm font-bold hover:bg-red-700 transition-all
+                       disabled:opacity-70 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                Deleting…
+              </>
+            ) : (
+              <>
+                <Trash2 size={14} />
+                Delete
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminPartnerRequests() {
   const [requests, setRequests] = useState([]);
@@ -16,6 +74,9 @@ export default function AdminPartnerRequests() {
   const [filter, setFilter] = useState('ALL');
   const [notes, setNotes] = useState({});
   const [noteErrors, setNoteErrors] = useState({});
+  // ✅ Delete state
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchRequests = useCallback(async () => {
     setLoading(true);
@@ -62,7 +123,6 @@ export default function AdminPartnerRequests() {
       return;
     }
 
-    // ✅ Mark WHICH action is processing for this request
     setActionLoading((prev) => ({ ...prev, [requestId]: status }));
     setError('');
     setSuccess('');
@@ -84,12 +144,32 @@ export default function AdminPartnerRequests() {
     } catch (err) {
       setError(err?.message || 'Failed to update partner request.');
     } finally {
-      // ✅ Clear only this request's loading flag
       setActionLoading((prev) => {
         const next = { ...prev };
         delete next[requestId];
         return next;
       });
+    }
+  };
+
+  /* ✅ Delete handler — only allowed for APPROVED / REJECTED */
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setError('');
+    setSuccess('');
+    try {
+      await deletePartnerRequest(deleteTarget.id);
+      // ✅ Success message shown right after the row disappears
+      setSuccess('Partner request deleted successfully.');
+      // Remove the row immediately
+      setRequests((prev) => prev.filter((r) => r.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      setTimeout(() => setSuccess(''), 3500);
+    } catch (err) {
+      setError(err?.message || 'Failed to delete partner request.');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -123,6 +203,15 @@ export default function AdminPartnerRequests() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
+      {deleteTarget && (
+        <DeleteConfirmModal
+          request={deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleDelete}
+          loading={deleting}
+        />
+      )}
+
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -203,11 +292,13 @@ export default function AdminPartnerRequests() {
                 const noteError = noteErrors[req.id];
                 const canSubmit = note.trim().length > 0;
 
-                // ✅ Which action (if any) is currently processing for this request
                 const activeAction = actionLoading[req.id]; // undefined | 'APPROVED' | 'REJECTED'
                 const approvingThis = activeAction === 'APPROVED';
                 const rejectingThis = activeAction === 'REJECTED';
                 const anyActionInFlight = Boolean(activeAction);
+
+                // ✅ Delete only allowed once reviewed
+                const canDelete = req.status === 'APPROVED' || req.status === 'REJECTED';
 
                 return (
                   <div key={req.id} className="p-5 hover:bg-gray-50/50 transition-colors">
@@ -290,7 +381,6 @@ export default function AdminPartnerRequests() {
                             )}
 
                             <div className="flex gap-2 mt-2.5">
-                              {/* ✅ Approve — spinner only when THIS button is clicked */}
                               <button
                                 onClick={() => handleStatusChange(req.id, 'APPROVED')}
                                 disabled={anyActionInFlight || !canSubmit}
@@ -310,7 +400,6 @@ export default function AdminPartnerRequests() {
                                 )}
                               </button>
 
-                              {/* ✅ Reject — spinner only when THIS button is clicked */}
                               <button
                                 onClick={() => handleStatusChange(req.id, 'REJECTED')}
                                 disabled={anyActionInFlight || !canSubmit}
@@ -332,8 +421,21 @@ export default function AdminPartnerRequests() {
                             </div>
                           </>
                         ) : (
-                          <div className="text-xs text-gray-400 italic self-start lg:text-right">
-                            No actions — request already {req.status.toLowerCase()}
+                          <div className="flex flex-col items-start lg:items-end gap-2">
+                            <span className="text-xs text-gray-400 italic">
+                              Reviewed — no further action needed
+                            </span>
+                            {canDelete && (
+                              <button
+                                onClick={() => setDeleteTarget(req)}
+                                disabled={anyActionInFlight}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold
+                                           bg-white text-red-600 border border-red-200
+                                           hover:bg-red-50 disabled:opacity-50 transition-all"
+                              >
+                                <Trash2 size={13} /> Delete
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
