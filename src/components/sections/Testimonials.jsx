@@ -9,16 +9,16 @@ const Testimonials = () => {
       text: 'I lost my student ID and laptop bag on the bus. Within 24 hours, I found it listed on PataChako by the transport company. The verification was smooth and secure.',
       avatar: 'SH'
     },
-    { 
-      name: 'David Mwakasege', 
-      role: 'Parent', 
-      text: 'My daughter lost her passport right before a trip. Thanks to the airport partnership on this platform, we recovered it in time. Truly a lifesaver!',
-      avatar: 'DM'
+    {
+      name: 'Massoud Rashid',
+      role: 'Optometrist',
+      text: 'As an optometrist traveling from Kivukoni toward Kigamboni for a clinic visit, I accidentally left my portable eye examination equipment in a vehicle and could not remember where I had dropped it. Fortunately, someone reported the item through PataChako and left it with a nearby organization, making it much easier and safer for me to recover it.',
+      avatar: 'MR'
     },
-    { 
-      name: 'Seif Ali', 
-      role: 'Business Professional', 
-      text: 'As someone who travels frequently, losing a wallet is a nightmare. PataChako\'s secure verification gave me peace of mind that my sensitive documents were protected.',
+    {
+      name: 'Seif Ali',
+      role: 'Civil Engineer',
+      text: 'As a civil engineer working on construction sites, I travel frequently and often carry important equipment and documents. After leaving my surveying equipment in a transport vehicle, PataChako helped me report it and gave me peace of mind knowing it could be securely recovered.',
       avatar: 'SA'
     }
   ];
