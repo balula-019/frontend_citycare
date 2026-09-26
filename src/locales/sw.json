@@ -135,41 +135,6 @@
         "errLostLocation": "Mahali kilipopotea panahitajika"
       }
     },
-  
-    "reports": {
-      "title": "Ripoti Zangu",
-      "subtitle": "Ripoti zako zote za vitu vilivyopotea mahali pamoja",
-      "noReports": "Hakuna ripoti bado",
-      "noReportsHint": "Hujatoa ripoti yoyote ya kitu kilichopotea. Anza kwa kutafuta vitu vilivyopatikana.",
-      "goToSearch": "Nenda kwa utafutaji",
-      "reportCount": "ripoti {{count}}",
-      "reportCount_plural": "ripoti {{count}}",
-      "withMatches": "{{count}} zenye mechi za AI",
-      "loadMore": "Pakia zaidi",
-      "status": {
-        "notClaimed": "Haijadaiwa",
-        "matched": "Imelinganishwa",
-        "alreadyClaimed": "Imekwisha daiwa",
-        "closed": "Imefungwa",
-        "found": "Imepatikana"
-      },
-      "actions": {
-        "claimItem": "Dai Kitu",
-        "edit": "Hariri",
-        "deleteReport": "Futa ripoti hii",
-        "editDisabled": "Ripoti inaweza kuhaririwa tu wakati hali ni REPORTED",
-        "deleteDisabled": "Ripoti inaweza kufutwa tu wakati hali ni REPORTED"
-      },
-      "deleteModal": {
-        "title": "Futa Ripoti",
-        "warning": "Kitendo hiki hakiwezi kurudishwa.",
-        "message": "Futa kabisa ripoti yako ya {{itemName}}? Itaondolewa kwenye ripoti zako na kuacha kulinganishwa na AI.",
-        "success": "Ripoti imefutwa kikamilifu."
-      },
-      "aiMatches": "Mechi {{count}} ya AI imepatikana",
-      "aiMatches_plural": "Mechi {{count}} za AI zimepatikana",
-      "bestScore": "Alama bora: {{score}}"
-    },
     "footer": {
   "tagline": "Jukwaa la Tanzania lililoaminika zaidi kwa kuripoti, kutafuta, na kurejesha vitu vilivyopotea kwa usalama na ufanisi.",
   "platformNavigation": "Urambazaji wa Jukwaa",
@@ -1082,5 +1047,53 @@
     "invalidOtp": "OTP si sahihi. Tafadhali jaribu tena.",
     "resendFailed": "Imeshindwa kutuma OTP tena."
   }
+},
+"reports": {
+  "title": "Ripoti Zangu",
+  "subtitle": "Ripoti zako zote za vitu vilivyopotea mahali pamoja",
+  "noReports": "Hakuna ripoti bado",
+  "noReportsHint": "Hujatoa ripoti yoyote ya kitu kilichopotea. Anza kwa kutafuta vitu vilivyopatikana.",
+  "goToSearch": "Nenda kwa utafutaji",
+  "reportCount": "ripoti {{count}}",
+  "reportCount_plural": "ripoti {{count}}",
+  "withMatches": "{{count}} zenye mechi za AI",
+  "loadMore": "Pakia zaidi",
+  "lostDate": "Ilipotea",
+  "matchNumber": "Mechi #{{number}}",
+  "claimThisItem": "Dai Kitu Hiki",
+  "deleteClaim": "Futa dai",
+  "loadFailed": "Imeshindwa kupakia ripoti. Tafadhali jaribu tena.",
+  "deleteFailed": "Imeshindwa kufuta ripoti.",
+  "scoreLabels": {
+    "finalScore": "Alama za mwisho",
+    "descriptionScore": "Maelezo",
+    "nameScore": "Ulinganisho wa jina",
+    "locationScore": "Mahali",
+    "dateScore": "Tarehe",
+    "colorScore": "Rangi"
+  },
+  "status": {
+    "notClaimed": "Haijadaiwa",
+    "matched": "Imelinganishwa",
+    "alreadyClaimed": "Imekwisha daiwa",
+    "closed": "Imefungwa",
+    "found": "Imepatikana"
+  },
+  "actions": {
+    "claimItem": "Dai Kitu",
+    "edit": "Hariri",
+    "deleteReport": "Futa ripoti hii",
+    "editDisabled": "Ripoti inaweza kuhaririwa tu wakati hali ni REPORTED",
+    "deleteDisabled": "Ripoti inaweza kufutwa tu wakati hali ni REPORTED"
+  },
+  "deleteModal": {
+    "title": "Futa Ripoti",
+    "warning": "Kitendo hiki hakiwezi kurudishwa.",
+    "message": "Futa kabisa ripoti yako ya {{itemName}}? Itaondolewa kwenye ripoti zako na kuacha kulinganishwa na AI.",
+    "success": "Ripoti imefutwa kikamilifu."
+  },
+  "aiMatches": "Mechi {{count}} ya AI imepatikana",
+  "aiMatches_plural": "Mechi {{count}} za AI zimepatikana",
+  "bestScore": "Alama bora: {{score}}"
 }
   }

@@ -135,41 +135,6 @@
         "errLostLocation": "Lost location is required"
       }
     },
-  
-    "reports": {
-      "title": "My Reports",
-      "subtitle": "All your lost item reports in one place",
-      "noReports": "No reports yet",
-      "noReportsHint": "You haven't filed any lost item reports. Start by searching found items.",
-      "goToSearch": "Go to search",
-      "reportCount": "{{count}} report",
-      "reportCount_plural": "{{count}} reports",
-      "withMatches": "{{count}} with AI matches",
-      "loadMore": "Load more",
-      "status": {
-        "notClaimed": "Not Claimed",
-        "matched": "Matched",
-        "alreadyClaimed": "Already Claimed",
-        "closed": "Closed",
-        "found": "Found"
-      },
-      "actions": {
-        "claimItem": "Claim Item",
-        "edit": "Edit",
-        "deleteReport": "Delete this report",
-        "editDisabled": "Report can only be edited when status is REPORTED",
-        "deleteDisabled": "Report can only be deleted when status is REPORTED"
-      },
-      "deleteModal": {
-        "title": "Delete Report",
-        "warning": "This action cannot be undone.",
-        "message": "Permanently delete your report for {{itemName}}? It will be removed from your reports and stop any AI matching.",
-        "success": "Report deleted successfully."
-      },
-      "aiMatches": "{{count}} AI match found",
-      "aiMatches_plural": "{{count}} AI matches found",
-      "bestScore": "Best score: {{score}}"
-    },
     "footer": {
   "tagline": "Tanzania's most trusted platform for reporting, searching, and recovering lost items safely and efficiently.",
   "platformNavigation": "Platform Navigation",
@@ -245,7 +210,7 @@
     },
     "verify": {
       "q": "How is ownership verified?",
-      "a": "Our partnered organizations conduct a multi-step verification process, which may include ID checks, matching serial numbers, or answering specific questions about the item."
+      "a": "Our partnered organizations conduct a multi-step verification process, which may include lostReportId and answering specific questions about the item."
     },
     "secure": {
       "q": "Is my information secure?",
@@ -1081,6 +1046,54 @@
     "invalidOtp": "Invalid OTP. Please try again.",
     "resendFailed": "Failed to resend OTP."
   }
+},
+"reports": {
+  "title": "My Reports",
+  "subtitle": "All your lost item reports in one place",
+  "noReports": "No reports yet",
+  "noReportsHint": "You haven't filed any lost item reports. Start by searching found items.",
+  "goToSearch": "Go to search",
+  "reportCount": "{{count}} report",
+  "reportCount_plural": "{{count}} reports",
+  "withMatches": "{{count}} with AI matches",
+  "loadMore": "Load more",
+  "lostDate": "Lost",
+  "matchNumber": "Match #{{number}}",
+  "claimThisItem": "Claim This Item",
+  "deleteClaim": "Delete claim",
+  "loadFailed": "Failed to load reports. Please try again.",
+  "deleteFailed": "Failed to delete report.",
+  "scoreLabels": {
+    "finalScore": "Final score",
+    "descriptionScore": "Description",
+    "nameScore": "Name match",
+    "locationScore": "Location",
+    "dateScore": "Date",
+    "colorScore": "Color"
+  },
+  "status": {
+    "notClaimed": "Not Claimed",
+    "matched": "Matched",
+    "alreadyClaimed": "Already Claimed",
+    "closed": "Closed",
+    "found": "Found"
+  },
+  "actions": {
+    "claimItem": "Claim Item",
+    "edit": "Edit",
+    "deleteReport": "Delete this report",
+    "editDisabled": "Report can only be edited when status is REPORTED",
+    "deleteDisabled": "Report can only be deleted when status is REPORTED"
+  },
+  "deleteModal": {
+    "title": "Delete Report",
+    "warning": "This action cannot be undone.",
+    "message": "Permanently delete your report for {{itemName}}? It will be removed from your reports and stop any AI matching.",
+    "success": "Report deleted successfully."
+  },
+  "aiMatches": "{{count}} AI match found",
+  "aiMatches_plural": "{{count}} AI matches found",
+  "bestScore": "Best score: {{score}}"
 }
 
   }
