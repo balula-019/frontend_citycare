@@ -241,11 +241,11 @@
     },
     "claim": {
       "q": "Je, mtu yeyote anaweza kudai kitu changu?",
-      "a": "Hapana. Madai yote yanahitaji uthibitisho mkali. Lazima utoe uthibitisho wa umiliki, kama vile lostReportId. Kisha unaweza hata kushiriki na rafiki yako kwa kuchukua."
+      "a": "Hapana. Madai yote yanahitaji uthibitisho mkali. Lazima utoe uthibitisho wa umiliki, kama vile lostReportId. Kisha unaweza hata kumpa na rafiki yako kwa kuchukua."
     },
     "verify": {
       "q": "Umiliki unathibitishwaje?",
-      "a": "Taasisi zetu washirika hufanya mchakato wa uthibitisho wa hatua nyingi, unaoweza kujumuisha ukaguzi wa vitambulisho, kulinganisha namba za serial, au kujibu maswali maalum kuhusu kitu hicho."
+      "a": "Taasisi zetu washirika hufanya mchakato wa uthibitisho wa hatua nyingi, unaoweza kujumuisha ukaguzi wa vitambulisho kama vile lostReportId, na kujibu maswali maalum kuhusu kitu hicho."
     },
     "secure": {
       "q": "Taarifa zangu ziko salama?",
@@ -265,7 +265,7 @@
     },
     "free": {
       "q": "PataChako ni bure kutumia?",
-      "a": "Kuripoti na kutafuta ni bure kabisa kwa watu binafsi. Tunaendeleza jukwaa kupitia huduma za uthibitisho wa malipo kwa taasisi kubwa."
+      "a": "Kuripoti na kutafuta ni bure kabisa kwa watu binafsi. Mpaka Ai inahakikisha kuwa kitu ni chakwako hatua inayofata itakuwa ndo kulipia."
     }
   }
 },
