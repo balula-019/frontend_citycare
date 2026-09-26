@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Send, Loader2, AlertCircle, Handshake, ShieldCheck, Lock,
 } from 'lucide-react';
@@ -8,20 +9,20 @@ import Input from '../components/shared/Input';
 import { sendPartnerRequestOtp, getPartnerOtpConfig } from '../api/partnerApi';
 import logoSrc from '/src/assets/pata-logo.png';
 
-// Extract the best error message from backend response
-const extractError = (err) => {
+const extractError = (err, fallback) => {
   const resp = err?.response?.data;
   return (
-    resp?.data?.message ||           // ✅ e.g. "Account locked. Try again in 29 mins."
+    resp?.data?.message ||
     resp?.message ||
     err?.message ||
-    'Something went wrong. Please try again.'
+    fallback
   );
 };
 
 const isLockError = (msg = '') => /lock/i.test(msg);
 
 export default function PartnerSendOtp() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,13 +51,13 @@ export default function PartnerSendOtp() {
 
     // Validation
     const errs = {};
-    if (!email.trim()) errs.email = 'Email is required.';
+    if (!email.trim()) errs.email = t('partnerSendOtp.errors.emailRequired');
     else if (!/^\S+@\S+\.\S+$/.test(email.trim()))
-      errs.email = 'Enter a valid email address.';
+      errs.email = t('partnerSendOtp.errors.emailInvalid');
 
     if (Object.keys(errs).length) {
       setFieldErrors(errs);
-      setError('Please fill all fields correctly.');
+      setError(t('partnerSendOtp.errors.fillAll'));
       triggerShake();
       return;
     }
@@ -71,7 +72,7 @@ export default function PartnerSendOtp() {
         replace: true,
       });
     } catch (err) {
-      const msg = extractError(err);
+      const msg = extractError(err, t('common.somethingWentWrong'));
       setError(msg);
       if (isLockError(msg)) setIsLocked(true);
       triggerShake();
@@ -104,7 +105,7 @@ export default function PartnerSendOtp() {
                 type="button"
                 onClick={() => navigate('/')}
                 className="focus:outline-none group"
-                aria-label="Go to home"
+                aria-label={t('partnerSendOtp.goHome')}
               >
                 <img
                   src={logoSrc}
@@ -130,15 +131,16 @@ export default function PartnerSendOtp() {
                   className="text-xl font-extrabold text-gray-900"
                   style={{ fontFamily: "'Sora', sans-serif" }}
                 >
-                  Partner With Us
+                  {t('partnerSendOtp.title')}
                 </h1>
-                <p className="text-sm text-gray-500">Step 1 of 2 — Verify your email</p>
+                <p className="text-sm text-gray-500">
+                  {t('partnerSendOtp.stepLabel')}
+                </p>
               </div>
             </div>
 
             <p className="text-sm text-gray-500 mb-5">
-              Enter the email address you'd like us to use for your partnership
-              request. We'll send a one-time code to verify it.
+              {t('partnerSendOtp.instructions')}
             </p>
 
             {/* Error banner */}
@@ -165,7 +167,7 @@ export default function PartnerSendOtp() {
               className={`space-y-5 ${shake ? 'animate-shake' : ''}`}
             >
               <Input
-                label="Email Address"
+                label={t('partnerSendOtp.emailLabel')}
                 type="email"
                 name="email"
                 value={email}
@@ -175,7 +177,7 @@ export default function PartnerSendOtp() {
                   setFieldErrors((p) => ({ ...p, email: '' }));
                 }}
                 required
-                placeholder="you@example.com"
+                placeholder={t('partnerSendOtp.emailPlaceholder')}
                 disabled={isLocked}
                 error={fieldErrors.email}
               />
@@ -188,15 +190,18 @@ export default function PartnerSendOtp() {
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
-                    <Loader2 size={18} className="animate-spin" /> Sending OTP…
+                    <Loader2 size={18} className="animate-spin" />
+                    {t('partnerSendOtp.sending')}
                   </span>
                 ) : isLocked ? (
                   <span className="flex items-center justify-center gap-2">
-                    <Lock size={18} /> Account Locked
+                    <Lock size={18} />
+                    {t('partnerSendOtp.accountLocked')}
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    <Send size={18} /> Send OTP
+                    <Send size={18} />
+                    {t('partnerSendOtp.sendOtp')}
                   </span>
                 )}
               </Button>
@@ -206,8 +211,13 @@ export default function PartnerSendOtp() {
               <ShieldCheck size={14} className="text-[#1a56db] mt-0.5 shrink-0" />
               <span>
                 {otpConfig
-                  ? `OTP expires in ${otpConfig.expiryMinutes} min. Max ${otpConfig.maxFailedAttempts} attempts. Resend cooldown ${otpConfig.cooldownSeconds}s, up to ${otpConfig.dailyLimit}/day.`
-                  : 'Your OTP is valid for a short time. Rate limits apply to resend requests.'}
+                  ? t('partnerSendOtp.otpInfo', {
+                      expiry: otpConfig.expiryMinutes,
+                      attempts: otpConfig.maxFailedAttempts,
+                      cooldown: otpConfig.cooldownSeconds,
+                      daily: otpConfig.dailyLimit,
+                    })
+                  : t('partnerSendOtp.otpInfoFallback')}
               </span>
             </div>
           </div>

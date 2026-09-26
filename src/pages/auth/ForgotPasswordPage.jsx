@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { forgotPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
@@ -8,6 +9,7 @@ import logoSrc from '/src/assets/pata-logo.png';
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -21,37 +23,32 @@ export default function ForgotPasswordPage() {
 
     const trimmed = email.trim();
     if (!trimmed) {
-      setError('Please enter your email address.');
+      setError(t('forgotPassword.errors.emailRequired'));
       return;
     }
     if (!EMAIL_REGEX.test(trimmed)) {
-      setError('Please enter a valid email address.');
+      setError(t('forgotPassword.errors.emailInvalid'));
       return;
     }
 
     setLoading(true);
     try {
       const response = await forgotPassword(trimmed);
-
-      // Extract data depending on whether your API helper unwraps Axios responses or not
       const data = response?.data || response;
 
-      // Intercept custom backend error status codes (like 804) wrapped inside a 200 OK
       if (data && data.statusCode && String(data.statusCode) !== '600') {
-        setError(data.message || 'Profile not found.');
+        setError(data.message || t('forgotPassword.errors.profileNotFound'));
         return;
       }
 
-      // If custom status code is 600 (or if it doesn't return a custom error structure), treat as success
-      setSuccess('OTP sent to your email. Redirecting...');
+      setSuccess(t('forgotPassword.success'));
       setTimeout(() => navigate('/reset-password', { state: { email: trimmed } }), 1500);
     } catch (err) {
-      // Catches actual network dropouts, crashes, or traditional 4xx/5xx HTTP errors
       const serverMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
-        'Failed to send OTP. Please try again.';
+        t('forgotPassword.errors.genericFailure');
       setError(serverMessage);
     } finally {
       setLoading(false);
@@ -60,7 +57,6 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 py-8">
-      {/* Spacer to keep card centered visually while keeping footer at bottom */}
       <div className="flex-1 flex items-center justify-center my-auto">
         <div className="w-full max-w-[440px] bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-gray-100 overflow-hidden min-h-[520px] flex flex-col">
           <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
@@ -71,7 +67,7 @@ export default function ForgotPasswordPage() {
                 type="button"
                 onClick={() => navigate('/')}
                 className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
-                title="Go to home"
+                title={t('forgotPassword.goHome')}
               >
                 <img
                   src={logoSrc}
@@ -80,10 +76,10 @@ export default function ForgotPasswordPage() {
                 />
               </button>
               <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight mt-4" style={{ fontFamily: "'Sora', sans-serif" }}>
-                Forgot password?
+                {t('forgotPassword.title')}
               </h1>
               <p className="text-sm text-gray-500 mt-1 text-center leading-relaxed">
-                Enter your email and we'll send you an OTP to reset it.
+                {t('forgotPassword.subtitle')}
               </p>
             </div>
 
@@ -103,9 +99,9 @@ export default function ForgotPasswordPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col justify-center">
               <Input
-                label="Email address"
+                label={t('forgotPassword.emailLabel')}
                 type="email"
-                placeholder="you@example.com"
+                placeholder={t('forgotPassword.emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -122,23 +118,23 @@ export default function ForgotPasswordPage() {
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Sending…
+                    {t('forgotPassword.sending')}
                   </span>
                 ) : (
-                  'Send OTP'
+                  t('forgotPassword.sendButton')
                 )}
               </Button>
             </form>
 
             <div className="mt-auto pt-6 text-center">
               <p className="text-sm text-gray-500">
-                Remember your password?{' '}
+                {t('forgotPassword.rememberPassword')}{' '}
                 <button
                   type="button"
                   onClick={() => navigate('/login')}
                   className="font-bold text-[#1a56db] hover:underline transition-colors"
                 >
-                  Sign in
+                  {t('forgotPassword.signIn')}
                 </button>
               </p>
             </div>
@@ -147,7 +143,7 @@ export default function ForgotPasswordPage() {
       </div>
 
       <p className="text-xs text-gray-400 text-center w-full pt-4">
-        If you didn't receive the email, check your spam folder or try again.
+        {t('forgotPassword.footer')}
       </p>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -20,7 +21,7 @@ import {
 } from 'lucide-react';
 
 /* ──────────────────────────────────────────────
-   Constants & Animations (for the modal)
+   Constants
 ────────────────────────────────────────────── */
 const CATEGORIES = [
   'PHONES','LAPTOPS','DOCUMENTS','IDS','PASSPORTS','BAGS','WALLETS','KEYS',
@@ -36,25 +37,12 @@ const REGIONS = [
   'SIMIYU','SINGIDA','TABORA','TANGA','UNGUJA_KASKAZINI','UNGUJA_KUSINI',
   'UNGUJA_MJINI_MAGHARIBI','PEMBA'
 ];
-const STEP_TITLES = ['Basic Information', 'Location Details', 'Images'];
 
 const animStyles = `
-  @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  @keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(2); opacity: 0; }
-  }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes dotBounce {
-    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-    40% { transform: scale(1); opacity: 1; }
-  }
+  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes dotBounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
   .ai-spinner-outer { animation: spin-slow 1.4s linear infinite; }
   .ai-spinner-inner { animation: spin-slow 1s linear infinite reverse; }
   .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
@@ -83,9 +71,10 @@ function SelectField({ label, name, value, onChange, options, placeholder, requi
 }
 
 /* ──────────────────────────────────────────────
-   ReportItemModal (inline definition)
+   ReportItemModal
 ────────────────────────────────────────────── */
 function ReportItemModal({ onClose, onSuccess }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
@@ -99,6 +88,12 @@ function ReportItemModal({ onClose, onSuccess }) {
   const [reportId, setReportId] = useState(null);
   const [matchResult, setMatchResult] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
+
+  const stepTitles = [
+    t('home.reportModal.steps.basic'),
+    t('home.reportModal.steps.location'),
+    t('home.reportModal.steps.images'),
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -136,15 +131,15 @@ function ReportItemModal({ onClose, onSuccess }) {
   const validateStep = () => {
     setError('');
     if (step === 0) {
-      if (!form.itemName.trim()) { setError('Item name is required'); return false; }
-      if (!form.category) { setError('Please select a category'); return false; }
-      if (!form.description.trim()) { setError('Description is required'); return false; }
+      if (!form.itemName.trim()) { setError(t('home.reportModal.errItemName')); return false; }
+      if (!form.category) { setError(t('home.reportModal.errCategory')); return false; }
+      if (!form.description.trim()) { setError(t('home.reportModal.errDescription')); return false; }
     }
     if (step === 1) {
-      if (!form.region) { setError('Region is required'); return false; }
-      if (!form.area.trim()) { setError('Area is required'); return false; }
-      if (!form.lostDate) { setError('Lost date is required'); return false; }
-      if (!form.lostLocation.trim()) { setError('Lost location is required'); return false; }
+      if (!form.region) { setError(t('home.reportModal.errRegion')); return false; }
+      if (!form.area.trim()) { setError(t('home.reportModal.errArea')); return false; }
+      if (!form.lostDate) { setError(t('home.reportModal.errLostDate')); return false; }
+      if (!form.lostLocation.trim()) { setError(t('home.reportModal.errLostLocation')); return false; }
     }
     return true;
   };
@@ -180,7 +175,7 @@ function ReportItemModal({ onClose, onSuccess }) {
       setStep(3);
       setTimeout(() => setStep(4), 1200);
     } catch (err) {
-      setError(err.message || 'Something went wrong.');
+      setError(err.message || t('common.somethingWentWrong'));
       setSubmitting(false);
     }
   };
@@ -190,17 +185,17 @@ function ReportItemModal({ onClose, onSuccess }) {
 
   const categoryOptions = CATEGORIES.map(c => ({
     value: c,
-    label: c.replace(/_/g, ' ').charAt(0) + c.replace(/_/g, ' ').slice(1).toLowerCase()
+    label: t(`categories.${c}`, c.replace(/_/g, ' ').charAt(0) + c.replace(/_/g, ' ').slice(1).toLowerCase())
   }));
-  const regionOptions = REGIONS.map(r => ({ value: r, label: r.replace(/_/g, ' ') }));
+  const regionOptions = REGIONS.map(r => ({ value: r, label: t(`regions.${r}`, r.replace(/_/g, ' ')) }));
 
   const hasMatch = matchResult?.matched === true;
   const matchDetails = matchResult?.matchDetails || {};
   const matchLevel = matchResult?.matchLevel || matchDetails?.matchLevel;
 
   const getMatchBadge = (level) => {
-    if (level === 'POTENTIAL_MATCH') return { bg: '#dbeafe', text: '#1e40af', label: 'Potential Match' };
-    if (level === 'NO_MATCH') return { bg: '#fee2e2', text: '#991b1b', label: 'No Match' };
+    if (level === 'POTENTIAL_MATCH') return { bg: '#dbeafe', text: '#1e40af', label: t('home.reportModal.potentialMatch') };
+    if (level === 'NO_MATCH') return { bg: '#fee2e2', text: '#991b1b', label: t('home.reportModal.noMatch') };
     return null;
   };
   const matchBadge = matchLevel ? getMatchBadge(matchLevel) : null;
@@ -214,15 +209,19 @@ function ReportItemModal({ onClose, onSuccess }) {
           <div className="flex items-center justify-between px-8 pt-7 pb-4 border-b border-gray-100 shrink-0">
             <div>
               <h2 className="text-xl font-bold text-gray-900">
-                {step === 3 ? 'Analyzing Your Report' : step === 4 ? 'Report Result' : 'Report Lost Item'}
+                {step === 3 ? t('home.reportModal.analyzingTitle')
+                 : step === 4 ? t('home.reportModal.resultTitle')
+                 : t('home.reportModal.title')}
               </h2>
               {isFormStep && (
-                <p className="text-sm text-gray-500 mt-0.5">Step {step + 1} of 3 — {STEP_TITLES[step]}</p>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  {t('home.reportModal.stepOf', { current: step + 1, total: 3 })} — {stepTitles[step]}
+                </p>
               )}
             </div>
             <button onClick={canClose ? onClose : undefined} disabled={!canClose}
               className={`rounded-full p-1.5 transition-colors ${canClose ? 'text-gray-400 hover:text-gray-700 hover:bg-gray-100 cursor-pointer' : 'text-gray-200 cursor-not-allowed'}`}
-              aria-label="Close">
+              aria-label={t('common.close')}>
               <X size={22} />
             </button>
           </div>
@@ -236,7 +235,7 @@ function ReportItemModal({ onClose, onSuccess }) {
                 ))}
               </div>
               <div className="flex justify-between mt-1.5">
-                {STEP_TITLES.map((title, i) => (
+                {stepTitles.map((title, i) => (
                   <span key={i} className="text-xs transition-colors duration-300"
                     style={{ color: i <= step ? '#1a56db' : '#94a3b8' }}>{title}</span>
                 ))}
@@ -253,11 +252,11 @@ function ReportItemModal({ onClose, onSuccess }) {
 
             {step === 0 && (
               <div className="space-y-5 fade-in-up">
-                <Input label="Item Name" name="itemName" placeholder="Enter the name of the lost item" value={form.itemName} onChange={handleChange} required />
-                <SelectField label="Category" name="category" value={form.category} onChange={handleChange} options={categoryOptions} placeholder="Select a category" required />
+                <Input label={t('home.reportModal.itemName')} name="itemName" placeholder={t('home.reportModal.itemNamePh')} value={form.itemName} onChange={handleChange} required />
+                <SelectField label={t('home.reportModal.category')} name="category" value={form.category} onChange={handleChange} options={categoryOptions} placeholder={t('home.reportModal.categoryPh')} required />
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description <span className="text-red-500">*</span></label>
-                  <textarea name="description" rows={4} placeholder="Describe your lost item" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-gray-800 transition-all text-sm" value={form.description} onChange={handleChange} />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('home.reportModal.description')} <span className="text-red-500">*</span></label>
+                  <textarea name="description" rows={4} placeholder={t('home.reportModal.descriptionPh')} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-gray-800 transition-all text-sm" value={form.description} onChange={handleChange} />
                 </div>
               </div>
             )}
@@ -265,19 +264,19 @@ function ReportItemModal({ onClose, onSuccess }) {
             {step === 1 && (
               <div className="space-y-5 fade-in-up">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <SelectField label="Region" name="region" value={form.region} onChange={handleChange} options={regionOptions} placeholder="Select a region" required />
-                  <Input label="Area" name="area" placeholder="e.g., Kijitonyama" value={form.area} onChange={handleChange} required />
+                  <SelectField label={t('home.reportModal.region')} name="region" value={form.region} onChange={handleChange} options={regionOptions} placeholder={t('home.reportModal.regionPh')} required />
+                  <Input label={t('home.reportModal.area')} name="area" placeholder={t('home.reportModal.areaPh')} value={form.area} onChange={handleChange} required />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label="Date Lost" type="date" name="lostDate" value={form.lostDate} onChange={handleChange} required max={new Date().toISOString().split('T')[0]} />
-                  <Input label="Dominant Color" name="dominantColor" placeholder="e.g., Black, Silver" value={form.dominantColor} onChange={handleChange} />
+                  <Input label={t('home.reportModal.dateLost')} type="date" name="lostDate" value={form.lostDate} onChange={handleChange} required max={new Date().toISOString().split('T')[0]} />
+                  <Input label={t('home.reportModal.dominantColor')} name="dominantColor" placeholder={t('home.reportModal.dominantColorPh')} value={form.dominantColor} onChange={handleChange} />
                 </div>
-                <Input label="Lost Location" name="lostLocation" placeholder="e.g., Bus Stop near Posta" value={form.lostLocation} onChange={handleChange} required />
+                <Input label={t('home.reportModal.lostLocation')} name="lostLocation" placeholder={t('home.reportModal.lostLocationPh')} value={form.lostLocation} onChange={handleChange} required />
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">GPS Coordinates <span className="text-gray-400 font-normal">(optional)</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('home.reportModal.gpsCoords')} <span className="text-gray-400 font-normal">{t('home.reportModal.optional')}</span></label>
                   <div className="grid grid-cols-2 gap-4">
-                    <Input name="latitude" placeholder="Latitude: -6.7924" value={form.latitude} onChange={handleChange} />
-                    <Input name="longitude" placeholder="Longitude: 39.2083" value={form.longitude} onChange={handleChange} />
+                    <Input name="latitude" placeholder={t('home.reportModal.latitudePh')} value={form.latitude} onChange={handleChange} />
+                    <Input name="longitude" placeholder={t('home.reportModal.longitudePh')} value={form.longitude} onChange={handleChange} />
                   </div>
                 </div>
               </div>
@@ -285,7 +284,10 @@ function ReportItemModal({ onClose, onSuccess }) {
 
             {step === 2 && (
               <div className="space-y-4 fade-in-up">
-                <p className="text-sm text-gray-500">Upload photos of the lost item to improve AI matching accuracy. <span className="text-gray-400">(optional)</span></p>
+                <p className="text-sm text-gray-500">
+                  {t('home.reportModal.uploadHint')}{' '}
+                  <span className="text-gray-400">{t('home.reportModal.optional')}</span>
+                </p>
                 <div
                   onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
                   onDragLeave={() => setIsDragOver(false)}
@@ -296,18 +298,22 @@ function ReportItemModal({ onClose, onSuccess }) {
                 >
                   <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" id="modalImageUpload" />
                   <Upload size={32} className="mx-auto mb-3" style={{ color: isDragOver ? '#1a56db' : '#9ca3af' }} />
-                  <p className="font-medium text-gray-600 text-sm">{isDragOver ? 'Drop images here' : 'Click or drag images here'}</p>
-                  <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP — up to 5MB each</p>
+                  <p className="font-medium text-gray-600 text-sm">
+                    {isDragOver ? t('home.reportModal.dropHere') : t('home.reportModal.clickOrDrag')}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">{t('home.reportModal.uploadFormats')}</p>
                 </div>
                 {imagePreviews.length > 0 && (
                   <div>
-                    <p className="text-xs font-medium text-gray-500 mb-2">{imagePreviews.length} image{imagePreviews.length > 1 ? 's' : ''} selected</p>
+                    <p className="text-xs font-medium text-gray-500 mb-2">
+                      {t('home.reportModal.imagesSelected', { count: imagePreviews.length })}
+                    </p>
                     <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                       {imagePreviews.map((src, idx) => (
                         <div key={idx} className="relative group rounded-xl overflow-hidden aspect-square bg-gray-100">
                           <img src={src} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex items-center justify-center">
-                            <button onClick={(e) => { e.stopPropagation(); removeImage(idx); }} className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5" aria-label="Remove image"><Trash2 size={14} /></button>
+                            <button onClick={(e) => { e.stopPropagation(); removeImage(idx); }} className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5" aria-label={t('home.reportModal.removeImage')}><Trash2 size={14} /></button>
                           </div>
                         </div>
                       ))}
@@ -332,8 +338,8 @@ function ReportItemModal({ onClose, onSuccess }) {
                   </svg>
                   <Brain size={22} className="absolute" style={{ color: '#1a56db' }} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Analyzing your report...</h3>
-                <p className="text-gray-500 text-sm text-center max-w-xs">Our intelligent matching system is comparing your report with available found items.</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{t('home.reportModal.analyzingHeading')}</h3>
+                <p className="text-gray-500 text-sm text-center max-w-xs">{t('home.reportModal.analyzingText')}</p>
                 <div className="flex gap-2 mt-6">
                   {[0, 1, 2].map(i => (
                     <div key={i} className="w-2.5 h-2.5 rounded-full dot-bounce" style={{ backgroundColor: '#1a56db', animationDelay: `${i * 0.2}s` }} />
@@ -349,7 +355,7 @@ function ReportItemModal({ onClose, onSuccess }) {
                     <div className="flex items-center gap-3">
                       <CheckCircle size={28} className="text-green-500" />
                       <h3 className="text-xl font-bold text-gray-900">
-                        {matchLevel === 'POTENTIAL_MATCH' ? 'Potential Match Found!' : 'Match Found!'}
+                        {matchLevel === 'POTENTIAL_MATCH' ? t('home.reportModal.potentialMatchHeading') : t('home.reportModal.matchFoundHeading')}
                       </h3>
                       {matchBadge && (
                         <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: matchBadge.bg, color: matchBadge.text }}>
@@ -357,30 +363,30 @@ function ReportItemModal({ onClose, onSuccess }) {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600">A potential match for your lost item has been identified.</p>
+                    <p className="text-sm text-gray-600">{t('home.reportModal.matchFoundText')}</p>
                     <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 space-y-3">
                       {matchDetails.previewImage && <img src={matchDetails.previewImage} alt="Matched item" className="w-full h-48 object-cover rounded-lg mb-3" />}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                        <div className="flex items-center gap-2"><Tag size={16} className="text-gray-500" /><span className="text-gray-600">Item:</span><span className="font-medium text-gray-800">{matchDetails.itemName || '—'}</span></div>
-                        <div className="flex items-center gap-2"><Building2 size={16} className="text-gray-500" /><span className="text-gray-600">Organization:</span><span className="font-medium text-gray-800">{matchDetails.organizationName || '—'}</span></div>
-                        <div className="flex items-center gap-2"><MapPin size={16} className="text-gray-500" /><span className="text-gray-600">Region:</span><span className="font-medium text-gray-800">{matchDetails.region || '—'}</span></div>
-                        <div className="flex items-center gap-2"><MapPin size={16} className="text-gray-500" /><span className="text-gray-600">Area:</span><span className="font-medium text-gray-800">{matchDetails.area || '—'}</span></div>
-                        <div className="flex items-center gap-2 col-span-full"><Calendar size={16} className="text-gray-500" /><span className="text-gray-600">Found Date:</span><span className="font-medium text-gray-800">{matchDetails.foundDate || '—'}</span></div>
+                        <div className="flex items-center gap-2"><Tag size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.item')}:</span><span className="font-medium text-gray-800">{matchDetails.itemName || '—'}</span></div>
+                        <div className="flex items-center gap-2"><Building2 size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.organization')}:</span><span className="font-medium text-gray-800">{matchDetails.organizationName || '—'}</span></div>
+                        <div className="flex items-center gap-2"><MapPin size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.regionLabel')}:</span><span className="font-medium text-gray-800">{matchDetails.region || '—'}</span></div>
+                        <div className="flex items-center gap-2"><MapPin size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.areaLabel')}:</span><span className="font-medium text-gray-800">{matchDetails.area || '—'}</span></div>
+                        <div className="flex items-center gap-2 col-span-full"><Calendar size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.foundDate')}:</span><span className="font-medium text-gray-800">{matchDetails.foundDate || '—'}</span></div>
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3 mt-2">
-                      <button onClick={() => navigate(`/owner/claim/${reportId}`)} className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}>View Details</button>
-                      <button onClick={() => { onSuccess?.(); onClose(); }} className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-gray-100 active:scale-95" style={{ color: '#1a56db', border: '1.5px solid #1a56db' }}><List size={18} /> My Reports</button>
+                      <button onClick={() => navigate(`/owner/claim/${reportId}`)} className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}>{t('home.reportModal.viewDetails')}</button>
+                      <button onClick={() => { onSuccess?.(); onClose(); }} className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-gray-100 active:scale-95" style={{ color: '#1a56db', border: '1.5px solid #1a56db' }}><List size={18} /> {t('home.reportModal.myReports')}</button>
                     </div>
                   </div>
                 ) : (
                   <div className="text-center py-6">
                     <div className="w-16 h-16 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4"><AlertCircle size={32} /></div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">No Matching Item Found</h3>
-                    <p className="text-gray-500 mb-6 max-w-md mx-auto">No matching item has been found yet. Your report has been saved successfully. Future found items may still be matched automatically.</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{t('home.reportModal.noMatchHeading')}</h3>
+                    <p className="text-gray-500 mb-6 max-w-md mx-auto">{t('home.reportModal.noMatchText')}</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <button onClick={() => { onSuccess?.(); onClose(); }} className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-gray-100 active:scale-95" style={{ color: '#1a56db', border: '1.5px solid #1a56db' }}><List size={18} /> My Reports</button>
-                      <button onClick={() => navigate('/owner/dashboard')} className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}><LayoutDashboard size={18} /> Dashboard</button>
+                      <button onClick={() => { onSuccess?.(); onClose(); }} className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-gray-100 active:scale-95" style={{ color: '#1a56db', border: '1.5px solid #1a56db' }}><List size={18} /> {t('home.reportModal.myReports')}</button>
+                      <button onClick={() => navigate('/owner/dashboard')} className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}><LayoutDashboard size={18} /> {t('home.reportModal.dashboard')}</button>
                     </div>
                   </div>
                 )}
@@ -390,17 +396,17 @@ function ReportItemModal({ onClose, onSuccess }) {
 
           {isFormStep && (
             <div className="px-8 py-5 border-t border-gray-100 flex justify-between items-center shrink-0">
-              <button onClick={prevStep} disabled={step === 0} className="px-5 py-2.5 rounded-xl border font-medium text-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50" style={{ borderColor: '#e2e8f0', color: '#374151' }}>← Back</button>
+              <button onClick={prevStep} disabled={step === 0} className="px-5 py-2.5 rounded-xl border font-medium text-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50" style={{ borderColor: '#e2e8f0', color: '#374151' }}>← {t('common.back')}</button>
               {step < 2 ? (
-                <button onClick={nextStep} className="px-6 py-2.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}>Next →</button>
+                <button onClick={nextStep} className="px-6 py-2.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}>{t('common.next')} →</button>
               ) : (
                 <button onClick={handleSubmit} disabled={submitting} className="px-6 py-2.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed" style={{ backgroundColor: '#1a56db', minWidth: 140 }}>
                   {submitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
-                      Submitting...
+                      {t('home.reportModal.submitting')}
                     </span>
-                  ) : 'Submit Report'}
+                  ) : t('home.reportModal.submitReport')}
                 </button>
               )}
             </div>
@@ -415,6 +421,7 @@ function ReportItemModal({ onClose, onSuccess }) {
    HomeCTA
 ────────────────────────────────────────────── */
 function HomeCTA({ isOwner, onReportClick }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -428,14 +435,13 @@ function HomeCTA({ isOwner, onReportClick }) {
       />
       <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
         <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white text-xs font-semibold tracking-wider uppercase mb-5 border border-white/20">
-          Start today — it's free
+          {t('home.cta.badge')}
         </span>
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-5 leading-tight">
-          Start Your Recovery<br className="hidden sm:block" /> Journey Today
+          {t('home.cta.headingLine1')}<br className="hidden sm:block" /> {t('home.cta.headingLine2')}
         </h2>
         <p className="text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Don't let a lost item disrupt your life. Join thousands of Tanzanians
-          who trust PataChako for secure and efficient recovery.
+          {t('home.cta.subtext')}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -444,7 +450,7 @@ function HomeCTA({ isOwner, onReportClick }) {
             className="flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-white text-[#1a56db] font-bold text-sm hover:bg-blue-50 active:scale-95 transition-all shadow-lg shadow-black/20"
           >
             <Megaphone size={18} />
-            {isOwner ? 'Report lost item' : 'Get started free'}
+            {isOwner ? t('home.cta.reportLostItem') : t('home.cta.getStarted')}
             <ArrowRight size={16} />
           </button>
           <button
@@ -452,18 +458,18 @@ function HomeCTA({ isOwner, onReportClick }) {
             className="flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl border-2 border-white/40 text-white font-bold text-sm hover:bg-white/10 hover:border-white/70 active:scale-95 transition-all"
           >
             <Search size={17} />
-            Search found items
+            {t('home.cta.searchFound')}
           </button>
         </div>
 
         {!isOwner && (
           <p className="text-white/50 text-xs mt-6">
-            Already have an account?{' '}
+            {t('home.cta.haveAccount')}{' '}
             <button
               onClick={() => navigate('/login')}
               className="text-white/80 underline hover:text-white transition-colors"
             >
-              Sign in
+              {t('home.cta.signIn')}
             </button>
           </p>
         )}
@@ -476,36 +482,34 @@ function HomeCTA({ isOwner, onReportClick }) {
    AboutSection
 ────────────────────────────────────────────── */
 function AboutSection() {
+  const { t } = useTranslation();
   return (
     <section id="about" className="py-24 bg-[#f8fafc]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
+
           {/* Left Content Side */}
           <div className="lg:col-span-6 space-y-6">
             <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#1a56db] text-xs font-bold tracking-wider uppercase border border-blue-100">
-              About us
+              {t('home.about.badge')}
             </span>
             <h2 className="text-4xl sm:text-5xl font-extrabold text-[#0f172a] leading-[1.15] tracking-tight">
-              Tanzania's most trusted <br className="hidden sm:block" />
-              lost &amp; found platform
+              {t('home.about.headingLine1')} <br className="hidden sm:block" />
+              {t('home.about.headingLine2')}
             </h2>
             <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-              PataChako connects people who have lost items with verified
-              organisations that have found them. Our AI-powered matching
-              system compares thousands of reports in seconds.
+              {t('home.about.para1')}
             </p>
             <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-              We partner with verified organisations across all 31 regions of
-              Tanzania — from Dar es Salaam to Zanzibar.
+              {t('home.about.para2')}
             </p>
           </div>
 
-          {/* Right Image Side (Larger & Seamless) */}
+          {/* Right Image Side */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end items-center">
-            <img 
-              src={aboutImg} 
-              alt="About PataChako" 
+            <img
+              src={aboutImg}
+              alt="About PataChako"
               className="w-full max-w-lg lg:max-w-xl h-auto max-h-[520px] object-contain mix-blend-multiply transition-transform duration-300 hover:scale-[1.02]"
             />
           </div>
@@ -515,6 +519,7 @@ function AboutSection() {
     </section>
   );
 }
+
 /* ──────────────────────────────────────────────
    HomePage (main export)
 ────────────────────────────────────────────── */
@@ -536,7 +541,6 @@ export default function HomePage() {
   );
 
   const [showModal, setShowModal] = useState(false);
-
   const [loadingReportBtn, setLoadingReportBtn] = useState(false);
   const [loadingSearchBtn, setLoadingSearchBtn] = useState(false);
 

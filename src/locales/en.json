@@ -1,0 +1,1086 @@
+{
+    "common": {
+  "back": "Back",
+  "next": "Next",
+  "backToSearch": "Back to Search",
+  "refresh": "Refresh",
+  "loading": "Loading…",
+  "save": "Save",
+  "saving": "Saving…",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "deleting": "Deleting…",
+  "edit": "Edit",
+  "retry": "Retry",
+  "yes": "Yes",
+  "no": "No",
+  "close": "Close",
+  "somethingWentWrong": "Something went wrong.",
+  "logout": "Log Out"
+},
+  
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "contact": "Contact",
+      "partnerWithUs": "Partner With Us",
+      "login": "Log In",
+      "register": "Create Account",
+      "logout": "Log Out",
+      "language": "Language",
+      "owner": {
+        "dashboard": "Dashboard",
+        "search": "Search Items",
+        "report": "Report Lost Item",
+        "reports": "My Reports",
+        "profile": "Profile"
+      },
+      "org": {
+        "dashboard": "Dashboard",
+        "publish": "Publish Item",
+        "items": "My Items",
+        "claims": "Claims",
+        "profile": "Profile"
+      },
+      "admin": {
+        "dashboard": "Dashboard",
+        "manageUsers": "Manage Users",
+        "createOrg": "Create Org",
+        "items": "Items",
+        "partnerRequests": "Partner Requests",
+        "profile": "Profile"
+      }
+    },
+  
+    "home": {
+      "cta": {
+        "badge": "Start today — it's free",
+        "headingLine1": "Start Your Recovery",
+        "headingLine2": "Journey Today",
+        "subtext": "Don't let a lost item disrupt your life. Join thousands of Tanzanians who trust PataChako for secure and efficient recovery.",
+        "reportLostItem": "Report lost item",
+        "getStarted": "Get started free",
+        "searchFound": "Search found items",
+        "haveAccount": "Already have an account?",
+        "signIn": "Sign in"
+      },
+      "about": {
+        "badge": "About us",
+        "headingLine1": "Tanzania's most trusted",
+        "headingLine2": "lost & found platform",
+        "para1": "PataChako connects people who have lost items with verified organisations that have found them. Our AI-powered matching system compares thousands of reports in seconds.",
+        "para2": "We partner with verified organisations across all 31 regions of Tanzania — from Dar es Salaam to Zanzibar."
+      },
+      "reportModal": {
+        "title": "Report Lost Item",
+        "analyzingTitle": "Analyzing Your Report",
+        "resultTitle": "Report Result",
+        "stepOf": "Step {{current}} of {{total}}",
+        "steps": {
+          "basic": "Basic Information",
+          "location": "Location Details",
+          "images": "Images"
+        },
+        "itemName": "Item Name",
+        "itemNamePh": "Enter the name of the lost item",
+        "category": "Category",
+        "categoryPh": "Select a category",
+        "description": "Description",
+        "descriptionPh": "Describe your lost item",
+        "region": "Region",
+        "regionPh": "Select a region",
+        "area": "Area",
+        "areaPh": "e.g., Kijitonyama",
+        "dateLost": "Date Lost",
+        "dominantColor": "Dominant Color",
+        "dominantColorPh": "e.g., Black, Silver",
+        "lostLocation": "Lost Location",
+        "lostLocationPh": "e.g., Bus Stop near Posta",
+        "gpsCoords": "GPS Coordinates",
+        "optional": "(optional)",
+        "latitudePh": "Latitude: -6.7924",
+        "longitudePh": "Longitude: 39.2083",
+        "uploadHint": "Upload photos of the lost item to improve AI matching accuracy.",
+        "dropHere": "Drop images here",
+        "clickOrDrag": "Click or drag images here",
+        "uploadFormats": "PNG, JPG, WEBP — up to 5MB each",
+        "imagesSelected": "{{count}} image selected",
+        "imagesSelected_plural": "{{count}} images selected",
+        "removeImage": "Remove image",
+        "analyzingHeading": "Analyzing your report...",
+        "analyzingText": "Our intelligent matching system is comparing your report with available found items.",
+        "matchFoundHeading": "Match Found!",
+        "potentialMatchHeading": "Potential Match Found!",
+        "noMatchHeading": "No Matching Item Found",
+        "noMatchText": "No matching item has been found yet. Your report has been saved successfully. Future found items may still be matched automatically.",
+        "matchFoundText": "A potential match for your lost item has been identified.",
+        "potentialMatch": "Potential Match",
+        "noMatch": "No Match",
+        "item": "Item",
+        "organization": "Organization",
+        "regionLabel": "Region",
+        "areaLabel": "Area",
+        "foundDate": "Found Date",
+        "viewDetails": "View Details",
+        "myReports": "My Reports",
+        "dashboard": "Dashboard",
+        "submitReport": "Submit Report",
+        "submitting": "Submitting...",
+        "errItemName": "Item name is required",
+        "errCategory": "Please select a category",
+        "errDescription": "Description is required",
+        "errRegion": "Region is required",
+        "errArea": "Area is required",
+        "errLostDate": "Lost date is required",
+        "errLostLocation": "Lost location is required"
+      }
+    },
+  
+    "reports": {
+      "title": "My Reports",
+      "subtitle": "All your lost item reports in one place",
+      "noReports": "No reports yet",
+      "noReportsHint": "You haven't filed any lost item reports. Start by searching found items.",
+      "goToSearch": "Go to search",
+      "reportCount": "{{count}} report",
+      "reportCount_plural": "{{count}} reports",
+      "withMatches": "{{count}} with AI matches",
+      "loadMore": "Load more",
+      "status": {
+        "notClaimed": "Not Claimed",
+        "matched": "Matched",
+        "alreadyClaimed": "Already Claimed",
+        "closed": "Closed",
+        "found": "Found"
+      },
+      "actions": {
+        "claimItem": "Claim Item",
+        "edit": "Edit",
+        "deleteReport": "Delete this report",
+        "editDisabled": "Report can only be edited when status is REPORTED",
+        "deleteDisabled": "Report can only be deleted when status is REPORTED"
+      },
+      "deleteModal": {
+        "title": "Delete Report",
+        "warning": "This action cannot be undone.",
+        "message": "Permanently delete your report for {{itemName}}? It will be removed from your reports and stop any AI matching.",
+        "success": "Report deleted successfully."
+      },
+      "aiMatches": "{{count}} AI match found",
+      "aiMatches_plural": "{{count}} AI matches found",
+      "bestScore": "Best score: {{score}}"
+    },
+    "footer": {
+  "tagline": "Tanzania's most trusted platform for reporting, searching, and recovering lost items safely and efficiently.",
+  "platformNavigation": "Platform Navigation",
+  "searchItems": "Search Items",
+  "reportLostItem": "Report Lost Item",
+  "partnerWithUs": "Partner With Us",
+  "howItWorks": "How it Works",
+  "company": "Company",
+  "aboutUs": "About Us",
+  "faqs": "FAQs",
+  "location": "Dar es Salaam, Tanzania",
+  "rightsReserved": "All rights reserved.",
+  "builtWith": "Built with trust and security for Tanzania."
+},
+"categoriesSection": {
+  "badge": "Categories",
+  "title": "What Can You Recover?",
+  "subtitle": "From essential documents to valuable electronics, we help you recover a wide range of personal belongings."
+},
+"categoriesGrid": {
+  "items": {
+    "phones": "Phones",
+    "ids": "IDs",
+    "laptops": "Laptops",
+    "wallets": "Wallets",
+    "bags": "Bags",
+    "passports": "Passports",
+    "documents": "Documents",
+    "keys": "Keys",
+    "electronics": "Electronics",
+    "clothes": "Clothes",
+    "jewelry": "Jewelry",
+    "watches": "Watches",
+    "money": "Money",
+    "books": "Books",
+    "vehicleItems": "Vehicle Items",
+    "headphones": "Headphones",
+    "chargerOfPhone": "Charger of Phone",
+    "chargerOfLaptop": "Charger of Laptop",
+    "chargerOfVehicle": "Charger of Vehicle",
+    "otherChargers": "Other Chargers",
+    "waterBottles": "Water Bottles",
+    "toys": "Toys",
+    "medicalItems": "Medical Items",
+    "sportsItems": "Sports Items",
+    "petItems": "Pet Items",
+    "foodContainers": "Food Containers",
+    "umbrellas": "Umbrellas",
+    "calculator": "Calculator",
+    "otherItems": "Other Items"
+  }
+},
+"faqSection": {
+  "badge": "FAQ",
+  "title": "Frequently Asked Questions",
+  "subtitle": "Everything you need to know about recovering your lost items safely.",
+  "items": {
+    "partner": {
+      "q": "How can I partner with PataChako?",
+      "a": "Click on \"Partner with Us\" in the navigation menu and fill the partner form. You can partner with PataChako only if you are an organization such as a university, owner of a wedding hall, owner of a mall, or other places where many people gather."
+    },
+    "report": {
+      "q": "How do I report a lost item?",
+      "a": "Click on \"Report Lost Item\" in the navigation menu. Fill out the secure form with details about your item. Then wait for matching once your item is found."
+    },
+    "search": {
+      "q": "How do I search for my item?",
+      "a": "Use the \"Search Found Items\" feature to search by the region where you lost your item. If you find that your item belongs to a particular region, you can continue to report your item. If you don't find it but you are sure you lost your valuable item, just go to the Report Lost Item button to report."
+    },
+    "claim": {
+      "q": "Can anyone claim my item?",
+      "a": "No. All claims require strict verification. You must provide proof of ownership, such as a lostReportId. You can then even share it with a friend for pickup."
+    },
+    "verify": {
+      "q": "How is ownership verified?",
+      "a": "Our partnered organizations conduct a multi-step verification process, which may include ID checks, matching serial numbers, or answering specific questions about the item."
+    },
+    "secure": {
+      "q": "Is my information secure?",
+      "a": "Absolutely. We use end-to-end encryption for all data transmissions and adhere to strict privacy policies. Your contact details are never publicly displayed."
+    },
+    "noLocation": {
+      "q": "What if I don't know the exact location?",
+      "a": "Provide the last known location or general area. Our system uses geolocation matching to alert you if an item is found nearby."
+    },
+    "retention": {
+      "q": "How long are items kept?",
+      "a": "Retention periods vary by partnering organization, but typically items are held securely for 30 to 90 days before being processed according to local regulations."
+    },
+    "beOrganisation": {
+      "q": "How can I become an organization on PataChako?",
+      "a": "You can become an organization on PataChako only if you are the owner of a mall, hall, university, or any place where many people gather or events happen frequently."
+    },
+    "free": {
+      "q": "Is PataChako free to use?",
+      "a": "Reporting and searching are completely free for individuals. We sustain the platform through premium verification services for large organizations."
+    }
+  }
+},
+"hero": {
+  "badge": "Lost & Found Platform",
+  "headingPart1": "Bringing the lost item",
+  "headingHighlight": "Back to home",
+  "subtext": "Tanzania's trusted platform for reporting, searching, and recovering lost items safely and efficiently through verified organizations.",
+  "reportLostItem": "Report Lost Item",
+  "searchFoundItems": "Search Found Items"
+},
+"howItWorks": {
+  "badge": "How It Works",
+  "title": "Simple, Secure, and Effective",
+  "subtitle": "Our streamlined process ensures your lost items are recovered safely without exposing your personal information.",
+  "steps": {
+    "report": {
+      "title": "Report Lost Item",
+      "desc": "Submit details about your lost item securely through our encrypted platform."
+    },
+    "publish": {
+      "title": "Organizations Publish",
+      "desc": "Verified partners and organizations publish found items to the secure database."
+    },
+    "search": {
+      "title": "Search Published Items",
+      "desc": "Use our advanced search to find matches for your lost belongings."
+    },
+    "verify": {
+      "title": "Verify & Recover",
+      "desc": "Complete our secure verification process to safely reclaim your item."
+    }
+  }
+},
+"testimonialsSection": {
+  "badge": "Testimonials",
+  "title": "Trusted by the Community",
+  "subtitle": "Hear from people who have successfully recovered their valuable belongings.",
+  "items": {
+    "shinuna": {
+      "name": "Shinuna Khamis",
+      "role": "University Student",
+      "text": "I lost my student ID and laptop bag on the bus. Within 24 hours, I found it listed on PataChako by the transport company. The verification was smooth and secure."
+    },
+    "massoud": {
+      "name": "Massoud Rashid",
+      "role": "Optometrist",
+      "text": "As an optometrist traveling from Kivukoni toward Kigamboni for a clinic visit, I accidentally left my portable eye examination equipment in a vehicle and could not remember where I had dropped it. Fortunately, someone reported the item through PataChako and left it with a nearby organization, making it much easier and safer for me to recover it."
+    },
+    "seif": {
+      "name": "Seif Ali",
+      "role": "Civil Engineer",
+      "text": "As a civil engineer working on construction sites, I travel frequently and often carry important equipment and documents. After leaving my surveying equipment in a transport vehicle, PataChako helped me report it and gave me peace of mind knowing it could be securely recovered."
+    }
+  }
+},
+"whyChoose": {
+  "badge": "Why Choose Us",
+  "title": "Built on Trust and Security",
+  "subtitle": "We prioritize your security and peace of mind at every step of the recovery process.",
+  "items": {
+    "secureVerification": {
+      "title": "Secure Verification",
+      "desc": "Multi-step identity verification ensures items only go to rightful owners."
+    },
+    "trustedOrganizations": {
+      "title": "Trusted Organizations",
+      "desc": "We partner with verified police stations, universities, and transport hubs."
+    },
+    "privacyProtection": {
+      "title": "Privacy Protection",
+      "desc": "Your personal data is encrypted and never shared with unauthorized parties."
+    },
+    "fastRecovery": {
+      "title": "Fast Recovery",
+      "desc": "Real-time notifications alert you the moment a matching item is found."
+    },
+    "digitalTracking": {
+      "title": "Digital Tracking",
+      "desc": "Track the status of your report and recovery process in real-time."
+    },
+    "fraudPrevention": {
+      "title": "Fraud Prevention",
+      "desc": "Advanced algorithms and manual reviews prevent fraudulent claims."
+    }
+  }
+},
+"heroCarousel": {
+  "headingPart1": "See how a lost item",
+  "headingHighlight": "finds its way home",
+  "subtext": "One report, one network, one AI match — watch the whole journey.",
+  "play": "Play video",
+  "pause": "Pause video",
+  "mute": "Mute video",
+  "unmute": "Unmute video",
+  "chapters": {
+    "search": {
+      "label": "Search the network",
+      "detail": "Police, airports & universities in one place"
+    },
+    "report": {
+      "label": "Report in seconds",
+      "detail": "A quick, guided form — no paperwork"
+    },
+    "match": {
+      "label": "AI finds the match",
+      "detail": "Your report is matched automatically"
+    }
+  }
+},
+"ownerDashboard": {
+  "greeting": "Hi, {{name}}! Welcome to PataChako.",
+  "defaultName": "User",
+  "cards": {
+    "search": {
+      "title": "🔍 Search Found Items",
+      "desc": "Filter by region and find your lost items."
+    },
+    "report": {
+      "title": "📝 Report Lost Item",
+      "desc": "Submit a new lost report."
+    },
+    "reports": {
+      "title": "📋 My Reports",
+      "desc": "View your previous reports."
+    }
+  }
+},
+"searchPage": {
+  "defaultName": "User",
+  "greeting": "Hi, {{name}}! 👋",
+  "subtitle": "Search for found items across Tanzania",
+  "backToHome": "Back to home",
+  "myReports": "My Reports",
+  "filterLabel": "Filter by region",
+  "allRegions": "All Regions",
+  "search": "Search",
+  "searching": "Searching...",
+  "errorLoad": "Unable to load items. Please try again.",
+  "itemsFoundInRegion": "{{count}} item found in {{region}}",
+  "itemsFoundInRegion_plural": "{{count}} items found in {{region}}",
+  "itemsFoundAllRegions": "{{count}} item found across all regions",
+  "itemsFoundAllRegions_plural": "{{count}} items found across all regions",
+  "noItemsTitle": "No items found",
+  "noItemsHint": "Try a different region or check back later.",
+  "idleTitle": "Find a reported item",
+  "idleHint": "Select a region and click Search to browse found items in your area.",
+  "ctaText": "Lost something? Let our AI find it for you.",
+  "reportLostItem": "Report Lost Item"
+},
+"regions": {
+  "ARUSHA": "Arusha",
+  "DAR_ES_SALAAM": "Dar es Salaam",
+  "DODOMA": "Dodoma",
+  "GEITA": "Geita",
+  "IRINGA": "Iringa",
+  "KAGERA": "Kagera",
+  "KATAVI": "Katavi",
+  "KIGOMA": "Kigoma",
+  "KILIMANJARO": "Kilimanjaro",
+  "LINDI": "Lindi",
+  "MANYARA": "Manyara",
+  "MARA": "Mara",
+  "MBEYA": "Mbeya",
+  "MOROGORO": "Morogoro",
+  "MTWARA": "Mtwara",
+  "MWANZA": "Mwanza",
+  "NJOMBE": "Njombe",
+  "PWANI": "Pwani",
+  "RUKWA": "Rukwa",
+  "RUVUMA": "Ruvuma",
+  "SHINYANGA": "Shinyanga",
+  "SIMIYU": "Simiyu",
+  "SINGIDA": "Singida",
+  "TABORA": "Tabora",
+  "TANGA": "Tanga",
+  "UNGUJA_KASKAZINI": "Unguja Kaskazini",
+  "UNGUJA_KUSINI": "Unguja Kusini",
+  "UNGUJA_MJINI_MAGHARIBI": "Unguja Mjini Magharibi",
+  "PEMBA": "Pemba"
+},
+"profile": {
+  "title": "My Profile",
+  "subtitle": "Manage your account details",
+  "roleOwner": "Owner",
+  "accountInfo": "Account information",
+  "fields": {
+    "fullName": "Full name",
+    "email": "Email address",
+    "mobile": "Mobile number"
+  },
+  "placeholders": {
+    "fullName": "Your full name",
+    "email": "you@example.com",
+    "mobile": "+255 7XX XXX XXX"
+  },
+  "location": {
+    "heading": "Your Location",
+    "optional": "(optional)",
+    "placeholder": "Search your area…",
+    "hint": "Drag the map or search to set your coordinates."
+  },
+  "saveChanges": "Save changes",
+  "saving": "Saving...",
+  "success": "Profile updated successfully!",
+  "errors": {
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Enter a valid email address",
+    "numberInvalid": "Must be a valid number",
+    "updateFailed": "Failed to update profile."
+  }
+},
+"reportItem": {
+  "title": "Report Lost Item",
+  "stepOf": "Step {{current}} of {{total}}",
+  "steps": {
+    "basic": "Basic Information",
+    "location": "Location Details",
+    "images": "Images"
+  },
+  "fields": {
+    "itemName": "Item Name",
+    "category": "Category",
+    "description": "Description",
+    "dominantColor": "Dominant Color",
+    "region": "Region",
+    "area": "Area / Sub-locality",
+    "dateLost": "Date Lost",
+    "lostLocation": "Lost Location (Map Pin)"
+  },
+  "placeholders": {
+    "itemName": "e.g., Samsung Galaxy S22 Ultra, HP Pavilion Laptop, National ID",
+    "category": "Select a category",
+    "description": "Include key features for accurate AI matching:\n• Brand, model, or make\n• Distinct marks (scratches, stickers, cracked screen)\n• Case/cover color or style\n• ID details (Name, NIDA/Student ID Number if applicable)\n• Contents inside (if bag or wallet)",
+    "dominantColor": "e.g., Black, Silver, Dark Blue",
+    "region": "Select a region",
+    "area": "e.g., Magufuli Hostel, Block B234",
+    "lostLocation": "Search building, street, or nearby landmark..."
+  },
+  "upload": {
+    "hint": "Upload photos of the lost item or similar sample photos to improve AI matching accuracy.",
+    "optional": "(optional)",
+    "dropHere": "Drop images here",
+    "clickOrDrag": "Click or drag images here",
+    "formats": "PNG, JPG, WEBP — up to 5MB each",
+    "imagesSelected": "{{count}} image selected",
+    "imagesSelected_plural": "{{count}} images selected",
+    "removeImage": "Remove image"
+  },
+  "saving": {
+    "title": "Saving Lost Report...",
+    "subtitle": "Indexing details into our AI registry"
+  },
+  "success": {
+    "title": "Lost Report Submitted Successfully!",
+    "text1": "Our AI engine is actively searching. Once an organization registers a matching item, we will notify you immediately via your",
+    "emailWord": "email",
+    "text2": ".",
+    "automatedTitle": "Automated AI Matching",
+    "automatedText1": "You don't need to keep checking back continuously. We will notify you through your email. And once notified, go to",
+    "myReportWord": "My Reports",
+    "automatedText2": "to claim your item.",
+    "goToDashboard": "Go to Dashboard",
+    "viewMyReports": "View My Reports"
+  },
+  "submitReport": "Submit Report",
+  "submitting": "Submitting...",
+  "errors": {
+    "itemName": "Item name is required",
+    "category": "Please select a category",
+    "description": "Description is required",
+    "region": "Region is required",
+    "area": "Area is required",
+    "lostDate": "Lost date is required",
+    "pickLocation": "Please select a location from the map.",
+    "submitFailed": "Something went wrong while submitting the report."
+  }
+},
+"ctaSection": {
+  "heading": "Start Your Recovery Journey Today",
+  "subtext": "Don't let a lost item disrupt your life. Join thousands of Tanzanians who trust PataChako for secure and efficient recovery.",
+  "reportLostItem": "Report Lost Item",
+  "searchFoundItems": "Search Found Items"
+},
+"reportModal": {
+  "title": "Report Lost Item",
+  "stepOf": "Step {{current}} of {{total}}",
+  "steps": {
+    "basic": "Basic Information",
+    "location": "Location Details",
+    "images": "Images"
+  },
+  "fields": {
+    "itemName": "Item Name",
+    "category": "Category",
+    "description": "Detailed Description",
+    "dominantColor": "Dominant Color",
+    "region": "Region",
+    "area": "Specific Area / District",
+    "lostDate": "Lost Date",
+    "lostLocation": "Exact Venue Location"
+  },
+  "placeholders": {
+    "itemName": "e.g., Laptop, iPhone 13",
+    "category": "Select item category",
+    "description": "Provide unique serial numbers, scratch patterns, or configurations...",
+    "dominantColor": "e.g., Matte Black",
+    "region": "Select region",
+    "area": "e.g., Kinondoni",
+    "lostLocation": "e.g., COICT Room B-12"
+  },
+  "ready": {
+    "title": "Ready for AI Neural Verification",
+    "subtitle": "Your telemetry and descriptive indexes will be matched synchronously against active data pools."
+  },
+  "submitAndMatch": "Submit & Match",
+  "retrySubmit": "Try Re-submitting",
+
+  "ai": {
+    "title": "AI is matching your item…",
+    "errNetwork": "Network communication execution failed"
+  },
+
+  "aiStages": {
+    "ingest": "Ingesting report data",
+    "nlp": "Running NLP on description",
+    "embed": "Generating semantic embeddings",
+    "image": "Scanning image similarity index",
+    "geo": "Matching geographic location",
+    "color": "Comparing dominant color features",
+    "category": "Scoring category alignment",
+    "rank": "Ranking candidate matches",
+    "score": "Computing final confidence score",
+    "done": "Finalizing and storing results"
+  },
+
+  "badges": {
+    "excellent": "Excellent Match",
+    "high": "High Match",
+    "possible": "Possible Match",
+    "low": "Low Match"
+  },
+
+  "result": {
+    "submittedBadge": "Report Submitted Successfully",
+    "noMatchTitle": "No Matches Found Immediately",
+    "noMatchText1": "Your report has been successfully filed under ID",
+    "noMatchText2": ". The system will continue scanning continuously.",
+    "dashboard": "Dashboard",
+    "myReports": "My Reports",
+    "registeredItem": "Registered Core Item",
+    "lostItemFallback": "Lost Item Assignment",
+    "highestMatch": "Highest Match Percentage",
+    "totalMatches": "Total Verified Network Matches: {{count}}",
+    "matchRank": "Match Rank #{{number}}",
+    "goToMyReports": "Go To My Reports",
+    "scoreLabels": {
+      "name": "Name Alignment",
+      "description": "Description Weight",
+      "location": "Spatial Proximity",
+      "date": "Chronological Delta",
+      "color": "Spectral Metric"
+    }
+  },
+
+  "errors": {
+    "itemName": "Item name is required",
+    "category": "Please select a category",
+    "description": "Description is required",
+    "region": "Region is required",
+    "area": "Area is required",
+    "lostDate": "Lost date is required",
+    "lostLocation": "Lost location is required",
+    "statusCodeMismatch": "Custom business status code layout mismatch. Please verify state mappings.",
+    "networkFailed": "Network communication execution failed",
+    "emptyResponse": "The network returned a completely empty payload response.",
+    "missingEnvelope": "The connection succeeded, but structural data envelope properties are missing."
+  }
+},
+"claimItem": {
+  "loading": "Loading match details…",
+  "unknownOrganisation": "Unknown Organisation",
+
+  "success": {
+    "title": "Claim Submitted!",
+    "pendingReview": "Pending Review",
+    "detailsHeading": "Important Details",
+    "lostReportIdLabel": "Your Lost Report ID:",
+    "organisationLabel": "Organisation:",
+    "shareHint1": "You can share your",
+    "shareHintBold": "Lost Report ID",
+    "shareHint2": "with a friend to pick up the item on your behalf.",
+    "pendingText": "Your claim has been sent to the organisation. They will review it and get back to you.",
+    "processedText": "The organisation has processed your claim.",
+    "myReports": "My Reports"
+  },
+
+  "error": {
+    "title": "Already claimed",
+    "noMatchYet": "This report has not been matched with any found item yet.",
+    "backToMyReports": "Back to My Reports",
+    "goToSearch": "Go to Search"
+  },
+
+  "ownClaimed": {
+    "title": "Already Claimed",
+    "text": "You have already claimed this item. You can view the status of your claim in My Reports.",
+    "myReports": "My Reports",
+    "backToSearch": "Back to Search"
+  },
+
+  "unavailable": {
+    "title": "Item No Longer Available",
+    "text": "This matched item is no longer available to claim. It may have already been picked up or closed by the organisation.",
+    "myReports": "My Reports",
+    "backToSearch": "Back to Search"
+  },
+
+  "matchCard": {
+    "title": "We found a match!",
+    "subtitle": "Your lost item may have been found by an organisation.",
+    "organisationFallback": "Organisation",
+    "itemFallback": "Matched Item",
+    "aiConfidence": "AI Confidence",
+    "matchWord": "match",
+    "claimButton": "Claim This Item",
+    "submittingClaim": "Submitting Claim…",
+    "disclaimer": "By claiming, you confirm this item belongs to you. The organisation will verify your request."
+  },
+
+  "errors": {
+    "reportNotFound": "Report not found.",
+    "loadFailed": "Failed to load report",
+    "noMatchedItem": "No matched item to claim.",
+    "claimFailed": "Claim could not be completed. Please try again.",
+    "claimFailedShort": "Claim failed"
+  }
+},
+"editReport": {
+  "title": "Edit Report",
+  "subtitlePart1": "You can edit this report while its status is",
+  "subtitlePart2": ". Only fill the fields you want to change.",
+  "backToMyReports": "Back to My Reports",
+  "pinnedLocation": "Pinned location",
+  "accountLocked": "Account Locked",
+  "saveChanges": "Save Changes",
+
+  "fields": {
+    "itemName": "Item Name",
+    "category": "Category",
+    "description": "Description",
+    "region": "Region",
+    "area": "Area",
+    "dateLost": "Date Lost",
+    "dominantColor": "Dominant Color",
+    "lostLocation": "Lost Location (Map Pin)",
+    "images": "Images"
+  },
+
+  "placeholders": {
+    "itemName": "Enter the name of the lost item",
+    "category": "Select a category",
+    "description": "Describe your lost item",
+    "region": "Select a region",
+    "area": "e.g., Kijitonyama",
+    "dominantColor": "e.g., Black, Silver",
+    "lostLocation": "Search building, street, or nearby landmark..."
+  },
+
+  "imagesOptional": "(optional)",
+
+  "imageUpload": {
+    "clickToAdd": "Click to add images",
+    "formats": "PNG, JPG, WEBP",
+    "removeImage": "Remove image"
+  },
+
+  "success": {
+    "title": "Report Updated!",
+    "subtitle": "Your report has been updated successfully. Redirecting…"
+  },
+
+  "errors": {
+    "itemNameLength": "Item name must be between 2 and 105 characters",
+    "descriptionTooLong": "Description is too long (max 2000 characters)",
+    "areaTooLong": "Area is too long (max 150 characters)",
+    "dateInFuture": "Lost date cannot be in the future",
+    "fixHighlighted": "Please fix the highlighted fields."
+  }
+},
+"partnerSendOtp": {
+  "title": "Partner With Us",
+  "stepLabel": "Step 1 of 2 — Verify your email",
+  "goHome": "Go to home",
+  "instructions": "Enter the email address you'd like us to use for your partnership request. We'll send a one-time code to verify it.",
+  "emailLabel": "Email Address",
+  "emailPlaceholder": "you@example.com",
+  "sendOtp": "Send OTP",
+  "sending": "Sending OTP…",
+  "accountLocked": "Account Locked",
+  "otpInfo": "OTP expires in {{expiry}} min. Max {{attempts}} attempts. Resend cooldown {{cooldown}}s, up to {{daily}}/day.",
+  "otpInfoFallback": "Your OTP is valid for a short time. Rate limits apply to resend requests.",
+  "errors": {
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "fillAll": "Please fill all fields correctly."
+  }
+},
+"partnerWithUs": {
+  "title": "Partner With Us",
+  "stepLabel": "Step 2 of 2 — Tell us about your organization",
+  "goHome": "Go to home",
+
+  "fields": {
+    "orgName": "Organization Name",
+    "contactPerson": "Contact Person",
+    "emailVerified": "Email (verified)",
+    "phone": "Phone Number",
+    "partnershipType": "Partnership Type",
+    "message": "Message"
+  },
+
+  "placeholders": {
+    "orgName": "e.g., Universities, Mall,...",
+    "contactPerson": "Full name",
+    "email": "you@example.com",
+    "phone": "255 7XX XXX XXX",
+    "message": "Tell us about your organization and how you'd like to partner…"
+  },
+
+  "partnershipTypes": {
+    "UNIVERSITY": "University",
+    "BUSINESS": "Business",
+    "NGO": "NGO",
+    "GOVERNMENT": "Government",
+    "TECHNOLOGY": "Technology",
+    "SECURITY": "Security",
+    "OTHER": "Other"
+  },
+
+  "otp": {
+    "heading": "Email Verification",
+    "locked": "Locked",
+    "sending": "Sending…",
+    "resendIn": "Resend in {{seconds}}s",
+    "resend": "Resend OTP",
+    "placeholder": "Enter 6-digit OTP code",
+    "sentTo1": "We sent a code to",
+    "sentTo2": ".",
+    "expiresIn": "It expires in {{minutes}} min."
+  },
+
+  "buttons": {
+    "submitting": "Submitting…",
+    "accountLocked": "Account Locked",
+    "submitRequest": "Submit Request"
+  },
+
+  "messages": {
+    "resendSuccess": "A new OTP has been sent to your email."
+  },
+
+  "success": {
+    "title": "Request Submitted!",
+    "message": "Thank you for your interest in partnering with PataChako. Our team will review your request and get back to you shortly.",
+    "backHome": "Back to Home"
+  },
+
+  "errors": {
+    "orgNameRequired": "Organization name is required",
+    "orgNameLength": "Organization name must be between 2 and 100 characters",
+    "orgNameLettersOnly": "Organization name must contain only letters and spaces",
+    "contactRequired": "Contact person is required",
+    "contactLength": "Contact person name must be between 2 and 50 characters",
+    "contactLettersOnly": "Contact person name must contain only letters and spaces",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "phoneRequired": "Phone number is required",
+    "phoneInvalid": "Invalid mobile number format",
+    "messageRequired": "Message is required",
+    "messageLength": "Message must be between 10 and 1000 characters",
+    "otpRequired": "OTP code is required",
+    "otpInvalid": "Enter a valid 6-digit OTP code",
+    "fixBeforeSubmit": "Please resolve validation errors before submitting."
+  }
+},
+"register": {
+  "goHome": "Go to home",
+  "activeBadge": "Active",
+
+  "steps": {
+    "personal": "Personal",
+    "security": "Security",
+    "location": "Location"
+  },
+
+  "leftPanel": {
+    "headingLine1": "Join Tanzania's",
+    "headingLine2": "Trusted Lost",
+    "headingLine3": "& Found Network",
+    "subtext": "Create your free account and reconnect with what matters most — backed by verified partners nationwide."
+  },
+
+  "stats": {
+    "itemsFound": "Items Found",
+    "success": "Success",
+    "partners": "Partners"
+  },
+
+  "titles": {
+    "personal": "Personal Details",
+    "security": "Secure Your Account",
+    "location": "Your Location"
+  },
+
+  "subtitles": {
+    "personal": "Tell us your basic info to get started.",
+    "security": "Set a strong password to protect your account.",
+    "location": "Optional — helps match you with nearby lost items."
+  },
+
+  "fields": {
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "mobile": "Mobile Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "yourLocation": "Your Location"
+  },
+
+  "placeholders": {
+    "fullName": "e.g. Amina Hassan",
+    "email": "you@example.com",
+    "mobile": "7XX XXX XXX",
+    "password": "Min. 8 characters, 1 upper, 1 lower, 1 digit",
+    "confirmPassword": "Re-enter your password",
+    "location": "Search your area…"
+  },
+
+  "strength": {
+    "enterPassword": "Enter a password",
+    "tooWeak": "Too weak",
+    "weakLength": "Weak – use at least 8 characters",
+    "strong": "Strong password",
+    "good": "Good password",
+    "couldBeStronger": "Could be stronger – add uppercase/number"
+  },
+
+  "matchIndicator": {
+    "match": "✓ Passwords match",
+    "noMatch": "✕ Passwords do not match"
+  },
+
+  "buttons": {
+    "continue": "Continue",
+    "back": "Back",
+    "creating": "Creating…",
+    "createAccount": "Create Account ✓"
+  },
+
+  "locationHint": "Adding your location helps match you with nearby items. This is entirely optional.",
+
+  "smsNotice": {
+    "label": "SMS OTP:",
+    "message": " We will send a verification code via SMS to your mobile number (+255 {{mobile}})."
+  },
+
+  "loginPrompt": "Already have an account?",
+  "signIn": "Sign in",
+  "footer": "By registering you agree to our Terms & Privacy Policy.",
+
+  "errors": {
+    "nameRequired": "Full name is required.",
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Please enter a valid email address.",
+    "mobileRequired": "Mobile number is required.",
+    "mobileInvalid": "Enter a valid 9-digit mobile number (starts with 6 or 7, e.g. 712345678).",
+    "passwordRequired": "Password is required.",
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "passwordWeak": "Password must include one uppercase, one lowercase, and one number.",
+    "confirmPasswordRequired": "Please confirm your password.",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "genericFailure": "Registration failed. Please try again."
+  }
+},
+
+"login": {
+  "goHome": "Go to home",
+  "title": "Welcome back",
+  "subtitle": "Sign in to your PataChako account",
+
+  "leftPanel": {
+    "headingLine1": "Tanzania's",
+    "headingLine2": "Lost & Found",
+    "headingLine3": "Platform",
+    "subtext": "Reuniting people with what matters most — verified, secure, and trusted across the nation."
+  },
+
+  "features": {
+    "verifiedPartners": {
+      "title": "Verified Partners",
+      "sub": "Police, airports & universities"
+    },
+    "smartMatching": {
+      "title": "Smart Matching",
+      "sub": "AI-powered item recognition"
+    },
+    "nationwide": {
+      "title": "Nationwide Coverage",
+      "sub": "All regions of Tanzania"
+    }
+  },
+
+  "stats": {
+    "itemsFound": "Items Found",
+    "successRate": "Success Rate",
+    "partners": "Partners"
+  },
+
+  "fields": {
+    "username": " Phone",
+    "password": "Password"
+  },
+
+  "placeholders": {
+    "username": "255XXXXXXXXX",
+    "password": "••••••••"
+  },
+
+  "forgotPassword": "Forgot password?",
+  "signIn": "Sign In",
+  "signingIn": "Signing in…",
+  "newHere": "New to PataChako?",
+  "createAccount": "Create an Account",
+  "footer": "By signing in you agree to our Terms & Privacy Policy.",
+
+  "lockedFallback": "Too many failed attempts. Your account has been temporarily locked.",
+  "tryAgainIn": "Try again in",
+  "tooManyAttempts": "Too many failed attempts. Please try again in {{time}}.",
+
+  "validation": {
+    "enterUsername": "Enter your username.",
+    "emailInvalid": "Enter a valid email address (e.g. name@example.com).",
+    "mobileInvalid": "Enter a valid mobile number in the format 255XXXXXXXXX or 0XXXXXXXXX.",
+    "usernameInvalid": "Username must be 3-30 characters (letters, numbers, \".\", \"_\", \"-\" only, no spaces)."
+  },
+
+  "errors": {
+    "loginFailed": "Login failed.",
+    "invalidCredentials": "Invalid username or password.",
+    "sessionExpired": "Your session has expired. Please log in again.",
+    "networkFailed": "Unable to connect. Check your internet connection."
+  }
+},
+"resetPassword": {
+  "goHome": "Go to home",
+  "title": "Reset your password",
+  "subtitlePart1": "Enter the OTP sent to",
+  "yourEmailFallback": "your email",
+  "fields": {
+    "otp": "OTP Code",
+    "newPassword": "New Password"
+  },
+  "placeholders": {
+    "otp": "000000",
+    "password": "••••••••"
+  },
+  "resetButton": "Reset Password",
+  "resetting": "Resetting…",
+  "rememberPassword": "Remember your password?",
+  "signIn": "Sign in",
+  "footer": "For security, use a strong password with at least 8 characters.",
+  "errors": {
+    "invalidOtp": "Invalid OTP code. Please try again.",
+    "genericFailure": "Failed to reset password. Please try again."
+  }
+},
+"forgotPassword": {
+  "goHome": "Go to home",
+  "title": "Forgot password?",
+  "subtitle": "Enter your email and we'll send you an OTP to reset it.",
+  "emailLabel": "Email address",
+  "emailPlaceholder": "you@example.com",
+  "sendButton": "Send OTP",
+  "sending": "Sending…",
+  "rememberPassword": "Remember your password?",
+  "signIn": "Sign in",
+  "footer": "If you didn't receive the email, check your spam folder or try again.",
+  "success": "OTP sent to your email. Redirecting...",
+  "errors": {
+    "emailRequired": "Please enter your email address.",
+    "emailInvalid": "Please enter a valid email address.",
+    "profileNotFound": "Profile not found.",
+    "genericFailure": "Failed to send OTP. Please try again."
+  }
+},
+"verifyOtp": {
+  "goHome": "Go to home",
+  "title": "Verify your mobile number",
+  "subtitlePart1": "We sent a 6-digit code via SMS to",
+  "yourMobileFallback": "your mobile number",
+  "otpLabel": "SMS OTP Code",
+  "otpPlaceholder": "000000",
+  "verifyButton": "Verify Account",
+  "verifying": "Verifying…",
+  "resendButton": "Resend SMS OTP",
+  "resendSuccess": "A new OTP has been sent via SMS to {{target}}.",
+  "alreadyVerified": "Already verified?",
+  "signIn": "Sign in",
+  "footer": "If you didn't receive the SMS message, check your network signal or request a new OTP.",
+  "errors": {
+    "invalidOtp": "Invalid OTP. Please try again.",
+    "resendFailed": "Failed to resend OTP."
+  }
+}
+
+  }

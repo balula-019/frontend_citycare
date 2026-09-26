@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Play, Pause, Volume2, VolumeX, Search, FileCheck2, Sparkles } from 'lucide-react';
 
 // ✅ Drop patachako.mp4 into ../../assets/ exactly as named.
@@ -7,19 +8,19 @@ import { Play, Pause, Volume2, VolumeX, Search, FileCheck2, Sparkles } from 'luc
 import patachakoVideo from '../../assets/patachako.mp4';
 // import patachakoPoster from '../../assets/patachako-poster.jpg';
 
-/* ── Brand palette (matches the homepage) ────────────────────────── */
+/* ── Brand palette ──────────────────────────────────────────────── */
 const BLUE  = '#1A56DB';
 const GREEN = '#10B981';
-const AMBER = '#F59E0B';
 
-/* ── The three things the video shows, in order ──────────────────── */
+/* ── Chapter definitions — text is resolved via i18n at render time ── */
 const CHAPTERS = [
-  { key: 'search', icon: Search,     label: 'Search the network', detail: 'Police, airports & universities in one place', accent: BLUE,  at: 0 },
-  { key: 'report', icon: FileCheck2, label: 'Report in seconds',  detail: 'A quick, guided form — no paperwork',           accent: BLUE,  at: 0.34 },
-  { key: 'match',  icon: Sparkles,   label: 'AI finds the match', detail: 'Your report is matched automatically',          accent: GREEN, at: 0.68 },
+  { key: 'search', icon: Search,     accent: BLUE,  at: 0    },
+  { key: 'report', icon: FileCheck2, accent: BLUE,  at: 0.34 },
+  { key: 'match',  icon: Sparkles,   accent: GREEN, at: 0.68 },
 ];
 
 const HeroImageCarousel = () => {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
 
   const [isPlaying, setIsPlaying] = useState(true);
@@ -45,8 +46,7 @@ const HeroImageCarousel = () => {
     setIsMuted(video.muted);
   }, []);
 
-  // Track playback progress and drive chapter markers from real video time,
-  // so labels stay honest to what's actually on screen.
+  // Drive chapter markers from real video time
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -68,14 +68,14 @@ const HeroImageCarousel = () => {
 
   return (
     <section className="relative left-1/2 w-screen -translate-x-1/2 py-16 md:py-24 px-6 md:px-12 bg-gradient-to-b from-slate-950 via-[#0B1330] to-slate-950 overflow-hidden">
-      {/* Ambient brand glow — decorative only, never covers content */}
+      {/* Ambient brand glow */}
       <div
         className="absolute -top-40 left-1/2 -translate-x-1/2 w-[640px] h-[640px] rounded-full pointer-events-none"
         style={{ background: `radial-gradient(circle, ${BLUE}33 0%, transparent 70%)` }}
       />
 
       <div className="relative max-w-5xl mx-auto">
-        {/* Headline — always full-width text, never sits on top of the video */}
+        {/* Headline */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -84,7 +84,7 @@ const HeroImageCarousel = () => {
           className="text-center max-w-2xl mx-auto mb-10 md:mb-12"
         >
           <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white leading-tight">
-            See how a lost item{' '}
+            {t('heroCarousel.headingPart1')}{' '}
             <span
               style={{
                 background: `linear-gradient(90deg, ${BLUE}, #A855F7, #EC4899)`,
@@ -92,15 +92,15 @@ const HeroImageCarousel = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              finds its way home
+              {t('heroCarousel.headingHighlight')}
             </span>
           </h2>
           <p className="text-white/70 mt-3 text-sm md:text-lg">
-            One report, one network, one AI match — watch the whole journey.
+            {t('heroCarousel.subtext')}
           </p>
         </motion.div>
 
-        {/* Chapter markers — sit above the video, so nothing overlaps the footage */}
+        {/* Chapter markers */}
         <div className="flex flex-wrap justify-center gap-2.5 md:gap-3 mb-6">
           {CHAPTERS.map((c, i) => {
             const Icon = c.icon;
@@ -121,17 +121,14 @@ const HeroImageCarousel = () => {
                   <Icon size={12} color="white" />
                 </span>
                 <span className="text-white text-xs md:text-sm font-semibold whitespace-nowrap">
-                  {c.label}
+                  {t(`heroCarousel.chapters.${c.key}.label`)}
                 </span>
               </div>
             );
           })}
         </div>
 
-        {/* ── Video frame ───────────────────────────────────────────
-            aspect-[4/5] on phones (taller viewport, less letterboxing),
-            aspect-video on larger screens. object-contain guarantees the
-            full frame is always visible — nothing is ever cropped. */}
+        {/* Video frame */}
         <div className="relative w-full max-w-3xl mx-auto rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40">
           <video
             ref={videoRef}
@@ -145,11 +142,11 @@ const HeroImageCarousel = () => {
           />
         </div>
 
-        {/* Controls — just play/pause and mute, no progress line */}
+        {/* Controls */}
         <div className="flex items-center justify-center gap-3 md:gap-4 max-w-3xl mx-auto mt-4">
           <button
             onClick={togglePlay}
-            aria-label={isPlaying ? 'Pause video' : 'Play video'}
+            aria-label={isPlaying ? t('heroCarousel.pause') : t('heroCarousel.play')}
             className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 transition-colors shrink-0"
           >
             {isPlaying ? <Pause size={15} color="white" /> : <Play size={15} color="white" />}
@@ -157,7 +154,7 @@ const HeroImageCarousel = () => {
 
           <button
             onClick={toggleMute}
-            aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+            aria-label={isMuted ? t('heroCarousel.unmute') : t('heroCarousel.mute')}
             className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 transition-colors shrink-0"
           >
             {isMuted ? <VolumeX size={15} color="white" /> : <Volume2 size={15} color="white" />}

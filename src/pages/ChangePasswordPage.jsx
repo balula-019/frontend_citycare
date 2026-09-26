@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, CheckCircle2, AlertCircle, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import Button from '../components/shared/Button';
-import Input from '../components/shared/Input';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
-import logoSrc from '/src/assets/pata-logo.png';   // same logo as login page
+import logoSrc from '/src/assets/pata-logo.png'; // same logo as login page
 
 export default function ChangePasswordPage() {
   const navigate = useNavigate();
@@ -67,51 +66,44 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 py-8 relative">
-      {/* Back button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-6 left-6 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#1a56db] transition-colors bg-white border border-gray-200 hover:border-[#1a56db] rounded-xl px-4 py-2.5 shadow-sm"
-      >
-        <ArrowLeft size={15} />
-        Back
-      </button>
-
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-blue-100/40 border border-gray-100 overflow-hidden">
-        <div className="h-1.5 w-full bg-gradient-to-r from-[#1a56db] to-[#10b981]" />
-        <div className="px-8 py-8">
-          {/* Logo */}
-          <div className="flex flex-col items-center mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 sm:px-6 py-10">
+      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl shadow-blue-100/50 border border-gray-100 overflow-hidden transition-all">
+        <div className="h-2 w-full bg-gradient-to-r from-[#1a56db] to-[#10b981]" />
+        
+        <div className="px-6 py-8 sm:p-10">
+          {/* Logo & Header */}
+          <div className="flex flex-col items-center mb-8">
             <img
               src={logoSrc}
               alt="PataChako"
-              className="w-24 h-24 object-contain drop-shadow-md mb-4"
+              className="w-28 h-28 sm:w-36 sm:h-36 object-contain drop-shadow-lg mb-4 transition-all"
             />
-            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight text-center" style={{ fontFamily: "'Sora', sans-serif" }}>
               Change Password
             </h1>
-            <p className="text-sm text-gray-500 mt-1 text-center">
+            <p className="text-sm sm:text-base text-gray-500 mt-2 text-center max-w-sm">
               Your account requires a new password before you can continue.
             </p>
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
-              <AlertCircle size={16} className="shrink-0" />
-              {error}
+            <div className="flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-700 px-4 py-3.5 rounded-xl mb-5 text-sm">
+              <AlertCircle size={18} className="shrink-0" />
+              <span>{error}</span>
             </div>
           )}
+          
           {success && (
-            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl mb-4 text-sm">
-              <CheckCircle2 size={16} className="shrink-0" />
-              {success}
+            <div className="flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3.5 rounded-xl mb-5 text-sm">
+              <CheckCircle2 size={18} className="shrink-0" />
+              <span>{success}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Current password */}
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-gray-600 uppercase tracking-wider">
                 Current (temporary) password
               </label>
               <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/15 focus-within:bg-white">
@@ -123,7 +115,7 @@ export default function ChangePasswordPage() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="flex-1 bg-transparent px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none disabled:opacity-50"
+                  className="flex-1 bg-transparent px-4 py-3 text-base text-gray-900 placeholder-gray-400 outline-none disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -131,14 +123,14 @@ export default function ChangePasswordPage() {
                   tabIndex={-1}
                   className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
                 >
-                  {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showCurrent ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
 
             {/* New password */}
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-gray-600 uppercase tracking-wider">
                 New password
               </label>
               <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/15 focus-within:bg-white">
@@ -150,7 +142,7 @@ export default function ChangePasswordPage() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="flex-1 bg-transparent px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none disabled:opacity-50"
+                  className="flex-1 bg-transparent px-4 py-3 text-base text-gray-900 placeholder-gray-400 outline-none disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -158,14 +150,14 @@ export default function ChangePasswordPage() {
                   tabIndex={-1}
                   className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
                 >
-                  {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showNew ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
 
             {/* Confirm new password */}
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-gray-600 uppercase tracking-wider">
                 Confirm new password
               </label>
               <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/15 focus-within:bg-white">
@@ -177,7 +169,7 @@ export default function ChangePasswordPage() {
                   onChange={handleChange}
                   required
                   disabled={loading}
-                  className="flex-1 bg-transparent px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none disabled:opacity-50"
+                  className="flex-1 bg-transparent px-4 py-3 text-base text-gray-900 placeholder-gray-400 outline-none disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -185,7 +177,7 @@ export default function ChangePasswordPage() {
                   tabIndex={-1}
                   className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
                 >
-                  {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
@@ -193,12 +185,12 @@ export default function ChangePasswordPage() {
             <Button
               variant="primary"
               type="submit"
-              className="w-full py-3.5 text-base font-semibold tracking-wide rounded-xl"
+              className="w-full py-4 text-base font-semibold tracking-wide rounded-xl mt-2"
               disabled={loading}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <Loader2 size={18} className="animate-spin" />
+                  <Loader2 size={20} className="animate-spin" />
                   Changing…
                 </span>
               ) : (

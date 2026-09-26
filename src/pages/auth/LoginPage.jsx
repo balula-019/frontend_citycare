@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Shield, MapPin, Search, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/shared/Button';
@@ -13,45 +14,34 @@ const LOCK_STORAGE_KEY = 'patachako_login_lock';
 
 // ---- Username / mobile / email validation ----
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Accepts 255XXXXXXXXX (12 digits) or local 0XXXXXXXXX (10 digits)
 const MOBILE_255_REGEX = /^255\d{9}$/;
 const MOBILE_LOCAL_REGEX = /^0\d{9}$/;
-// Plain username: letters, numbers, dot/underscore/hyphen, 3-30 chars
 const USERNAME_REGEX = /^[a-zA-Z0-9._-]{3,30}$/;
 
-function classifyAndValidate(rawValue) {
+function classifyAndValidate(rawValue, t) {
   const value = rawValue.trim();
 
   if (!value) {
-    return { valid: false, error: 'Enter your username.' };
+    return { valid: false, error: t('login.validation.enterUsername') };
   }
 
-  // Looks like an email attempt
   if (value.includes('@')) {
     if (!EMAIL_REGEX.test(value)) {
-      return { valid: false, error: 'Enter a valid email address (e.g. name@example.com).' };
+      return { valid: false, error: t('login.validation.emailInvalid') };
     }
     return { valid: true, type: 'email', value };
   }
 
-  // Looks like a mobile number attempt (only digits, optionally starting with +)
   const digitsOnly = value.replace(/^\+/, '');
   if (/^\d+$/.test(digitsOnly)) {
     if (MOBILE_255_REGEX.test(digitsOnly) || MOBILE_LOCAL_REGEX.test(digitsOnly)) {
       return { valid: true, type: 'mobile', value: digitsOnly };
     }
-    return {
-      valid: false,
-      error: 'Enter a valid mobile number in the format 255XXXXXXXXX or 0XXXXXXXXX.',
-    };
+    return { valid: false, error: t('login.validation.mobileInvalid') };
   }
 
-  // Otherwise treat as a plain username
   if (!USERNAME_REGEX.test(value)) {
-    return {
-      valid: false,
-      error: 'Username must be 3-30 characters (letters, numbers, ".", "_", "-" only, no spaces).',
-    };
+    return { valid: false, error: t('login.validation.usernameInvalid') };
   }
   return { valid: true, type: 'username', value };
 }
@@ -64,15 +54,15 @@ function formatMMSS(ms) {
 }
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  // ---- Rate limit state ----
   const [attempts, setAttempts] = useState(0);
-  const [lockedUntil, setLockedUntil] = useState(null); // epoch ms
+  const [lockedUntil, setLockedUntil] = useState(null);
   const [remainingMs, setRemainingMs] = useState(0);
   const [backendLockMessage, setBackendLockMessage] = useState('');
   const tickRef = useRef(null);
@@ -80,7 +70,6 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Load any existing lock/attempt state on mount (survives page refresh)
   useEffect(() => {
     try {
       const stored = JSON.parse(localStorage.getItem(LOCK_STORAGE_KEY) || 'null');
@@ -100,7 +89,6 @@ export default function LoginPage() {
     }
   }, []);
 
-  // Countdown ticker while locked
   useEffect(() => {
     if (!lockedUntil) {
       setRemainingMs(0);
@@ -156,7 +144,7 @@ export default function LoginPage() {
       setLockedUntil(until);
       setBackendLockMessage('');
       persistAttemptState(nextAttempts, until);
-      setError(`Too many failed attempts. Please try again in ${formatMMSS(LOCK_DURATION_MS)}.`);
+      setError(t('login.tooManyAttempts', { time: formatMMSS(LOCK_DURATION_MS) }));
     } else {
       setAttempts(nextAttempts);
       persistAttemptState(nextAttempts, null);
@@ -176,7 +164,7 @@ export default function LoginPage() {
 
   const extractBackendError = (err) => ({
     code: err?.statusCode != null ? String(err.statusCode) : undefined,
-    message: err?.message || 'Login failed.',
+    message: err?.message || t('login.errors.loginFailed'),
   });
 
   const handleSubmit = async (e) => {
@@ -185,9 +173,9 @@ export default function LoginPage() {
 
     if (isLocked) return;
 
-    const check = classifyAndValidate(username);
+    const check = classifyAndValidate(username, t);
     if (!check.valid) {
-      setError('Invalid username or password.');
+      setError(t('login.errors.invalidCredentials'));
       return;
     }
 
@@ -210,7 +198,7 @@ export default function LoginPage() {
       const { code, message } = extractBackendError(err);
 
       if (code === '702') {
-        setError('Invalid username or password.');
+        setError(t('login.errors.invalidCredentials'));
         setLoading(false);
         return;
       }
@@ -232,34 +220,46 @@ export default function LoginPage() {
       if (code === '619' || credentialErrorMessages[message] || err?.response?.status === 401) {
         registerFailedAttempt();
         if (attempts + 1 < MAX_ATTEMPTS) {
-          setError('Invalid username or password.');
+          setError(t('login.errors.invalidCredentials'));
         }
         setLoading(false);
         return;
       }
 
       if (message === 'Session expired') {
-        setError('Your session has expired. Please log in again.');
+        setError(t('login.errors.sessionExpired'));
         setLoading(false);
         return;
       }
 
       if (message.includes('Network request failed') || message.includes('Failed to fetch')) {
-        setError('Unable to connect. Check your internet connection.');
+        setError(t('login.errors.networkFailed'));
         setLoading(false);
         return;
       }
 
-      setError('Invalid username or password.');
+      setError(t('login.errors.invalidCredentials'));
     } finally {
       setLoading(false);
     }
   };
 
+  const featureItems = [
+    { icon: Shield, labelKey: 'login.features.verifiedPartners.title', subKey: 'login.features.verifiedPartners.sub' },
+    { icon: Search, labelKey: 'login.features.smartMatching.title',   subKey: 'login.features.smartMatching.sub' },
+    { icon: MapPin, labelKey: 'login.features.nationwide.title',      subKey: 'login.features.nationwide.sub' },
+  ];
+
+  const statItems = [
+    ['10K+', t('login.stats.itemsFound')],
+    ['98%',  t('login.stats.successRate')],
+    ['200+', t('login.stats.partners')],
+  ];
+
   return (
     <div className="h-screen flex bg-white overflow-hidden">
 
-      {/* LEFT PANEL – STATIC */}
+      {/* LEFT PANEL */}
       <div
         className="hidden lg:flex w-[480px] flex-shrink-0 relative flex-col justify-start overflow-hidden pt-12 pb-8"
         style={{ background: 'linear-gradient(160deg, #1a56db 0%, #1240a8 55%, #0b2878 100%)' }}
@@ -274,20 +274,18 @@ export default function LoginPage() {
               className="text-4xl font-extrabold text-white leading-tight tracking-tight mb-4"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
-              Tanzania's<br />Lost & Found<br />Platform
+              {t('login.leftPanel.headingLine1')}<br />
+              {t('login.leftPanel.headingLine2')}<br />
+              {t('login.leftPanel.headingLine3')}
             </h2>
             <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              Reuniting people with what matters most — verified, secure, and trusted across the nation.
+              {t('login.leftPanel.subtext')}
             </p>
 
             <div className="flex flex-col gap-2.5">
-              {[
-                { icon: Shield, label: 'Verified Partners', sub: 'Police, airports & universities' },
-                { icon: Search, label: 'Smart Matching', sub: 'AI-powered item recognition' },
-                { icon: MapPin, label: 'Nationwide Coverage', sub: 'All regions of Tanzania' },
-              ].map(({ icon: Icon, label, sub }) => (
+              {featureItems.map(({ icon: Icon, labelKey, subKey }) => (
                 <div
-                  key={label}
+                  key={labelKey}
                   className="flex items-center gap-4 rounded-2xl px-5 py-3.5"
                   style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
                 >
@@ -298,8 +296,8 @@ export default function LoginPage() {
                     <Icon size={16} color="white" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">{label}</p>
-                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{sub}</p>
+                    <p className="text-sm font-semibold text-white">{t(labelKey)}</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{t(subKey)}</p>
                   </div>
                 </div>
               ))}
@@ -310,7 +308,7 @@ export default function LoginPage() {
             className="rounded-2xl px-6 py-4 flex justify-between mt-4"
             style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
           >
-            {[['10K+', 'Items Found'], ['98%', 'Success Rate'], ['200+', 'Partners']].map(([val, lbl]) => (
+            {statItems.map(([val, lbl]) => (
               <div key={lbl} className="text-center">
                 <p className="text-xl font-extrabold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>{val}</p>
                 <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{lbl}</p>
@@ -320,7 +318,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* RIGHT PANEL – scrollable */}
+      {/* RIGHT PANEL */}
       <div className="flex-1 flex flex-col items-center justify-start pt-6 px-6 pb-8 overflow-y-auto" style={{ background: '#f8fafd' }}>
 
         <div className="w-full max-w-[440px] bg-white rounded-3xl border border-gray-100 shadow-xl shadow-slate-200/60 overflow-hidden min-h-[580px] flex flex-col mt-4">
@@ -332,7 +330,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => navigate('/')}
                 className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
-                title="Go to home"
+                title={t('login.goHome')}
               >
                 <img
                   src={logoSrc}
@@ -344,17 +342,18 @@ export default function LoginPage() {
                 className="text-2xl font-extrabold text-gray-900 tracking-tight mt-4"
                 style={{ fontFamily: "'Sora', sans-serif" }}
               >
-                Welcome back
+                {t('login.title')}
               </h1>
-              <p className="text-sm text-gray-500 mt-1">Sign in to your PataChako account</p>
+              <p className="text-sm text-gray-500 mt-1">{t('login.subtitle')}</p>
             </div>
 
             {isLocked && (
               <div className="flex items-center gap-2.5 bg-amber-50 border border-amber-200 text-amber-800 text-xs px-4 py-2 rounded-xl mb-3">
                 <Lock size={14} className="shrink-0" />
                 <span>
-                  {backendLockMessage || 'Too many failed attempts. Your account has been temporarily locked.'}{' '}
-                  Try again in <span className="font-bold tabular-nums">{formatMMSS(remainingMs)}</span>.
+                  {backendLockMessage || t('login.lockedFallback')}{' '}
+                  {t('login.tryAgainIn')}{' '}
+                  <span className="font-bold tabular-nums">{formatMMSS(remainingMs)}</span>.
                 </span>
               </div>
             )}
@@ -368,9 +367,9 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4 flex-1">
               <Input
-                label="phone number"
+                label={t('login.fields.username')}
                 type="text"
-                placeholder="255XXXXXXXXX"
+                placeholder={t('login.placeholders.username')}
                 value={username}
                 onChange={handleUsernameChange}
                 required
@@ -378,11 +377,13 @@ export default function LoginPage() {
               />
 
               <div className="flex flex-col gap-1">
-                <label className="text-sm font-semibold text-gray-700">Password</label>
+                <label className="text-sm font-semibold text-gray-700">
+                  {t('login.fields.password')}
+                </label>
                 <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/20 focus-within:bg-white">
                   <input
                     type={showPass ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder={t('login.placeholders.password')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -406,7 +407,7 @@ export default function LoginPage() {
                   onClick={() => navigate('/forgot-password')}
                   className="text-xs font-semibold text-[#1a56db] hover:underline"
                 >
-                  Forgot password?
+                  {t('login.forgotPassword')}
                 </button>
               </div>
 
@@ -417,27 +418,27 @@ export default function LoginPage() {
                 disabled={loading || isLocked}
               >
                 {isLocked ? (
-                  `Try again in ${formatMMSS(remainingMs)}`
+                  t('login.tryAgainIn') + ' ' + formatMMSS(remainingMs)
                 ) : loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Signing in…
+                    {t('login.signingIn')}
                   </span>
                 ) : (
-                  'Sign In'
+                  t('login.signIn')
                 )}
               </Button>
             </form>
 
             <div className="mt-auto pt-4 border-t border-gray-100 text-center">
               <p className="text-sm text-gray-500">
-                New to PataChako?{' '}
+                {t('login.newHere')}{' '}
                 <button
                   type="button"
                   onClick={() => navigate('/register')}
                   className="font-bold text-[#1a56db] hover:underline transition-colors"
                 >
-                  Create an Account
+                  {t('login.createAccount')}
                 </button>
               </p>
             </div>
@@ -445,7 +446,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-xs text-gray-400 mt-4 text-center">
-          By signing in you agree to our Terms & Privacy Policy.
+          {t('login.footer')}
         </p>
       </div>
     </div>

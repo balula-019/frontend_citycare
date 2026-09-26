@@ -12,9 +12,9 @@ import LocationPicker from '../../components/shared/LocationPicker/components/Lo
 const CATEGORIES = [
   'PHONES','LAPTOPS','DOCUMENTS','IDS','PASSPORTS','BAGS','WALLETS','KEYS',
   'ELECTRONICS','CLOTHES','JEWELRY','WATCHES','MONEY','BOOKS','VEHICLE_ITEMS',
-  'HEADPHONES','CHARGERS_PHONE','CHARGERS_OTHERS','WATER_BOTTLES','TOYS',
-  'MEDICAL_ITEMS','SPORTS_ITEMS','PET_ITEMS','FOOD_CONTAINERS','UMBRELLAS',
-  'CALCULATOR','OTHERS',
+  'HEADPHONES','CHARGERS_PHONE','CHARGERS_LAPTOPS','CHARGERS_VEHICLE','CHARGERS_OTHERS',
+  'WATER_BOTTLES','TOYS','MEDICAL_ITEMS','SPORTS_ITEMS','PET_ITEMS','FOOD_CONTAINERS',
+  'UMBRELLAS','CALCULATOR','OTHERS',
 ];
 
 const REGIONS = [
@@ -24,6 +24,19 @@ const REGIONS = [
   'SIMIYU','SINGIDA','TABORA','TANGA','UNGUJA_KASKAZINI','UNGUJA_KUSINI',
   'UNGUJA_MJINI_MAGHARIBI','PEMBA',
 ];
+
+// Friendlier display names — any category not listed here falls back to the
+// default "Title Case" formatting (e.g. CHARGERS_PHONE → "Chargers Phone").
+const CATEGORY_DISPLAY = {
+  CHARGERS_PHONE:   'Charger of Phone',
+  CHARGERS_LAPTOPS: 'Charger of Laptop',
+  CHARGERS_VEHICLE: 'Charger of Vehicle',
+  CHARGERS_OTHERS:  'Other Chargers',
+};
+
+const categoryLabel = (code) =>
+  CATEGORY_DISPLAY[code] ||
+  code.replace(/_/g, ' ').charAt(0) + code.replace(/_/g, ' ').slice(1).toLowerCase();
 
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const ACCEPTED_FILE_EXTENSIONS = 'image/jpeg,image/png,image/webp';
@@ -75,7 +88,7 @@ function PhotoSection({ title, description, images, onAdd, onRemove, required, e
   const handleFiles = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       onAdd(e.target.files);
-      e.target.value = ''; // Reset input so same file can be chosen again if needed
+      e.target.value = '';
     }
   };
 
@@ -112,7 +125,6 @@ function PhotoSection({ title, description, images, onAdd, onRemove, required, e
           <FolderOpen size={16} /> Upload Photo
         </button>
 
-        {/* Hidden File Inputs restricted to JPEG, PNG, WEBP */}
         <input
           ref={cameraRef}
           type="file"
@@ -179,10 +191,10 @@ export default function PublishItem() {
     region: '', area: '', foundLocation: '', dominantColor: '',
     mobileReporter: '', fullReporterName: '', latitude: '', longitude: '',
   });
-  const [itemImages, setItemImages] = useState([]);      // Item photos
-  const [reporterImages, setReporterImages] = useState([]); // Reporter photos
+  const [itemImages, setItemImages] = useState([]);
+  const [reporterImages, setReporterImages] = useState([]);
   const [errors, setErrors] = useState({});
-  const [phase, setPhase] = useState('idle'); // idle | submitting | success | error
+  const [phase, setPhase] = useState('idle');
   const [stepIdx, setStepIdx] = useState(0);
   const [apiError, setApiError] = useState('');
 
@@ -236,19 +248,16 @@ export default function PublishItem() {
     if (!form.fullReporterName.trim()) e.fullReporterName = 'Reporter name is required';
     if (!form.mobileReporter.trim()) e.mobileReporter = 'Mobile phone number is required';
     
-    // Validate map location
     if (!parseFloat(form.latitude) || !parseFloat(form.longitude)) {
       e.foundLocation = 'Please select a location on the map';
     }
 
-    // Require at least one item photo
     if (itemImages.length === 0) {
       e.itemImages = 'At least one photo of the found item is required';
     }
 
     setErrors(e);
 
-    // Scroll to top if there are validation errors
     if (Object.keys(e).length > 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -474,7 +483,7 @@ export default function PublishItem() {
                     <option value="">Select category…</option>
                     {CATEGORIES.map(c => (
                       <option key={c} value={c}>
-                        {c.replace(/_/g,' ').charAt(0) + c.replace(/_/g,' ').slice(1).toLowerCase()}
+                        {categoryLabel(c)}
                       </option>
                     ))}
                   </select>
@@ -603,7 +612,6 @@ export default function PublishItem() {
           {/* Right Panel */}
           <div className="space-y-5">
 
-            {/* Item Photos */}
             <PhotoSection
               title="Item Photos"
               description="Upload photos of the found item (JPEG, PNG, WEBP)"
@@ -614,7 +622,6 @@ export default function PublishItem() {
               error={errors.itemImages}
             />
 
-            {/* Reporter Photos */}
             <PhotoSection
               title="Reporter Photos"
               description="Photos of the finder (optional)"
@@ -623,7 +630,6 @@ export default function PublishItem() {
               onRemove={removeReporterImage}
             />
 
-            {/* Submit Action Box */}
             <div className="bg-white rounded-2xl border border-[#e2e8f0] p-6">
               <div className="flex items-start gap-3 p-3 bg-[#eff6ff] rounded-xl mb-4">
                 <Sparkles size={16} className="text-[#1a56db] shrink-0 mt-0.5" />

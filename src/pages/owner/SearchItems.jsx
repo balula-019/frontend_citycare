@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Search, AlertCircle, RefreshCw, FileText, Megaphone, ArrowLeft,
   Smartphone, Laptop, FileText as DocIcon, CreditCard, BookOpen,
@@ -52,6 +53,37 @@ const CATEGORY_ICON_MAP = {
 
 const DEFAULT_CATEGORY = { icon: Package, bg: '#f1f5f9', color: '#475569' };
 
+/* ── Map backend category (UPPER_SNAKE) → i18n key ──────────── */
+const CATEGORY_KEY_MAP = {
+  PHONES: 'phones',
+  LAPTOPS: 'laptops',
+  DOCUMENTS: 'documents',
+  IDS: 'ids',
+  PASSPORTS: 'passports',
+  BAGS: 'bags',
+  WALLETS: 'wallets',
+  KEYS: 'keys',
+  ELECTRONICS: 'electronics',
+  CLOTHES: 'clothes',
+  JEWELRY: 'jewelry',
+  WATCHES: 'watches',
+  MONEY: 'money',
+  BOOKS: 'books',
+  VEHICLE_ITEMS: 'vehicleItems',
+  HEADPHONES: 'headphones',
+  CHARGERS_PHONE: 'chargers',
+  CHARGERS_OTHERS: 'chargers',
+  WATER_BOTTLES: 'waterBottles',
+  TOYS: 'toys',
+  MEDICAL_ITEMS: 'medicalItems',
+  SPORTS_ITEMS: 'sportsItems',
+  PET_ITEMS: 'petItems',
+  FOOD_CONTAINERS: 'foodContainers',
+  UMBRELLAS: 'umbrellas',
+  CALCULATOR: 'calculator',
+  OTHERS: 'otherItems',
+};
+
 /* ── Skeleton card ───────────────────────────────────────────── */
 function SkeletonCard() {
   return (
@@ -72,10 +104,16 @@ function SkeletonCard() {
   );
 }
 
-/* ── Item card – category icon & label only, no image or name ─ */
+/* ── Item card ───────────────────────────────────────────────── */
 function ItemCard({ item }) {
+  const { t } = useTranslation();
   const cfg = CATEGORY_ICON_MAP[item.category] || DEFAULT_CATEGORY;
   const IconComp = cfg.icon;
+
+  const catKey = CATEGORY_KEY_MAP[item.category];
+  const catLabel = catKey
+    ? t(`categoriesGrid.items.${catKey}`)
+    : (item.category || 'ITEM').replace(/_/g, ' ');
 
   return (
     <div className="bg-white border border-[#e2e8f0] rounded-2xl overflow-hidden
@@ -89,7 +127,7 @@ function ItemCard({ item }) {
           className="text-xs font-semibold tracking-wide"
           style={{ color: cfg.color, opacity: 0.75 }}
         >
-          {(item.category || 'ITEM').replace(/_/g, ' ')}
+          {catLabel}
         </span>
       </div>
     </div>
@@ -98,10 +136,11 @@ function ItemCard({ item }) {
 
 /* ── Main page ───────────────────────────────────────────────── */
 export default function SearchItems() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const stored   = JSON.parse(localStorage.getItem('user') || '{}');
-  const userName = stored.name || user?.name || 'User';
+  const userName = stored.name || user?.name || t('searchPage.defaultName');
   const firstName = userName.split(' ')[0];
 
   const [region,   setRegion]   = useState('');
@@ -122,12 +161,14 @@ export default function SearchItems() {
       });
       setItems(result?.data?.content ?? result?.content ?? []);
     } catch (err) {
-      setError('Unable to load items. Please try again.');
+      setError(t('searchPage.errorLoad'));
       setItems([]);
     } finally {
       setLoading(false);
     }
   };
+
+  const regionLabel = region ? t(`regions.${region}`, region.replace(/_/g, ' ')) : '';
 
   return (
     <>
@@ -151,11 +192,10 @@ export default function SearchItems() {
 
             {/* ── Top row ──────────────────────────────────────── */}
             <div className="flex items-center justify-between mb-8 gap-4">
-              {/* Back button + greeting */}
               <div className="flex items-center gap-3 min-w-0">
                 <button
                   onClick={() => navigate('/')}
-                  aria-label="Back to home"
+                  aria-label={t('searchPage.backToHome')}
                   className="shrink-0 w-10 h-10 flex items-center justify-center
                              rounded-xl border border-[#e2e8f0] bg-white text-gray-500
                              hover:text-[#0f172a] hover:bg-gray-50 hover:border-gray-300
@@ -166,22 +206,21 @@ export default function SearchItems() {
 
                 <div className="min-w-0">
                   <h1 className="text-xl sm:text-2xl font-bold text-[#0f172a] truncate">
-                    Hi, {firstName}! 👋
+                    {t('searchPage.greeting', { name: firstName })}
                   </h1>
                   <p className="text-sm text-gray-500 mt-0.5 hidden sm:block">
-                    Search for found items across Tanzania
+                    {t('searchPage.subtitle')}
                   </p>
                 </div>
               </div>
 
-              {/* My Reports */}
               <Button
                 variant="primary"
                 onClick={() => navigate('/owner/reports')}
                 className="shrink-0"
               >
                 <FileText size={16} className="mr-1.5" />
-                My Reports
+                {t('searchPage.myReports')}
               </Button>
             </div>
 
@@ -190,7 +229,7 @@ export default function SearchItems() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
                   <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                    Filter by region
+                    {t('searchPage.filterLabel')}
                   </label>
                   <select
                     value={region}
@@ -200,9 +239,11 @@ export default function SearchItems() {
                                focus:ring-2 focus:ring-[#1a56db]/20 focus:border-[#1a56db]
                                outline-none bg-white text-gray-800 text-sm transition-all"
                   >
-                    <option value="">All Regions</option>
+                    <option value="">{t('searchPage.allRegions')}</option>
                     {REGIONS.map((r) => (
-                      <option key={r} value={r}>{r.replace(/_/g, ' ')}</option>
+                      <option key={r} value={r}>
+                        {t(`regions.${r}`, r.replace(/_/g, ' '))}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -218,9 +259,9 @@ export default function SearchItems() {
                     style={{ minWidth: 140 }}
                   >
                     {loading ? (
-                      <><RefreshCw size={15} className="animate-spin" /> Searching...</>
+                      <><RefreshCw size={15} className="animate-spin" /> {t('searchPage.searching')}</>
                     ) : (
-                      <><Search size={15} /> Search</>
+                      <><Search size={15} /> {t('searchPage.search')}</>
                     )}
                   </button>
                 </div>
@@ -237,7 +278,7 @@ export default function SearchItems() {
                   onClick={handleSearch}
                   className="text-xs font-semibold underline hover:no-underline shrink-0"
                 >
-                  Retry
+                  {t('common.retry')}
                 </button>
               </div>
             )}
@@ -255,8 +296,9 @@ export default function SearchItems() {
             {!loading && items.length > 0 && (
               <div className="fade-up">
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
-                  {items.length} item{items.length !== 1 ? 's' : ''} found
-                  {region ? ` in ${region.replace(/_/g, ' ')}` : ' across all regions'}
+                  {region
+                    ? t('searchPage.itemsFoundInRegion', { count: items.length, region: regionLabel })
+                    : t('searchPage.itemsFoundAllRegions', { count: items.length })}
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                   {items.map((item, i) => (
@@ -282,10 +324,10 @@ export default function SearchItems() {
                   <Search size={26} className="text-gray-300" />
                 </div>
                 <h3 className="text-base font-bold text-[#0f172a] mb-1">
-                  No items found
+                  {t('searchPage.noItemsTitle')}
                 </h3>
                 <p className="text-sm text-gray-500 max-w-xs">
-                  Try a different region or check back later.
+                  {t('searchPage.noItemsHint')}
                 </p>
               </div>
             )}
@@ -300,10 +342,10 @@ export default function SearchItems() {
                   <Search size={28} className="text-[#1a56db]" />
                 </div>
                 <h3 className="text-lg font-bold text-[#0f172a] mb-1">
-                  Find a reported item
+                  {t('searchPage.idleTitle')}
                 </h3>
                 <p className="text-sm text-gray-500 max-w-sm">
-                  Select a region and click Search to browse found items in your area.
+                  {t('searchPage.idleHint')}
                 </p>
               </div>
             )}
@@ -321,7 +363,7 @@ export default function SearchItems() {
                           items-center justify-center gap-3">
             <div className="flex items-center gap-2 text-[#0f172a] font-semibold text-sm sm:text-base">
               <Megaphone size={20} className="text-[#1a56db] shrink-0" />
-              <span>Lost something? Let our AI find it for you.</span>
+              <span>{t('searchPage.ctaText')}</span>
             </div>
             <Button
               variant="primary"
@@ -329,7 +371,7 @@ export default function SearchItems() {
               className="whitespace-nowrap shrink-0"
             >
               <Megaphone size={16} className="mr-1.5" />
-              Report Lost Item
+              {t('searchPage.reportLostItem')}
             </Button>
           </div>
         </div>

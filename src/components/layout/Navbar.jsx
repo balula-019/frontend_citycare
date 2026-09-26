@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, LogOut, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Button from '../shared/Button';
+import LanguageSwitcher from '../shared/LanguageSwitcher';
 import { useAuth } from '../../context/AuthContext';
 import logoSrc from '/src/assets/pata-logo.png';
 
@@ -9,6 +11,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, logout, loggingOut } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,38 +26,38 @@ export default function Navbar() {
 
   // ✅ PUBLIC (guest) — sees Partner With Us
   const publicLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '#about', isHash: true },
-    { name: 'Partner With Us', href: '/partner-with-us' }, // ✅ only guests
-    { name: 'Contact', href: '#footer', isHash: true },
+    { name: t('nav.home'),          href: '/' },
+    { name: t('nav.about'),         href: '#about',  isHash: true },
+    { name: t('nav.partnerWithUs'), href: '/partner-with-us' },
+    { name: t('nav.contact'),       href: '#footer', isHash: true },
   ];
 
   // ✅ OWNER — no Partner With Us
   const ownerLinks = [
-    { name: 'Dashboard', href: '/owner/dashboard' },
-    { name: 'Search Items', href: '/owner/search' },
-    { name: 'Report Lost Item', href: '/owner/report' },
-    { name: 'My Reports', href: '/owner/reports' },
-    { name: 'Profile', href: '/owner/profile' },
+    { name: t('nav.owner.dashboard'), href: '/owner/dashboard' },
+    { name: t('nav.owner.search'),    href: '/owner/search'    },
+    { name: t('nav.owner.report'),    href: '/owner/report'    },
+    { name: t('nav.owner.reports'),   href: '/owner/reports'   },
+    { name: t('nav.owner.profile'),   href: '/owner/profile'   },
   ];
 
   // ✅ ORGANISATION — no Partner With Us
   const orgLinks = [
-    { name: 'Dashboard', href: '/org/dashboard' },
-    { name: 'Publish Item', href: '/org/publish' },
-    { name: 'My Items', href: '/org/items' },
-    { name: 'Claims', href: '/org/claims' },
-    { name: 'Profile', href: '/org/profile' },
+    { name: t('nav.org.dashboard'), href: '/org/dashboard' },
+    { name: t('nav.org.publish'),   href: '/org/publish'   },
+    { name: t('nav.org.items'),     href: '/org/items'     },
+    { name: t('nav.org.claims'),    href: '/org/claims'    },
+    { name: t('nav.org.profile'),   href: '/org/profile'   },
   ];
 
-  // ✅ ADMIN — dedicated review section (approve / reject)
+  // ✅ ADMIN — dedicated review section
   const adminLinks = [
-    { name: 'Dashboard', href: '/admin/dashboard' },
-    { name: 'Manage Users', href: '/admin/manage-users' },
-    { name: 'Create Org', href: '/admin/create-org' },
-    { name: 'Items', href: '/admin/items' },
-    { name: 'Partner Requests', href: '/admin/partner-requests' }, // ✅ approve / reject
-    { name: 'Profile', href: '/admin/profile' },
+    { name: t('nav.admin.dashboard'),        href: '/admin/dashboard'        },
+    { name: t('nav.admin.manageUsers'),      href: '/admin/manage-users'     },
+    { name: t('nav.admin.createOrg'),        href: '/admin/create-org'       },
+    { name: t('nav.admin.items'),            href: '/admin/items'            },
+    { name: t('nav.admin.partnerRequests'),  href: '/admin/partner-requests' },
+    { name: t('nav.admin.profile'),          href: '/admin/profile'          },
   ];
 
   let navLinks = publicLinks;
@@ -106,10 +109,10 @@ export default function Navbar() {
   };
 
   const renderLink = (link) => {
-    if (link.name === 'Home') {
+    if (link.name === t('nav.home')) {
       return (
         <a
-          key={link.name}
+          key={link.href}
           href="/"
           className="text-sm font-medium text-gray-600 hover:text-primary transition-colors cursor-pointer"
           onClick={handleHomeClick}
@@ -122,7 +125,7 @@ export default function Navbar() {
     if (link.isHash) {
       return (
         <a
-          key={link.name}
+          key={link.href}
           href={link.href}
           className="text-sm font-medium text-gray-600 hover:text-primary transition-colors cursor-pointer"
           onClick={(e) => handleHashClick(e, link.href)}
@@ -134,7 +137,7 @@ export default function Navbar() {
 
     return (
       <Link
-        key={link.name}
+        key={link.href}
         to={link.href}
         className="text-sm font-medium text-gray-600 hover:text-primary transition-colors"
         onClick={() => setIsMenuOpen(false)}
@@ -169,8 +172,10 @@ export default function Navbar() {
             {navLinks.map(renderLink)}
           </nav>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Buttons + Language Switcher */}
           <div className="hidden lg:flex items-center gap-4">
+            <LanguageSwitcher variant="pills" />
+
             {user ? (
               <Button
                 variant="ghost"
@@ -183,15 +188,19 @@ export default function Navbar() {
                 ) : (
                   <LogOut size={16} />
                 )}
-                Log Out
+                {t('nav.logout')}
               </Button>
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" className="px-4 py-2 text-sm">Log In</Button>
+                  <Button variant="ghost" className="px-4 py-2 text-sm">
+                    {t('nav.login')}
+                  </Button>
                 </Link>
                 <Link to="/register">
-                  <Button variant="primary" className="px-5 py-2.5 text-sm">Create Account</Button>
+                  <Button variant="primary" className="px-5 py-2.5 text-sm">
+                    {t('nav.register')}
+                  </Button>
                 </Link>
               </>
             )}
@@ -211,15 +220,15 @@ export default function Navbar() {
       {/* Mobile Nav */}
       <div
         className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${
-          isMenuOpen ? 'max-h-[36rem] opacity-100' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'max-h-[42rem] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="bg-white border-b border-border px-4 py-6 space-y-4">
           {navLinks.map((link) => {
-            if (link.name === 'Home') {
+            if (link.name === t('nav.home')) {
               return (
                 <a
-                  key={link.name}
+                  key={link.href}
                   href="/"
                   className="block text-base font-medium text-gray-700 hover:text-primary cursor-pointer"
                   onClick={handleHomeClick}
@@ -231,7 +240,7 @@ export default function Navbar() {
             if (link.isHash) {
               return (
                 <a
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
                   className="block text-base font-medium text-gray-700 hover:text-primary cursor-pointer"
                   onClick={(e) => handleHashClick(e, link.href)}
@@ -242,7 +251,7 @@ export default function Navbar() {
             }
             return (
               <Link
-                key={link.name}
+                key={link.href}
                 to={link.href}
                 className="block text-base font-medium text-gray-700 hover:text-primary"
                 onClick={() => setIsMenuOpen(false)}
@@ -251,6 +260,15 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          {/* ✅ Language switcher — mobile */}
+          <div className="pt-3 flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-500">
+              {t('nav.language') || 'Language'}
+            </span>
+            <LanguageSwitcher variant="pills" />
+          </div>
+
           <div className="pt-4 border-t border-border space-y-3">
             {user ? (
               <Button
@@ -264,15 +282,19 @@ export default function Navbar() {
                 ) : (
                   <LogOut size={16} />
                 )}
-                Log Out
+                {t('nav.logout')}
               </Button>
             ) : (
               <>
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full justify-center">Log In</Button>
+                  <Button variant="outline" className="w-full justify-center">
+                    {t('nav.login')}
+                  </Button>
                 </Link>
                 <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="primary" className="w-full justify-center">Create Account</Button>
+                  <Button variant="primary" className="w-full justify-center">
+                    {t('nav.register')}
+                  </Button>
                 </Link>
               </>
             )}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Send, Loader2, CheckCircle2, AlertCircle,
   Handshake, KeyRound, ShieldCheck, RefreshCw, Lock,
@@ -23,24 +24,25 @@ const PARTNERSHIP_TYPES = [
   'OTHER',
 ];
 
-// Validation Regex patterns matching Java @Pattern annotations
+// Validation Regex patterns
 const ALPHA_SPACE_REGEX = /^[a-zA-Z\s]+$/;
 const PHONE_REGEX = /^(\+?[0-9]{1,3})?[0-9]{9,12}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const extractError = (err) => {
+const extractError = (err, fallback) => {
   const resp = err?.response?.data;
   return (
     resp?.data?.message ||
     resp?.message ||
     err?.message ||
-    'Something went wrong. Please try again.'
+    fallback
   );
 };
 
 const isLockError = (msg = '') => /lock/i.test(msg);
 
 export default function PartnerWithUs() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const verifiedEmail = location.state?.email || '';
@@ -77,8 +79,8 @@ export default function PartnerWithUs() {
 
   useEffect(() => {
     if (cooldown <= 0) return;
-    const t = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
-    return () => clearInterval(t);
+    const interval = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(interval);
   }, [cooldown]);
 
   const triggerShake = () => {
@@ -100,13 +102,13 @@ export default function PartnerWithUs() {
     setInfo('');
     try {
       await resendPartnerRequestOtp({
-        identifier: form.email,   // ✅ spec: ResendOtpDTO now uses `identifier`
+        identifier: form.email,
         purpose: 'PARTNER_REQUEST_EMAIL_VERIFICATION',
       });
-      setInfo('A new OTP has been sent to your email.');
+      setInfo(t('partnerWithUs.messages.resendSuccess'));
       setCooldown(otpConfig?.cooldownSeconds ?? 60);
     } catch (err) {
-      const msg = extractError(err);
+      const msg = extractError(err, t('common.somethingWentWrong'));
       setError(msg);
       if (isLockError(msg)) setIsLocked(true);
       triggerShake();
@@ -121,54 +123,53 @@ export default function PartnerWithUs() {
     // 1. Organization Name
     const org = form.organizationName.trim();
     if (!org) {
-      errs.organizationName = 'Organization name is required';
+      errs.organizationName = t('partnerWithUs.errors.orgNameRequired');
     } else if (org.length < 2 || org.length > 100) {
-      errs.organizationName = 'Organization name must be between 2 and 100 characters';
+      errs.organizationName = t('partnerWithUs.errors.orgNameLength');
     } else if (!ALPHA_SPACE_REGEX.test(org)) {
-      errs.organizationName = 'Organization name must contain only letters and spaces';
+      errs.organizationName = t('partnerWithUs.errors.orgNameLettersOnly');
     }
 
     // 2. Contact Person
     const contact = form.contactPerson.trim();
     if (!contact) {
-      errs.contactPerson = 'Contact person is required';
+      errs.contactPerson = t('partnerWithUs.errors.contactRequired');
     } else if (contact.length < 2 || contact.length > 50) {
-      errs.contactPerson = 'Contact person name must be between 2 and 50 characters';
+      errs.contactPerson = t('partnerWithUs.errors.contactLength');
     } else if (!ALPHA_SPACE_REGEX.test(contact)) {
-      errs.contactPerson = 'Contact person name must contain only letters and spaces';
+      errs.contactPerson = t('partnerWithUs.errors.contactLettersOnly');
     }
 
     // 3. Email
     const emailVal = form.email.trim();
     if (!emailVal) {
-      errs.email = 'Email is required';
+      errs.email = t('partnerWithUs.errors.emailRequired');
     } else if (!EMAIL_REGEX.test(emailVal)) {
-      errs.email = 'Invalid email address';
+      errs.email = t('partnerWithUs.errors.emailInvalid');
     }
 
     // 4. Phone Number
     const phone = form.phoneNumber.trim();
     if (!phone) {
-      errs.phoneNumber = 'Phone number is required';
+      errs.phoneNumber = t('partnerWithUs.errors.phoneRequired');
     } else if (!PHONE_REGEX.test(phone)) {
-      errs.phoneNumber = 'Invalid mobile number format';
+      errs.phoneNumber = t('partnerWithUs.errors.phoneInvalid');
     }
 
-    // 5. Message — only length is enforced now
-    //    (spec dropped the letters-and-spaces-only pattern)
+    // 5. Message
     const msg = form.message.trim();
     if (!msg) {
-      errs.message = 'Message is required';
+      errs.message = t('partnerWithUs.errors.messageRequired');
     } else if (msg.length < 10 || msg.length > 1000) {
-      errs.message = 'Message must be between 10 and 1000 characters';
+      errs.message = t('partnerWithUs.errors.messageLength');
     }
 
     // 6. OTP Code
     const otp = form.otpCode.trim();
     if (!otp) {
-      errs.otpCode = 'OTP code is required';
+      errs.otpCode = t('partnerWithUs.errors.otpRequired');
     } else if (!/^\d{6}$/.test(otp)) {
-      errs.otpCode = 'Enter a valid 6-digit OTP code';
+      errs.otpCode = t('partnerWithUs.errors.otpInvalid');
     }
 
     return errs;
@@ -182,7 +183,7 @@ export default function PartnerWithUs() {
 
     if (Object.keys(errs).length > 0) {
       setFieldErrors(errs);
-      setError('Please resolve validation errors before submitting.');
+      setError(t('partnerWithUs.errors.fixBeforeSubmit'));
       triggerShake();
       return;
     }
@@ -195,9 +196,8 @@ export default function PartnerWithUs() {
       await submitPartnerRequest(form);
       setSuccess(true);
     } catch (err) {
-      const msg = extractError(err);
+      const msg = extractError(err, t('common.somethingWentWrong'));
 
-      // Map server-side field errors if returned as an object
       const serverFieldErrors = err?.response?.data?.data?.fieldErrors;
       if (serverFieldErrors) {
         setFieldErrors(serverFieldErrors);
@@ -220,7 +220,7 @@ export default function PartnerWithUs() {
           type="button"
           onClick={() => navigate('/')}
           className="focus:outline-none group mb-4"
-          aria-label="Go to home"
+          aria-label={t('partnerWithUs.goHome')}
         >
           <img
             src={logoSrc}
@@ -230,17 +230,16 @@ export default function PartnerWithUs() {
         </button>
         <CheckCircle2 size={64} className="text-emerald-500 mb-6" />
         <h1 className="text-2xl font-black text-gray-900 mb-2">
-          Request Submitted!
+          {t('partnerWithUs.success.title')}
         </h1>
         <p className="text-gray-500 max-w-md mb-8">
-          Thank you for your interest in partnering with PataChako. Our team
-          will review your request and get back to you shortly.
+          {t('partnerWithUs.success.message')}
         </p>
         <button
           onClick={() => navigate('/')}
           className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#1a56db] to-[#1547c0] text-white font-bold"
         >
-          Back to Home
+          {t('partnerWithUs.success.backHome')}
         </button>
       </div>
     );
@@ -268,7 +267,7 @@ export default function PartnerWithUs() {
                 type="button"
                 onClick={() => navigate('/')}
                 className="focus:outline-none group"
-                aria-label="Go to home"
+                aria-label={t('partnerWithUs.goHome')}
               >
                 <img
                   src={logoSrc}
@@ -294,10 +293,10 @@ export default function PartnerWithUs() {
                   className="text-2xl font-extrabold text-gray-900"
                   style={{ fontFamily: "'Sora', sans-serif" }}
                 >
-                  Partner With Us
+                  {t('partnerWithUs.title')}
                 </h1>
                 <p className="text-sm text-gray-500">
-                  Step 2 of 2 — Tell us about your organization
+                  {t('partnerWithUs.stepLabel')}
                 </p>
               </div>
             </div>
@@ -331,48 +330,48 @@ export default function PartnerWithUs() {
               className={`space-y-4 ${shake ? 'animate-shake' : ''}`}
             >
               <Input
-                label="Organization Name"
+                label={t('partnerWithUs.fields.orgName')}
                 name="organizationName"
                 value={form.organizationName}
                 onChange={handleChange}
                 required
-                placeholder="e.g., Universities, Mall,..."
+                placeholder={t('partnerWithUs.placeholders.orgName')}
                 error={fieldErrors.organizationName}
               />
               <Input
-                label="Contact Person"
+                label={t('partnerWithUs.fields.contactPerson')}
                 name="contactPerson"
                 value={form.contactPerson}
                 onChange={handleChange}
                 required
-                placeholder="Full name"
+                placeholder={t('partnerWithUs.placeholders.contactPerson')}
                 error={fieldErrors.contactPerson}
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                  label="Email (verified)"
+                  label={t('partnerWithUs.fields.emailVerified')}
                   type="email"
                   name="email"
                   value={form.email}
                   onChange={() => {}}
                   disabled
                   required
-                  placeholder="you@example.com"
+                  placeholder={t('partnerWithUs.placeholders.email')}
                   error={fieldErrors.email}
                 />
                 <Input
-                  label="Phone Number"
+                  label={t('partnerWithUs.fields.phone')}
                   name="phoneNumber"
                   value={form.phoneNumber}
                   onChange={handleChange}
                   required
-                  placeholder="255 7XX XXX XXX"
+                  placeholder={t('partnerWithUs.placeholders.phone')}
                   error={fieldErrors.phoneNumber}
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Partnership Type
+                  {t('partnerWithUs.fields.partnershipType')}
                 </label>
                 <select
                   name="partnershipType"
@@ -381,16 +380,16 @@ export default function PartnerWithUs() {
                   className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] focus:ring-2 focus:ring-[#1a56db]/20 focus:border-[#1a56db] outline-none bg-white text-sm"
                   required
                 >
-                  {PARTNERSHIP_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t.charAt(0) + t.slice(1).toLowerCase()}
+                  {PARTNERSHIP_TYPES.map((pt) => (
+                    <option key={pt} value={pt}>
+                      {t(`partnerWithUs.partnershipTypes.${pt}`)}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Message
+                  {t('partnerWithUs.fields.message')}
                 </label>
                 <textarea
                   name="message"
@@ -398,7 +397,7 @@ export default function PartnerWithUs() {
                   onChange={handleChange}
                   rows={4}
                   required
-                  placeholder="Tell us about your organization and how you'd like to partner…"
+                  placeholder={t('partnerWithUs.placeholders.message')}
                   className={`w-full px-4 py-2.5 rounded-xl border outline-none text-sm resize-none focus:ring-2 ${
                     fieldErrors.message
                       ? 'border-red-400 focus:ring-red-200 focus:border-red-400'
@@ -414,7 +413,8 @@ export default function PartnerWithUs() {
               <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <KeyRound size={16} className="text-[#1a56db]" /> Email Verification
+                    <KeyRound size={16} className="text-[#1a56db]" />
+                    {t('partnerWithUs.otp.heading')}
                   </p>
                   <button
                     type="button"
@@ -424,17 +424,17 @@ export default function PartnerWithUs() {
                   >
                     {isLocked ? (
                       <>
-                        <Lock size={12} /> Locked
+                        <Lock size={12} /> {t('partnerWithUs.otp.locked')}
                       </>
                     ) : resending ? (
                       <>
-                        <Loader2 size={12} className="animate-spin" /> Sending…
+                        <Loader2 size={12} className="animate-spin" /> {t('partnerWithUs.otp.sending')}
                       </>
                     ) : cooldown > 0 ? (
-                      <>Resend in {cooldown}s</>
+                      <>{t('partnerWithUs.otp.resendIn', { seconds: cooldown })}</>
                     ) : (
                       <>
-                        <RefreshCw size={12} /> Resend OTP
+                        <RefreshCw size={12} /> {t('partnerWithUs.otp.resend')}
                       </>
                     )}
                   </button>
@@ -444,7 +444,7 @@ export default function PartnerWithUs() {
                   name="otpCode"
                   value={form.otpCode}
                   onChange={handleChange}
-                  placeholder="Enter 6-digit OTP code"
+                  placeholder={t('partnerWithUs.otp.placeholder')}
                   maxLength={6}
                   disabled={isLocked}
                   error={fieldErrors.otpCode}
@@ -452,9 +452,11 @@ export default function PartnerWithUs() {
                 <p className="text-xs text-gray-500 mt-2 flex items-start gap-1.5">
                   <ShieldCheck size={12} className="text-[#1a56db] mt-0.5 shrink-0" />
                   <span>
-                    We sent a code to <strong>{form.email}</strong>.
+                    {t('partnerWithUs.otp.sentTo1')}{' '}
+                    <strong>{form.email}</strong>
+                    {t('partnerWithUs.otp.sentTo2')}
                     {otpConfig
-                      ? ` It expires in ${otpConfig.expiryMinutes} min.`
+                      ? ` ${t('partnerWithUs.otp.expiresIn', { minutes: otpConfig.expiryMinutes })}`
                       : ''}
                   </span>
                 </p>
@@ -468,15 +470,18 @@ export default function PartnerWithUs() {
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
-                    <Loader2 size={18} className="animate-spin" /> Submitting…
+                    <Loader2 size={18} className="animate-spin" />
+                    {t('partnerWithUs.buttons.submitting')}
                   </span>
                 ) : isLocked ? (
                   <span className="flex items-center justify-center gap-2">
-                    <Lock size={18} /> Account Locked
+                    <Lock size={18} />
+                    {t('partnerWithUs.buttons.accountLocked')}
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    <Send size={18} /> Submit Request
+                    <Send size={18} />
+                    {t('partnerWithUs.buttons.submitRequest')}
                   </span>
                 )}
               </Button>

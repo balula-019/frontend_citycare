@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Loader2, AlertCircle, CheckCircle2,
   Save, Upload, Trash2, Lock,
@@ -24,13 +25,25 @@ const REGIONS = [
   'UNGUJA_MJINI_MAGHARIBI','PEMBA'
 ];
 
-const extractError = (err) => {
+/* Backend category code → key under categoriesGrid.items.* */
+const CATEGORY_KEY_MAP = {
+  PHONES: 'phones', LAPTOPS: 'laptops', DOCUMENTS: 'documents', IDS: 'ids',
+  PASSPORTS: 'passports', BAGS: 'bags', WALLETS: 'wallets', KEYS: 'keys',
+  ELECTRONICS: 'electronics', CLOTHES: 'clothes', JEWELRY: 'jewelry',
+  WATCHES: 'watches', MONEY: 'money', BOOKS: 'books', VEHICLE_ITEMS: 'vehicleItems',
+  HEADPHONES: 'headphones', CHARGERS_PHONE: 'chargers', CHARGERS_OTHERS: 'chargers',
+  WATER_BOTTLES: 'waterBottles', TOYS: 'toys', MEDICAL_ITEMS: 'medicalItems',
+  SPORTS_ITEMS: 'sportsItems', PET_ITEMS: 'petItems', FOOD_CONTAINERS: 'foodContainers',
+  UMBRELLAS: 'umbrellas', CALCULATOR: 'calculator', OTHERS: 'otherItems',
+};
+
+const extractError = (err, fallback) => {
   const resp = err?.response?.data;
   return (
     resp?.data?.message ||
     resp?.message ||
     err?.message ||
-    'Something went wrong. Please try again.'
+    fallback
   );
 };
 
@@ -59,6 +72,7 @@ function SelectField({ label, name, value, onChange, options, placeholder, disab
 }
 
 export default function EditReport() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { reportId } = useParams();
   const location = useLocation();
@@ -142,8 +156,6 @@ export default function EditReport() {
     }));
   };
 
-  // ✅ Relaxed validation — backend no longer enforces @NotBlank / @NotNull,
-  // so we only guard against obvious garbage (e.g. 1-character item names).
   const validate = () => {
     const errs = {};
     const name = form.itemName.trim();
@@ -151,18 +163,18 @@ export default function EditReport() {
     const area = form.area.trim();
 
     if (name && (name.length < 2 || name.length > 105)) {
-      errs.itemName = 'Item name must be between 2 and 105 characters';
+      errs.itemName = t('editReport.errors.itemNameLength');
     }
     if (desc && desc.length > 2000) {
-      errs.description = 'Description is too long (max 2000 characters)';
+      errs.description = t('editReport.errors.descriptionTooLong');
     }
     if (area && area.length > 150) {
-      errs.area = 'Area is too long (max 150 characters)';
+      errs.area = t('editReport.errors.areaTooLong');
     }
     if (form.lostDate) {
       const today = new Date().toISOString().split('T')[0];
       if (form.lostDate > today) {
-        errs.lostDate = 'Lost date cannot be in the future';
+        errs.lostDate = t('editReport.errors.dateInFuture');
       }
     }
     return errs;
@@ -175,7 +187,7 @@ export default function EditReport() {
     const errs = validate();
     if (Object.keys(errs).length) {
       setFieldErrors(errs);
-      setError('Please fix the highlighted fields.');
+      setError(t('editReport.errors.fixHighlighted'));
       return;
     }
 
@@ -184,8 +196,6 @@ export default function EditReport() {
     setLoading(true);
 
     try {
-      // ✅ Only include fields that the user actually filled in.
-      //    Backend now accepts partial updates, so empty strings are dropped.
       const payload = {};
       if (form.itemName.trim())       payload.itemName = form.itemName.trim();
       if (form.description.trim())    payload.description = form.description.trim();
@@ -205,7 +215,7 @@ export default function EditReport() {
         navigate('/owner/reports', { replace: true });
       }, 1500);
     } catch (err) {
-      const msg = extractError(err);
+      const msg = extractError(err, t('common.somethingWentWrong'));
       setError(msg);
       if (isLockError(msg)) setIsLocked(true);
     } finally {
@@ -215,20 +225,27 @@ export default function EditReport() {
 
   if (!incoming) return null;
 
-  const categoryOptions = CATEGORIES.map(c => ({
-    value: c,
-    label: c.replace(/_/g, ' ').charAt(0) +
-           c.replace(/_/g, ' ').slice(1).toLowerCase(),
+  const categoryOptions = CATEGORIES.map(c => {
+    const key = CATEGORY_KEY_MAP[c];
+    return {
+      value: c,
+      label: key ? t(`categoriesGrid.items.${key}`) : c.replace(/_/g, ' '),
+    };
+  });
+  const regionOptions = REGIONS.map(r => ({
+    value: r,
+    label: t(`regions.${r}`, r.replace(/_/g, ' ')),
   }));
-  const regionOptions = REGIONS.map(r => ({ value: r, label: r.replace(/_/g, ' ') }));
 
   if (success) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 text-center">
         <CheckCircle2 size={64} className="text-emerald-500 mb-6" />
-        <h1 className="text-2xl font-black text-gray-900 mb-2">Report Updated!</h1>
+        <h1 className="text-2xl font-black text-gray-900 mb-2">
+          {t('editReport.success.title')}
+        </h1>
         <p className="text-gray-500 max-w-md mb-8">
-          Your report has been updated successfully. Redirecting…
+          {t('editReport.success.subtitle')}
         </p>
       </div>
     );
@@ -243,7 +260,7 @@ export default function EditReport() {
                    hover:bg-gray-50 hover:text-gray-900 shadow-sm
                    transition-all active:scale-95 mb-6"
       >
-        <ArrowLeft size={16} /> Back to My Reports
+        <ArrowLeft size={16} /> {t('editReport.backToMyReports')}
       </Link>
 
       <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-sm overflow-hidden">
@@ -253,11 +270,12 @@ export default function EditReport() {
             className="text-2xl font-extrabold text-gray-900 mb-1"
             style={{ fontFamily: "'Sora', sans-serif" }}
           >
-            Edit Report
+            {t('editReport.title')}
           </h1>
           <p className="text-sm text-gray-500 mb-6">
-            You can edit this report while its status is <strong>REPORTED</strong>.
-            Only fill the fields you want to change.
+            {t('editReport.subtitlePart1')}{' '}
+            <strong>REPORTED</strong>
+            {t('editReport.subtitlePart2')}
           </p>
 
           {error && (
@@ -279,33 +297,33 @@ export default function EditReport() {
 
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
             <Input
-              label="Item Name"
+              label={t('editReport.fields.itemName')}
               name="itemName"
               value={form.itemName}
               onChange={handleChange}
-              placeholder="Enter the name of the lost item"
+              placeholder={t('editReport.placeholders.itemName')}
               error={fieldErrors.itemName}
             />
 
             <SelectField
-              label="Category"
+              label={t('editReport.fields.category')}
               name="category"
               value={form.category}
               onChange={handleChange}
               options={categoryOptions}
-              placeholder="Select a category"
+              placeholder={t('editReport.placeholders.category')}
             />
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Description
+                {t('editReport.fields.description')}
               </label>
               <textarea
                 name="description"
                 rows={4}
                 value={form.description}
                 onChange={handleChange}
-                placeholder="Describe your lost item"
+                placeholder={t('editReport.placeholders.description')}
                 className={`w-full px-4 py-2.5 rounded-xl border outline-none text-sm resize-none focus:ring-2 ${
                   fieldErrors.description
                     ? 'border-red-400 focus:ring-red-200'
@@ -319,26 +337,26 @@ export default function EditReport() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <SelectField
-                label="Region"
+                label={t('editReport.fields.region')}
                 name="region"
                 value={form.region}
                 onChange={handleChange}
                 options={regionOptions}
-                placeholder="Select a region"
+                placeholder={t('editReport.placeholders.region')}
               />
               <Input
-                label="Area"
+                label={t('editReport.fields.area')}
                 name="area"
                 value={form.area}
                 onChange={handleChange}
-                placeholder="e.g., Kijitonyama"
+                placeholder={t('editReport.placeholders.area')}
                 error={fieldErrors.area}
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Date Lost"
+                label={t('editReport.fields.dateLost')}
                 type="date"
                 name="lostDate"
                 value={form.lostDate}
@@ -347,18 +365,18 @@ export default function EditReport() {
                 error={fieldErrors.lostDate}
               />
               <Input
-                label="Dominant Color"
+                label={t('editReport.fields.dominantColor')}
                 name="dominantColor"
                 value={form.dominantColor}
                 onChange={handleChange}
-                placeholder="e.g., Black, Silver"
+                placeholder={t('editReport.placeholders.dominantColor')}
               />
             </div>
 
-            {/* ✅ Lost Location via LocationPicker (same as ReportItem page) */}
+            {/* Lost Location via LocationPicker */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Lost Location (Map Pin)
+                {t('editReport.fields.lostLocation')}
               </label>
               <LocationPicker
                 locationName={form.lostLocation}
@@ -372,11 +390,11 @@ export default function EditReport() {
                 }}
                 initialLat={form.latitude ? parseFloat(form.latitude) : undefined}
                 initialLng={form.longitude ? parseFloat(form.longitude) : undefined}
-                placeholder="Search building, street, or nearby landmark..."
+                placeholder={t('editReport.placeholders.lostLocation')}
               />
               {(form.latitude || form.longitude) && (
                 <p className="text-[11px] text-gray-400 mt-2">
-                  📍 {form.lostLocation || 'Pinned location'} ·{' '}
+                  📍 {form.lostLocation || t('editReport.pinnedLocation')} ·{' '}
                   {Number(form.latitude).toFixed(5)}, {Number(form.longitude).toFixed(5)}
                 </p>
               )}
@@ -385,7 +403,10 @@ export default function EditReport() {
             {/* Images */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Images <span className="text-gray-400 font-normal">(optional)</span>
+                {t('editReport.fields.images')}{' '}
+                <span className="text-gray-400 font-normal">
+                  {t('editReport.imagesOptional')}
+                </span>
               </label>
 
               <div
@@ -402,8 +423,12 @@ export default function EditReport() {
                   id="editImageUpload"
                 />
                 <Upload size={28} className="mx-auto mb-2 text-gray-400" />
-                <p className="text-sm font-medium text-gray-600">Click to add images</p>
-                <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                <p className="text-sm font-medium text-gray-600">
+                  {t('editReport.imageUpload.clickToAdd')}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  {t('editReport.imageUpload.formats')}
+                </p>
               </div>
 
               {imagePreviews.length > 0 && (
@@ -420,7 +445,7 @@ export default function EditReport() {
                           onClick={() => removeImage(idx)}
                           className="opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600
                                      text-white rounded-full p-1.5 transition-opacity"
-                          aria-label="Remove image"
+                          aria-label={t('editReport.imageUpload.removeImage')}
                         >
                           <Trash2 size={14} />
                         </button>
@@ -439,15 +464,15 @@ export default function EditReport() {
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <Loader2 size={18} className="animate-spin" /> Saving…
+                  <Loader2 size={18} className="animate-spin" /> {t('common.saving')}
                 </span>
               ) : isLocked ? (
                 <span className="flex items-center justify-center gap-2">
-                  <Lock size={18} /> Account Locked
+                  <Lock size={18} /> {t('editReport.accountLocked')}
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  <Save size={18} /> Save Changes
+                  <Save size={18} /> {t('editReport.saveChanges')}
                 </span>
               )}
             </Button>

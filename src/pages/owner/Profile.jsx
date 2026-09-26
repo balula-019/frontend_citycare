@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, User, Mail, Phone, MapPin, Save, CheckCircle2,
   AlertCircle, Loader2
@@ -31,6 +32,7 @@ const cls = `w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0]
              disabled:bg-[#f8fafc] disabled:text-gray-400 disabled:cursor-not-allowed`;
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   const [form, setForm] = useState({
@@ -64,7 +66,6 @@ export default function Profile() {
     setSuccess(false);
   };
 
-  // Update location fields from LocationPicker
   const handleLocationChange = ({ locationName, lat, lng }) => {
     setForm(prev => ({
       ...prev,
@@ -72,7 +73,6 @@ export default function Profile() {
       location_lat: lat != null ? String(lat) : '',
       location_long: lng != null ? String(lng) : '',
     }));
-    // Clear any location errors
     setFieldErrors(prev => {
       const next = { ...prev };
       delete next.location_lat;
@@ -84,14 +84,14 @@ export default function Profile() {
 
   const validate = () => {
     const errs = {};
-    if (!form.name.trim()) errs.name = 'Name is required';
-    if (!form.email.trim()) errs.email = 'Email is required';
+    if (!form.name.trim()) errs.name = t('profile.errors.nameRequired');
+    if (!form.email.trim()) errs.email = t('profile.errors.emailRequired');
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      errs.email = 'Enter a valid email address';
+      errs.email = t('profile.errors.emailInvalid');
     if (form.location_lat && isNaN(parseFloat(form.location_lat)))
-      errs.location_lat = 'Must be a valid number';
+      errs.location_lat = t('profile.errors.numberInvalid');
     if (form.location_long && isNaN(parseFloat(form.location_long)))
-      errs.location_long = 'Must be a valid number';
+      errs.location_long = t('profile.errors.numberInvalid');
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -111,12 +111,11 @@ export default function Profile() {
       };
       await updateProfile(user.id, payload);
 
-      // Update stored user
       const stored = JSON.parse(localStorage.getItem('user') || '{}');
       localStorage.setItem('user', JSON.stringify({ ...stored, ...payload }));
       setSuccess(true);
     } catch (err) {
-      setApiError(err.message || 'Failed to update profile.');
+      setApiError(err.message || t('profile.errors.updateFailed'));
     } finally {
       setSaving(false);
     }
@@ -137,8 +136,12 @@ export default function Profile() {
           <ArrowLeft size={18} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-[#0f172a]">My Profile</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Manage your account details</p>
+          <h1 className="text-2xl font-bold text-[#0f172a]">
+            {t('profile.title')}
+          </h1>
+          <p className="text-sm text-gray-500 mt-0.5">
+            {t('profile.subtitle')}
+          </p>
         </div>
       </div>
 
@@ -151,48 +154,53 @@ export default function Profile() {
           <p className="font-bold text-[#0f172a] text-base">{form.name || '—'}</p>
           <p className="text-sm text-gray-500">{form.email || '—'}</p>
           <span className="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1a56db]">
-            Owner
+            {t('profile.roleOwner')}
           </span>
         </div>
       </div>
 
       {/* Form */}
       <div className="bg-white border border-[#e2e8f0] rounded-2xl p-6 space-y-5">
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Account information</p>
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+          {t('profile.accountInfo')}
+        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <Field label="Full name" icon={User} error={fieldErrors.name}>
+          <Field label={t('profile.fields.fullName')} icon={User} error={fieldErrors.name}>
             <input
               value={form.name}
               onChange={e => set('name', e.target.value)}
-              placeholder="Your full name"
+              placeholder={t('profile.placeholders.fullName')}
               className={cls}
             />
           </Field>
-          <Field label="Email address" icon={Mail} error={fieldErrors.email}>
+          <Field label={t('profile.fields.email')} icon={Mail} error={fieldErrors.email}>
             <input
               value={form.email}
               onChange={e => set('email', e.target.value)}
               type="email"
-              placeholder="you@example.com"
+              placeholder={t('profile.placeholders.email')}
               className={cls}
             />
           </Field>
-          <Field label="Mobile number" icon={Phone}>
+          <Field label={t('profile.fields.mobile')} icon={Phone}>
             <input
               value={form.mobile}
               onChange={e => set('mobile', e.target.value)}
               type="tel"
-              placeholder="+255 7XX XXX XXX"
+              placeholder={t('profile.placeholders.mobile')}
               className={cls}
             />
           </Field>
         </div>
 
-        {/* Location section with OpenStreetMap picker */}
+        {/* Location section */}
         <div>
           <p className="text-xs font-bold text-gray-400 uppercase tracking-wider pt-1">
-            Your Location <span className="font-normal normal-case">(optional)</span>
+            {t('profile.location.heading')}{' '}
+            <span className="font-normal normal-case">
+              {t('profile.location.optional')}
+            </span>
           </p>
           <div className="mt-2 rounded-xl overflow-hidden border border-[#e2e8f0]">
             <LocationPicker
@@ -200,7 +208,7 @@ export default function Profile() {
               onChange={handleLocationChange}
               initialLat={form.location_lat ? parseFloat(form.location_lat) : undefined}
               initialLng={form.location_long ? parseFloat(form.location_long) : undefined}
-              placeholder="Search your area…"
+              placeholder={t('profile.location.placeholder')}
               disabled={saving}
             />
           </div>
@@ -211,7 +219,7 @@ export default function Profile() {
             </p>
           )}
           <p className="text-[11px] text-gray-400 mt-1">
-            Drag the map or search to set your coordinates.
+            {t('profile.location.hint')}
           </p>
         </div>
 
@@ -223,7 +231,7 @@ export default function Profile() {
 
         {success && (
           <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
-            <CheckCircle2 size={15} className="shrink-0" /> Profile updated successfully!
+            <CheckCircle2 size={15} className="shrink-0" /> {t('profile.success')}
           </div>
         )}
 
@@ -236,15 +244,14 @@ export default function Profile() {
                        disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {saving ? (
-              <><Loader2 size={15} className="animate-spin" /> Saving...</>
+              <><Loader2 size={15} className="animate-spin" /> {t('profile.saving')}</>
             ) : (
-              <><Save size={15} /> Save changes</>
+              <><Save size={15} /> {t('profile.saveChanges')}</>
             )}
           </button>
         </div>
       </div>
 
-      {/* Style override for compact map height */}
       <style>{`
         .leaflet-container {
           height: 180px !important;

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, RefreshCw, AlertCircle, FileText,
   MapPin, Calendar, Tag, ChevronDown,
@@ -15,22 +16,22 @@ import {
   deleteOwnerLostReport,
 } from '../../api/items';
 
-/* ─── Status & Claim Helpers ──────────────────────────────────── */
-const STATUS_CFG = {
-  REPORTED: { bg: '#f1f5f9', text: '#475569', label: 'Not Claimed' },
-  MATCHED:  { bg: '#dbeafe', text: '#1e40af', label: 'Matched' },
-  CLAIMED:  { bg: '#dcfce7', text: '#166534', label: 'Already Claimed' },
-  CLOSED:   { bg: '#e2e8f0', text: '#334155', label: 'Closed' },
-  FOUND:    { bg: '#ccfbf1', text: '#0f766e', label: 'Found' },
+/* ─── Status colors (labels come from i18n) ──────────────────── */
+const STATUS_COLORS = {
+  REPORTED: { bg: '#f1f5f9', text: '#475569', labelKey: 'reports.status.notClaimed' },
+  MATCHED:  { bg: '#dbeafe', text: '#1e40af', labelKey: 'reports.status.matched' },
+  CLAIMED:  { bg: '#dcfce7', text: '#166534', labelKey: 'reports.status.alreadyClaimed' },
+  CLOSED:   { bg: '#e2e8f0', text: '#334155', labelKey: 'reports.status.closed' },
+  FOUND:    { bg: '#ccfbf1', text: '#0f766e', labelKey: 'reports.status.found' },
 };
 
-const SCORE_LABELS = {
-  finalScore:       'Final score',
-  descriptionScore: 'Description',
-  nameScore:        'Name match',
-  locationScore:    'Location',
-  dateScore:        'Date',
-  colorScore:       'Color',
+const SCORE_KEY_MAP = {
+  finalScore:       'finalScore',
+  descriptionScore: 'descriptionScore',
+  nameScore:        'nameScore',
+  locationScore:    'locationScore',
+  dateScore:        'dateScore',
+  colorScore:       'colorScore',
 };
 
 const CATEGORY_ICON_MAP = {
@@ -64,6 +65,17 @@ const CATEGORY_ICON_MAP = {
 
 const DEFAULT_CATEGORY = { icon: Package, bg: '#f1f5f9', color: '#475569' };
 
+const CATEGORY_KEY_MAP = {
+  PHONES: 'phones', LAPTOPS: 'laptops', DOCUMENTS: 'documents', IDS: 'ids',
+  PASSPORTS: 'passports', BAGS: 'bags', WALLETS: 'wallets', KEYS: 'keys',
+  ELECTRONICS: 'electronics', CLOTHES: 'clothes', JEWELRY: 'jewelry',
+  WATCHES: 'watches', MONEY: 'money', BOOKS: 'books', VEHICLE_ITEMS: 'vehicleItems',
+  HEADPHONES: 'headphones', CHARGERS_PHONE: 'chargers', CHARGERS_OTHERS: 'chargers',
+  WATER_BOTTLES: 'waterBottles', TOYS: 'toys', MEDICAL_ITEMS: 'medicalItems',
+  SPORTS_ITEMS: 'sportsItems', PET_ITEMS: 'petItems', FOOD_CONTAINERS: 'foodContainers',
+  UMBRELLAS: 'umbrellas', CALCULATOR: 'calculator', OTHERS: 'otherItems',
+};
+
 const isItemClaimedOrUnavailable = (item) => {
   if (!item) return false;
   const code = String(item.statusCode || item.code || item.errorCode || '');
@@ -92,9 +104,9 @@ const scoreColor = (v) => {
   return '#f59e0b';
 };
 
-const fmt     = (s) => s ? s.replace(/_/g, ' ') : '—';
-const fmtDate = (d) =>
-  d ? new Date(d).toLocaleDateString('en-GB', {
+const fmtDate = (d, locale = 'en-GB') =>
+  d
+    ? new Date(d).toLocaleDateString(locale, {
         day: '2-digit', month: 'short', year: 'numeric',
       })
     : '—';
@@ -116,8 +128,14 @@ function SkeletonCard() {
 
 /* ─── Category placeholder ──────────────────────────────────── */
 function CategoryPlaceholder({ category }) {
+  const { t } = useTranslation();
   const cfg = CATEGORY_ICON_MAP[category] || DEFAULT_CATEGORY;
   const IconComp = cfg.icon;
+  const key = CATEGORY_KEY_MAP[category];
+  const label = key
+    ? t(`categoriesGrid.items.${key}`)
+    : (category || 'ITEM').replace(/_/g, ' ');
+
   return (
     <div
       className="h-36 w-full flex flex-col items-center justify-center gap-2"
@@ -128,7 +146,7 @@ function CategoryPlaceholder({ category }) {
         className="text-xs font-semibold tracking-wide"
         style={{ color: cfg.color, opacity: 0.75 }}
       >
-        {(category || 'ITEM').replace(/_/g, ' ')}
+        {label}
       </span>
     </div>
   );
@@ -167,10 +185,11 @@ function ScoreBar({ label, rawValue }) {
 
 /* ─── Match detail panel ────────────────────────────────────── */
 function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const scoreKeys = Object.keys(SCORE_LABELS).filter(k => match[k] != null);
+  const scoreKeys = Object.keys(SCORE_KEY_MAP).filter(k => match[k] != null);
   const isMatchClaimed = isReportClaimed || isItemClaimedOrUnavailable(match);
   const canClaim = Boolean(match.organizationItemId) && !isMatchClaimed;
 
@@ -185,7 +204,9 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full shrink-0"
                style={{ backgroundColor: scoreColor(match.finalScore) }} />
-          <span className="font-semibold text-[#0f172a]">Match #{index + 1}</span>
+          <span className="font-semibold text-[#0f172a]">
+            {t('reports.matchNumber', { number: index + 1 })}
+          </span>
           {match.finalScore != null && (
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold"
                   style={{
@@ -197,7 +218,7 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
           )}
           {isMatchClaimed && (
             <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
-              Already Claimed
+              {t('reports.status.alreadyClaimed')}
             </span>
           )}
         </div>
@@ -211,12 +232,16 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
       {open && (
         <div className="px-3 py-3 bg-white space-y-2.5 border-t border-[#e2e8f0]">
           {scoreKeys.map(k => (
-            <ScoreBar key={k} label={SCORE_LABELS[k]} rawValue={match[k]} />
+            <ScoreBar
+              key={k}
+              label={t(`reports.scoreLabels.${SCORE_KEY_MAP[k]}`)}
+              rawValue={match[k]}
+            />
           ))}
           {isMatchClaimed ? (
             <div className="mt-2 w-full flex items-center justify-center py-2.5 rounded-lg
                            bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
-              Already Claimed
+              {t('reports.status.alreadyClaimed')}
             </div>
           ) : (
             <button
@@ -227,7 +252,7 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
                          hover:bg-[#1547c0] transition-all active:scale-95
                          disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Claim This Item
+              {t('reports.claimThisItem')}
             </button>
           )}
         </div>
@@ -238,6 +263,7 @@ function MatchDetailPanel({ match, index, reportId, isReportClaimed }) {
 
 /* ─── Delete report confirmation modal ──────────────── */
 function DeleteReportModal({ report, onClose, onConfirm, loading }) {
+  const { t } = useTranslation();
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -249,8 +275,12 @@ function DeleteReportModal({ report, onClose, onConfirm, loading }) {
             <Trash2 size={18} className="text-red-600" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-black text-[#0f172a]">Delete Report</h3>
-            <p className="text-xs text-gray-400 mt-0.5">This action cannot be undone.</p>
+            <h3 className="text-lg font-black text-[#0f172a]">
+              {t('reports.deleteModal.title')}
+            </h3>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {t('reports.deleteModal.warning')}
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -262,9 +292,7 @@ function DeleteReportModal({ report, onClose, onConfirm, loading }) {
         </div>
 
         <p className="text-sm text-gray-600 mb-4">
-          Permanently delete your report for{' '}
-          <span className="font-bold">{report.itemName}</span>? It will be removed
-          from your reports and stop any AI matching.
+          {t('reports.deleteModal.message', { itemName: report.itemName })}
         </p>
 
         <div className="flex gap-3">
@@ -275,7 +303,7 @@ function DeleteReportModal({ report, onClose, onConfirm, loading }) {
                        text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all
                        disabled:opacity-50"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
           <button
             onClick={onConfirm}
@@ -287,12 +315,12 @@ function DeleteReportModal({ report, onClose, onConfirm, loading }) {
             {loading ? (
               <>
                 <Loader2 size={14} className="animate-spin" />
-                Deleting…
+                {t('common.deleting')}
               </>
             ) : (
               <>
                 <Trash2 size={14} />
-                Delete
+                {t('common.delete')}
               </>
             )}
           </button>
@@ -304,10 +332,13 @@ function DeleteReportModal({ report, onClose, onConfirm, loading }) {
 
 /* ─── Report card ────────────────────────────────────────────── */
 function ReportCard({ report, onDelete, onDeleteReport }) {
+  const { t, i18n } = useTranslation();
   const [imgErr, setImgErr] = useState(false);
   const [showMatches, setShowMatches] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
+
+  const dateLocale = i18n.language === 'sw' ? 'sw-TZ' : 'en-GB';
 
   const thumb        = report.imageUrls?.[0];
   const matches      = Array.isArray(report.matches) ? report.matches : [];
@@ -317,16 +348,19 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
   const isMatched    = best?.finalScore != null;
 
   const isClaimed = isItemClaimedOrUnavailable(report) || matches.some(isItemClaimedOrUnavailable);
+
   const cfg = isClaimed
-    ? { bg: '#dcfce7', text: '#166534', label: 'Already Claimed' }
+    ? { bg: '#dcfce7', text: '#166534', label: t('reports.status.alreadyClaimed') }
     : isMatched
-      ? STATUS_CFG.MATCHED
-      : (STATUS_CFG[report.status] || { bg: '#f1f5f9', text: '#475569', label: 'Not Claimed' });
+      ? { bg: '#dbeafe', text: '#1e40af', label: t('reports.status.matched') }
+      : (() => {
+          const c = STATUS_COLORS[report.status] || STATUS_COLORS.REPORTED;
+          return { bg: c.bg, text: c.text, label: t(c.labelKey) };
+        })();
 
   const claimIdForDelete = report.claimId || report.claimRequestId;
   const claimTargetId    = best?.organizationItemId;
 
-  // ✅ Edit + Delete report both only allowed while status is REPORTED
   const reportStatusUpper = String(report.status || '').toUpperCase();
   const canEdit   = reportStatusUpper === 'REPORTED';
   const canDelete = reportStatusUpper === 'REPORTED';
@@ -346,9 +380,7 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
 
   const handleEdit = () => {
     if (!canEdit) return;
-    navigate(`/owner/edit-report/${report.id}`, {
-      state: { report },
-    });
+    navigate(`/owner/edit-report/${report.id}`, { state: { report } });
   };
 
   const handleDeleteReport = () => {
@@ -356,11 +388,21 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
     onDeleteReport?.(report);
   };
 
+  // Translated category name
+  const catKey = CATEGORY_KEY_MAP[report.category];
+  const catLabel = catKey
+    ? t(`categoriesGrid.items.${catKey}`)
+    : (report.category || '').replace(/_/g, ' ');
+
+  // Translated region name
+  const regionLabel = report.region
+    ? t(`regions.${report.region}`, report.region.replace(/_/g, ' '))
+    : '';
+
   return (
     <div className="bg-white border border-[#e2e8f0] rounded-2xl overflow-hidden
                     transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5
                     flex flex-col">
-      {/* Thumbnail */}
       <div className="h-36 bg-[#f8fafc] flex items-center justify-center overflow-hidden shrink-0">
         {thumb && !imgErr ? (
           <img src={thumb} alt={report.itemName}
@@ -372,7 +414,6 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
       </div>
 
       <div className="p-4 flex flex-col flex-1 gap-2.5">
-        {/* Title + status badge + delete claim */}
         <div className="flex items-start justify-between gap-2">
           <p className="font-bold text-[#0f172a] text-sm leading-snug line-clamp-2">
             {report.itemName}
@@ -387,7 +428,7 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
                 onClick={handleDeleteClaim}
                 disabled={deleting}
                 className="w-7 h-7 rounded-lg hover:bg-red-50 flex items-center justify-center transition-colors group"
-                title="Delete claim"
+                title={t('reports.deleteClaim')}
               >
                 <Trash2 size={14} className="text-gray-400 group-hover:text-red-500" />
               </button>
@@ -395,25 +436,23 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
           </div>
         </div>
 
-        {/* Metadata */}
         <div className="space-y-1.5 text-xs text-gray-500">
           <div className="flex items-center gap-1.5">
             <Tag size={11} className="shrink-0 text-gray-400" />
-            <span>{fmt(report.category)}</span>
+            <span>{catLabel}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Calendar size={11} className="shrink-0 text-gray-400" />
-            <span>Lost: {fmtDate(report.lostDate)}</span>
+            <span>{t('reports.lostDate')}: {fmtDate(report.lostDate, dateLocale)}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <MapPin size={11} className="shrink-0 text-gray-400" />
             <span className="truncate">
-              {fmt(report.region)}{report.area ? `, ${report.area}` : ''}
+              {regionLabel}{report.area ? `, ${report.area}` : ''}
             </span>
           </div>
         </div>
 
-        {/* AI match banner */}
         {hasMatches && (
           <button
             onClick={() => setShowMatches(p => !p)}
@@ -426,11 +465,11 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
               <Brain size={13} className="text-[#1a56db] shrink-0" />
               <div>
                 <p className="text-[11px] font-bold text-[#1a56db] leading-none">
-                  {totalMatches} AI match{totalMatches !== 1 ? 'es' : ''} found
+                  {t('reports.aiMatches', { count: totalMatches })}
                 </p>
                 {best?.finalScore != null && (
                   <p className="text-[10px] text-blue-500 mt-0.5">
-                    Best score: {fmtScore(best.finalScore)}
+                    {t('reports.bestScore', { score: fmtScore(best.finalScore) })}
                   </p>
                 )}
               </div>
@@ -443,7 +482,6 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
           </button>
         )}
 
-        {/* Expanded panels */}
         {hasMatches && showMatches && (
           <div className="space-y-2 mt-0.5">
             {matches.map((m, i) => (
@@ -458,14 +496,14 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
           </div>
         )}
 
-        {/* Footer actions — Delete report + Edit + Claim */}
         <div className="mt-auto pt-2 border-t border-[#f1f5f9]
                         flex items-center justify-end gap-2">
-          {/* ✅ Delete report — enabled only when REPORTED */}
           <button
             onClick={handleDeleteReport}
             disabled={!canDelete}
-            title={canDelete ? 'Delete this report' : 'Report can only be deleted when status is REPORTED'}
+            title={canDelete
+              ? t('reports.actions.deleteReport')
+              : t('reports.actions.deleteDisabled')}
             className="flex items-center justify-center w-7 h-7 rounded-lg text-xs font-semibold
                        border border-red-200 text-red-600 bg-white
                        hover:bg-red-50
@@ -475,24 +513,25 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
             <Trash2 size={12} />
           </button>
 
-          {/* ✅ Edit — enabled only when REPORTED */}
           <button
             onClick={handleEdit}
             disabled={!canEdit}
-            title={canEdit ? 'Edit this report' : 'Report can only be edited when status is REPORTED'}
+            title={canEdit
+              ? t('reports.actions.edit')
+              : t('reports.actions.editDisabled')}
             className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold
                        border border-[#e2e8f0] text-gray-600 bg-white
                        hover:bg-gray-50 hover:text-gray-900
                        transition-all active:scale-95
                        disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white"
           >
-            <Pencil size={12} /> Edit
+            <Pencil size={12} /> {t('reports.actions.edit')}
           </button>
 
           {isClaimed ? (
             <span className="px-3 py-1.5 rounded-lg text-xs font-semibold
                              bg-emerald-50 text-emerald-800 border border-emerald-200">
-              Already Claimed
+              {t('reports.status.alreadyClaimed')}
             </span>
           ) : (
             <button
@@ -502,7 +541,7 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
                          bg-[#1a56db] text-white hover:bg-[#1547c0]
                          transition-all active:scale-95 disabled:opacity-60"
             >
-              Claim Item
+              {t('reports.actions.claimItem')}
             </button>
           )}
         </div>
@@ -513,6 +552,7 @@ function ReportCard({ report, onDelete, onDeleteReport }) {
 
 /* ─── Main page ───────────────────────────────────────────────── */
 export default function MyReports() {
+  const { t } = useTranslation();
   const [reports,     setReports]     = useState([]);
   const [loading,     setLoading]     = useState(true);
   const [error,       setError]       = useState('');
@@ -521,7 +561,6 @@ export default function MyReports() {
   const [totalPages,  setTotalPages]  = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  // ✅ Delete report state
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting,     setDeleting]     = useState(false);
 
@@ -546,16 +585,15 @@ export default function MyReports() {
       setTotalPages(pageData?.totalPages ?? res?.totalPages ?? 1);
       setPage(pageNum);
     } catch (err) {
-      setError(err.message || 'Failed to load reports. Please try again.');
+      setError(t('reports.loadFailed'));
     } finally {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => { fetchReports(0, true); }, [fetchReports]);
 
-  /* Removes a report after claim deletion */
   const handleDeleteAfterClaim = useCallback((reportId) => {
     if (reportId) {
       setReports(prev => prev.filter(r => r.id !== reportId));
@@ -564,7 +602,6 @@ export default function MyReports() {
     }
   }, [fetchReports]);
 
-  /* ✅ Delete report handler */
   const handleConfirmDeleteReport = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
@@ -572,7 +609,7 @@ export default function MyReports() {
     setSuccess('');
     try {
       await deleteOwnerLostReport(deleteTarget.id);
-      setSuccess('Report deleted successfully.');
+      setSuccess(t('reports.deleteModal.success'));
       setReports(prev => prev.filter(r => r.id !== deleteTarget.id));
       setDeleteTarget(null);
       setTimeout(() => setSuccess(''), 3500);
@@ -582,7 +619,7 @@ export default function MyReports() {
         resp?.data?.message ||
         resp?.message ||
         err.message ||
-        'Failed to delete report.'
+        t('reports.deleteFailed')
       );
     } finally {
       setDeleting(false);
@@ -622,7 +659,6 @@ export default function MyReports() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
 
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <Link
@@ -631,16 +667,18 @@ export default function MyReports() {
                          bg-white border border-[#e2e8f0] text-sm font-semibold text-gray-700
                          hover:bg-gray-50 hover:text-gray-900 shadow-sm
                          transition-all active:scale-95 shrink-0"
-              aria-label="Back to search"
+              aria-label={t('common.backToSearch')}
             >
               <ArrowLeft size={16} />
-              <span>Back to Search</span>
+              <span>{t('common.backToSearch')}</span>
             </Link>
 
             <div>
-              <h1 className="text-2xl font-bold text-[#0f172a]">My Reports</h1>
+              <h1 className="text-2xl font-bold text-[#0f172a]">
+                {t('reports.title')}
+              </h1>
               <p className="text-sm text-gray-500 mt-0.5">
-                All your lost item reports in one place
+                {t('reports.subtitle')}
               </p>
             </div>
           </div>
@@ -654,11 +692,10 @@ export default function MyReports() {
                        disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
-            Refresh
+            {t('common.refresh')}
           </button>
         </div>
 
-        {/* Success */}
         {success && (
           <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200
                           text-emerald-700 px-4 py-3 rounded-xl mb-6 text-sm">
@@ -667,7 +704,6 @@ export default function MyReports() {
           </div>
         )}
 
-        {/* Error */}
         {error && (
           <div className="flex items-center gap-3 bg-red-50 border border-red-200
                           text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
@@ -675,24 +711,22 @@ export default function MyReports() {
             <span className="flex-1">{error}</span>
             <button onClick={() => fetchReports(0, true)}
                     className="font-semibold underline hover:no-underline shrink-0">
-              Retry
+              {t('common.retry')}
             </button>
           </div>
         )}
 
-        {/* Skeleton */}
         {loading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         )}
 
-        {/* Results */}
         {!loading && reports.length > 0 && (
           <>
             <div className="flex items-center gap-4 mb-4 flex-wrap">
               <p className="text-xs text-gray-400">
-                {reports.length} report{reports.length !== 1 ? 's' : ''}
+                {t('reports.reportCount', { count: reports.length })}
               </p>
               {(() => {
                 const n = reports.filter(r => (r.totalMatches ?? 0) > 0).length;
@@ -701,7 +735,7 @@ export default function MyReports() {
                                    text-[#1a56db] bg-blue-50 border border-blue-100
                                    px-2.5 py-1 rounded-full">
                     <CheckCircle2 size={12} />
-                    {n} with AI matches
+                    {t('reports.withMatches', { count: n })}
                   </span>
                 ) : null;
               })()}
@@ -735,31 +769,32 @@ export default function MyReports() {
                       <span className="w-4 h-4 rounded-full border-2 border-gray-300
                                        border-t-[#1a56db]"
                             style={{ animation: 'spin 0.7s linear infinite' }} />
-                      Loading…
+                      {t('common.loading')}
                     </>
-                  ) : 'Load more'}
+                  ) : t('reports.loadMore')}
                 </button>
               </div>
             )}
           </>
         )}
 
-        {/* Empty state */}
         {!loading && !error && reports.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 text-center fade-up">
             <div className="w-16 h-16 rounded-full bg-[#f8fafc] border border-[#e2e8f0]
                             flex items-center justify-center mb-4">
               <FileText size={28} className="text-gray-300" />
             </div>
-            <h3 className="text-lg font-bold text-[#0f172a] mb-1">No reports yet</h3>
+            <h3 className="text-lg font-bold text-[#0f172a] mb-1">
+              {t('reports.noReports')}
+            </h3>
             <p className="text-sm text-gray-500 max-w-xs mb-5">
-              You haven't filed any lost item reports. Start by searching found items.
+              {t('reports.noReportsHint')}
             </p>
             <Link to="/owner/search"
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl
                              bg-[#1a56db] text-white text-sm font-semibold
                              hover:bg-[#1547c0] transition-all active:scale-95">
-              Go to search
+              {t('reports.goToSearch')}
             </Link>
           </div>
         )}

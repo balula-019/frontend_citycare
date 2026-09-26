@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { AlertCircle, Search, Loader2 } from 'lucide-react';
 import Button from '../shared/Button';
 import HeroImageCarousel from './HeroImageCarousel';
@@ -9,6 +10,8 @@ const Hero = ({
   isLoadingReport = false,
   isLoadingSearch = false,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-surface">
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-full pointer-events-none" />
@@ -22,13 +25,16 @@ const Hero = ({
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-border shadow-sm mb-6">
               <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span className="text-sm font-medium text-gray-600"> Lost & Found Platform</span>
+              <span className="text-sm font-medium text-gray-600">
+                {t('hero.badge')}
+              </span>
             </span>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-              Bringing the lost item <span className="text-gradient">Back to home</span>
+              {t('hero.headingPart1')}{' '}
+              <span className="text-gradient">{t('hero.headingHighlight')}</span>
             </h1>
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Tanzania's trusted platform for reporting, searching, and recovering lost items safely and efficiently through verified organizations.
+              {t('hero.subtext')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -42,7 +48,7 @@ const Hero = ({
                 ) : (
                   <AlertCircle size={20} />
                 )}
-                Report Lost Item
+                {t('hero.reportLostItem')}
               </Button>
 
               <Button
@@ -56,13 +62,13 @@ const Hero = ({
                 ) : (
                   <Search size={20} />
                 )}
-                Search Found Items
+                {t('hero.searchFoundItems')}
               </Button>
             </div>
           </motion.div>
         </div>
 
-        {/* ── Illustration carousel replaces floating icons ── */}
+        {/* ── Illustration carousel ── */}
         <div className="relative max-w-lg mx-auto">
           <HeroImageCarousel />
         </div>

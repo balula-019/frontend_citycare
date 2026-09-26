@@ -12,7 +12,7 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 
-// ✅ Partner With Us (public, 2-step flow)
+//  Partner With Us (public, 2-step flow)
 import PartnerSendOtp from './pages/PartnerSendOtp';
 import PartnerWithUs from './pages/PartnerWithUs';
 
@@ -22,7 +22,7 @@ import ReportItem from './pages/owner/ReportItem';
 import ClaimItem from './pages/owner/ClaimItem';
 import PaymentDemo from './pages/owner/PaymentDemo';
 import MyReports from './pages/owner/MyReports';
-import EditReport from './pages/owner/EditReport';       // ✅ NEW
+import EditReport from './pages/owner/EditReport';       
 import OwnerProfile from './pages/owner/Profile';
 
 // Organisation

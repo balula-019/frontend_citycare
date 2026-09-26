@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { FaInstagram, FaFacebook, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
 import { MapPin } from 'lucide-react';
@@ -6,6 +7,7 @@ import logoSrc from '/src/assets/pata-logo.png';
 
 const Footer = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -38,17 +40,17 @@ const Footer = () => {
   };
 
   const platformLinks = [
-    { label: 'Search Items',      path: '/owner/search',    protected: true },
-    { label: 'Report Lost Item',  path: '/owner/report',    protected: true },
-    { label: 'Partner With Us',   path: '/partner-with-us' }, // ✅ public — no protected flag
-    { label: 'How it Works',      path: '#how-it-works',    isHash: true },
+    { label: t('footer.searchItems'),     path: '/owner/search',    protected: true },
+    { label: t('footer.reportLostItem'),  path: '/owner/report',    protected: true },
+    { label: t('footer.partnerWithUs'),   path: '/partner-with-us' },
+    { label: t('footer.howItWorks'),      path: '#how-it-works',    isHash: true },
   ];
 
   const socialLinks = [
     { Icon: FaInstagram, href: 'https://www.instagram.com/pata.chako', label: 'Instagram', color: '#E1306C' },
-    { Icon: FaFacebook, href: 'https://www.facebook.com/share/1DT9uyErB5/', label: 'Facebook', color: '#1877F2' },
-    { Icon: FaLinkedin, href: 'https://www.linkedin.com/in/pata-chako-2a6a46442', label: 'LinkedIn', color: '#0A66C2' },
-    { Icon: FaWhatsapp, href: 'https://wa.me/255659819040', label: 'WhatsApp', color: '#25D366' },
+    { Icon: FaFacebook,  href: 'https://www.facebook.com/share/1DT9uyErB5/', label: 'Facebook', color: '#1877F2' },
+    { Icon: FaLinkedin,  href: 'https://www.linkedin.com/in/pata-chako-2a6a46442', label: 'LinkedIn', color: '#0A66C2' },
+    { Icon: FaWhatsapp,  href: 'https://wa.me/255659819040', label: 'WhatsApp', color: '#25D366' },
   ];
 
   return (
@@ -66,7 +68,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-              Tanzania's most trusted platform for reporting, searching, and recovering lost items safely and efficiently.
+              {t('footer.tagline')}
             </p>
             <div className="flex gap-3 pt-2">
               {socialLinks.map(({ Icon, href, label, color }) => (
@@ -87,7 +89,7 @@ const Footer = () => {
           {/* Column 2: Platform Navigation */}
           <div className="md:pl-8">
             <h4 className="text-xs font-mono font-semibold uppercase text-gray-400 tracking-wider mb-4">
-              Platform Navigation
+              {t('footer.platformNavigation')}
             </h4>
             <ul className="space-y-3">
               {platformLinks.map((link) => (
@@ -128,7 +130,7 @@ const Footer = () => {
           {/* Column 3: Company & FAQs */}
           <div>
             <h4 className="text-xs font-mono font-semibold uppercase text-gray-400 tracking-wider mb-4">
-              Company
+              {t('footer.company')}
             </h4>
             <ul className="space-y-3 mb-6">
               <li>
@@ -137,7 +139,7 @@ const Footer = () => {
                   onClick={(e) => handleHashClick(e, '#about')}
                   className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
                 >
-                  About Us
+                  {t('footer.aboutUs')}
                 </a>
               </li>
               <li>
@@ -146,7 +148,7 @@ const Footer = () => {
                   onClick={(e) => handleHashClick(e, '#faq')}
                   className="text-sm text-gray-400 hover:text-primary transition-colors cursor-pointer inline-block"
                 >
-                  FAQs
+                  {t('footer.faqs')}
                 </a>
               </li>
             </ul>
@@ -154,7 +156,7 @@ const Footer = () => {
             <div className="space-y-2.5 pt-4 border-t border-white/10">
               <div className="flex items-center gap-3 text-sm text-gray-400">
                 <MapPin size={16} className="text-primary shrink-0" />
-                <span>Dar es Salaam, Tanzania</span>
+                <span>{t('footer.location')}</span>
               </div>
             </div>
           </div>
@@ -164,10 +166,10 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} PataChako. All rights reserved.
+            © {new Date().getFullYear()} PataChako. {t('footer.rightsReserved')}
           </p>
           <p className="text-xs text-gray-500">
-            Built with trust and security for Tanzania.
+            {t('footer.builtWith')}
           </p>
         </div>
       </div>

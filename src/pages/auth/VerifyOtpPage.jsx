@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { verifyOtp, resendOtp } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
 import logoSrc from '/src/assets/pata-logo.png';
 
 export default function VerifyOtpPage() {
+  const { t } = useTranslation();
   const location = useLocation();
-  // Read mobile passed from RegisterPage state, falling back to email if missing
   const mobile = location.state?.mobile || '';
   const email = location.state?.email || '';
   const identifier = mobile || email;
@@ -28,20 +29,18 @@ export default function VerifyOtpPage() {
       const response = await verifyOtp(identifier, otp);
       const data = response?.data || response;
 
-      // Intercept custom backend errors wrapped inside a 200 OK
       if (data && data.statusCode && String(data.statusCode) !== '600') {
-        setError(data.message || 'Invalid OTP. Please try again.');
+        setError(data.message || t('verifyOtp.errors.invalidOtp'));
         return;
       }
 
-      // Only redirect if it is a confirmed success (status code 600)
       navigate('/login', { state: { accountVerified: true } });
     } catch (err) {
       const serverMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
-        'Invalid OTP. Please try again.';
+        t('verifyOtp.errors.invalidOtp');
       setError(serverMessage);
     } finally {
       setLoading(false);
@@ -56,29 +55,35 @@ export default function VerifyOtpPage() {
       const response = await resendOtp(identifier, 'ACCOUNT_VERIFICATION');
       const data = response?.data || response;
 
-      // Intercept custom backend errors during resend
       if (data && data.statusCode && String(data.statusCode) !== '600') {
-        setError(data.message || 'Failed to resend OTP.');
+        setError(data.message || t('verifyOtp.errors.resendFailed'));
         return;
       }
 
-      setMessage(`A new OTP has been sent via SMS to ${mobile ? `+255 ${mobile}` : 'your mobile number'}.`);
+      const target = mobile
+        ? `+255 ${mobile}`
+        : t('verifyOtp.yourMobileFallback');
+
+      setMessage(t('verifyOtp.resendSuccess', { target }));
     } catch (err) {
       const serverMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
-        'Failed to resend OTP.';
+        t('verifyOtp.errors.resendFailed');
       setError(serverMessage);
     }
   };
+
+  const destinationLabel = mobile
+    ? `+255 ${mobile}`
+    : email || t('verifyOtp.yourMobileFallback');
 
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 overflow-y-auto"
       style={{ background: '#f4f7fd' }}
     >
-      {/* Card Container */}
       <div className="w-full max-w-[460px] bg-white rounded-3xl shadow-2xl shadow-blue-100/30 border border-gray-100 overflow-hidden flex flex-col my-auto">
         <div
           className="h-1.5 w-full flex-shrink-0"
@@ -86,13 +91,12 @@ export default function VerifyOtpPage() {
         />
 
         <div className="px-6 sm:px-8 py-8 flex-1 flex flex-col justify-center">
-          {/* Enlarged Interactive Logo */}
           <div className="flex justify-center mb-2">
             <button
               type="button"
               onClick={() => navigate('/')}
               className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
-              title="Go to home"
+              title={t('verifyOtp.goHome')}
             >
               <img
                 src={logoSrc}
@@ -107,13 +111,11 @@ export default function VerifyOtpPage() {
               className="text-2xl font-extrabold text-gray-900 tracking-tight"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
-              Verify your mobile number
+              {t('verifyOtp.title')}
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              We sent a 6‑digit code via SMS to{' '}
-              <strong className="text-gray-700">
-                {mobile ? `+255 ${mobile}` : email || 'your mobile number'}
-              </strong>
+              {t('verifyOtp.subtitlePart1')}{' '}
+              <strong className="text-gray-700">{destinationLabel}</strong>
             </p>
           </div>
 
@@ -133,9 +135,9 @@ export default function VerifyOtpPage() {
 
           <form onSubmit={handleVerify} className="space-y-4">
             <Input
-              label="SMS OTP Code"
+              label={t('verifyOtp.otpLabel')}
               type="text"
-              placeholder="000000"
+              placeholder={t('verifyOtp.otpPlaceholder')}
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               required
@@ -159,10 +161,10 @@ export default function VerifyOtpPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Verifying…
+                  {t('verifyOtp.verifying')}
                 </span>
               ) : (
-                'Verify Account'
+                t('verifyOtp.verifyButton')
               )}
             </Button>
           </form>
@@ -173,19 +175,19 @@ export default function VerifyOtpPage() {
               onClick={handleResend}
               className="text-sm font-semibold text-[#1a56db] hover:underline"
             >
-              Resend SMS OTP
+              {t('verifyOtp.resendButton')}
             </button>
           </div>
 
           <div className="mt-6 pt-4 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-500">
-              Already verified?{' '}
+              {t('verifyOtp.alreadyVerified')}{' '}
               <button
                 type="button"
                 onClick={() => navigate('/login')}
                 className="font-bold text-[#1a56db] hover:underline"
               >
-                Sign in
+                {t('verifyOtp.signIn')}
               </button>
             </p>
           </div>
@@ -193,7 +195,7 @@ export default function VerifyOtpPage() {
       </div>
 
       <p className="text-xs text-gray-400 text-center w-full pt-4 pb-2">
-        If you didn't receive the SMS message, check your network signal or request a new OTP.
+        {t('verifyOtp.footer')}
       </p>
     </div>
   );

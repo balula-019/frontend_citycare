@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff } from 'lucide-react';
 import { resetPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
@@ -7,6 +8,7 @@ import Input from '../../components/shared/Input';
 import logoSrc from '/src/assets/pata-logo.png';
 
 export default function ResetPasswordPage() {
+  const { t } = useTranslation();
   const location = useLocation();
   const email = location.state?.email || '';
   const [otp, setOtp] = useState('');
@@ -23,25 +25,21 @@ export default function ResetPasswordPage() {
 
     try {
       const response = await resetPassword(email, otp, newPassword);
-
-      // Extract data depending on whether your API helper unwraps Axios responses
       const data = response?.data || response;
 
-      // Intercept custom backend error status codes (e.g. wrong OTP code) wrapped inside a 200 OK
+      // Intercept custom backend error status codes wrapped inside a 200 OK
       if (data && data.statusCode && String(data.statusCode) !== '600') {
-        setError(data.message || 'Invalid OTP code. Please try again.');
+        setError(data.message || t('resetPassword.errors.invalidOtp'));
         return;
       }
 
-      // Only redirect if the response confirms a true success (status code 600)
       navigate('/login', { state: { passwordReset: true } });
     } catch (err) {
-      // Catches actual network dropouts, server crashes, or traditional 4xx/5xx HTTP errors
       const serverMessage =
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
-        'Failed to reset password. Please try again.';
+        t('resetPassword.errors.genericFailure');
       setError(serverMessage);
     } finally {
       setLoading(false);
@@ -67,7 +65,7 @@ export default function ResetPasswordPage() {
               type="button"
               onClick={() => navigate('/')}
               className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
-              title="Go to home"
+              title={t('resetPassword.goHome')}
             >
               <img
                 src={logoSrc}
@@ -82,11 +80,13 @@ export default function ResetPasswordPage() {
               className="text-2xl font-extrabold text-gray-900 tracking-tight"
               style={{ fontFamily: "'Sora', sans-serif" }}
             >
-              Reset your password
+              {t('resetPassword.title')}
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Enter the OTP sent to{' '}
-              <strong className="text-gray-700">{email || 'your email'}</strong>
+              {t('resetPassword.subtitlePart1')}{' '}
+              <strong className="text-gray-700">
+                {email || t('resetPassword.yourEmailFallback')}
+              </strong>
             </p>
           </div>
 
@@ -99,9 +99,9 @@ export default function ResetPasswordPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="OTP Code"
+              label={t('resetPassword.fields.otp')}
               type="text"
-              placeholder="000000"
+              placeholder={t('resetPassword.placeholders.otp')}
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               required
@@ -114,9 +114,9 @@ export default function ResetPasswordPage() {
 
             <div className="relative">
               <Input
-                label="New Password"
+                label={t('resetPassword.fields.newPassword')}
                 type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
+                placeholder={t('resetPassword.placeholders.password')}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
@@ -147,23 +147,23 @@ export default function ResetPasswordPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Resetting…
+                  {t('resetPassword.resetting')}
                 </span>
               ) : (
-                'Reset Password'
+                t('resetPassword.resetButton')
               )}
             </Button>
           </form>
 
           <div className="mt-6 pt-4 border-t border-gray-100 text-center">
             <p className="text-sm text-gray-500">
-              Remember your password?{' '}
+              {t('resetPassword.rememberPassword')}{' '}
               <button
                 type="button"
                 onClick={() => navigate('/login')}
                 className="font-bold text-[#1a56db] hover:underline"
               >
-                Sign in
+                {t('resetPassword.signIn')}
               </button>
             </p>
           </div>
@@ -171,7 +171,7 @@ export default function ResetPasswordPage() {
       </div>
 
       <p className="text-xs text-gray-400 text-center w-full pt-4 pb-2">
-        For security, use a strong password with at least 8 characters.
+        {t('resetPassword.footer')}
       </p>
     </div>
   );
