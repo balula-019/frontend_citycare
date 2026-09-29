@@ -1,35 +1,71 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Building2, Mail, Phone, FileText, MapPin,
-  CheckCircle2, AlertCircle, Loader2, ShieldCheck, GraduationCap
+  ArrowLeft, Building2, Mail, Phone, MapPin, Check,
+  CheckCircle2, AlertCircle, Loader2, Landmark, Route,
+  Droplet, Zap, Trash2, Car, MoreHorizontal, Info,
 } from 'lucide-react';
 import { createOrganisation } from '../../api/adminApi';
+import { PROBLEM_TYPES } from '../../constants/problemTypes';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
 import LocationPicker from '../../components/shared/LocationPicker/components/LocationPicker';
 
+/* Mirrors OrganizationType on the backend, minus the two deprecated values. */
 const ORG_TYPES = [
-  { value: 'PUBLIC',     label: 'Public',     description: 'Police stations, airports, transit hubs', icon: ShieldCheck },
-  { value: 'UNIVERSITY', label: 'University', description: 'Campus lost-and-found offices',            icon: GraduationCap },
+  { value: 'MUNICIPAL_COUNCIL', label: 'Municipal council', description: 'City, municipal and district councils', icon: Landmark },
+  { value: 'ROADS_AUTHORITY', label: 'Roads authority', description: 'TANROADS, TARURA and road agencies', icon: Route },
+  { value: 'WATER_UTILITY', label: 'Water utility', description: 'Water supply and sewerage', icon: Droplet },
+  { value: 'ELECTRICITY_UTILITY', label: 'Electricity', description: 'Streetlights and cabling', icon: Zap },
+  { value: 'WASTE_MANAGEMENT', label: 'Waste management', description: 'Collection and landfill', icon: Trash2 },
+  { value: 'TRAFFIC_AUTHORITY', label: 'Traffic authority', description: 'Traffic police and transport', icon: Car },
+  { value: 'OTHER', label: 'Other', description: 'Any other registered body', icon: MoreHorizontal },
 ];
+
+const EMPTY_FORM = {
+  organization_name: '',
+  email: '',
+  mobile: '',
+  description: '',
+  location_name: '',
+  location_lat: '',
+  location_long: '',
+  organization_type: 'MUNICIPAL_COUNCIL',
+};
 
 export default function CreateOrganisation() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    organization_name: '', email: '', mobile: '', description: '',
-    location_name: '', location_lat: '', location_long: '', organization_type: 'PUBLIC'
-  });
-  const [error, setError]     = useState('');
-  const [success, setSuccess] = useState('');
+  const [form, setForm] = useState(EMPTY_FORM);
+
+  /*
+    The whole point of registering an organisation: reports of these problem
+    types get routed to it. Without at least one it would never hear anything,
+    which is why the backend rejects an empty set.
+  */
+  const [problemTypes, setProblemTypes] = useState([]);
+
+  const [error, setError] = useState('');
+  const [created, setCreated] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   const selectType = (value) => setForm({ ...form, organization_type: value });
 
+  const toggleProblemType = (value) =>
+    setProblemTypes((current) =>
+      current.includes(value)
+        ? current.filter((type) => type !== value)
+        : [...current, value],
+    );
+
+  const allSelected = problemTypes.length === PROBLEM_TYPES.length;
+
+  const toggleAll = () =>
+    setProblemTypes(allSelected ? [] : PROBLEM_TYPES.map((type) => type.value));
+
   const handleLocationChange = ({ locationName, lat, lng }) => {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       location_name: locationName,
       location_lat: lat.toString(),
@@ -40,22 +76,31 @@ export default function CreateOrganisation() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
+    setCreated(null);
 
     if (!parseFloat(form.location_lat) || !parseFloat(form.location_long)) {
-      setError('Please search and select a location for this organisation.');
+      setError('Search and select this organisation’s location. Reports are routed to the nearest office that handles the problem.');
+      return;
+    }
+
+    if (problemTypes.length === 0) {
+      setError('Choose at least one urban problem this organisation is responsible for, otherwise no report will ever reach it.');
       return;
     }
 
     setSubmitting(true);
+
     try {
-      await createOrganisation({
+      const response = await createOrganisation({
         ...form,
-        location_lat: parseFloat(form.location_lat) || 0,
-        location_long: parseFloat(form.location_long) || 0,
+        location_lat: parseFloat(form.location_lat),
+        location_long: parseFloat(form.location_long),
+        problem_types: problemTypes,
       });
-      setSuccess('Organisation created! A temporary password has been sent to their email.');
-      setForm({ ...form, organization_name: '', email: '', mobile: '', description: '', location_name: '', location_lat: '', location_long: '' });
+
+      setCreated(response?.data || {});
+      setForm({ ...EMPTY_FORM, organization_type: form.organization_type });
+      setProblemTypes([]);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {
@@ -63,7 +108,7 @@ export default function CreateOrganisation() {
     }
   };
 
-  const activeType = ORG_TYPES.find(t => t.value === form.organization_type);
+  const activeType = ORG_TYPES.find((t) => t.value === form.organization_type);
 
   return (
     <>
@@ -78,18 +123,18 @@ export default function CreateOrganisation() {
         <div className="fade-up mb-6">
           <button onClick={() => navigate(-1)}
                   className="flex items-center gap-1.5 text-sm font-semibold text-gray-500
-                             hover:text-[#1a56db] transition-colors mb-4 group">
+                             hover:text-[#0f766e] transition-colors mb-4 group">
             <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
             Back
           </button>
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-[#dbeafe] flex items-center justify-center">
-              <Building2 size={20} className="text-[#1a56db]" />
+            <div className="w-11 h-11 rounded-xl bg-[#ccfbf1] flex items-center justify-center">
+              <Building2 size={20} className="text-[#0f766e]" />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-[#0f172a]">Create Organisation</h1>
+              <h1 className="text-2xl font-black text-[#0f172a]">Register Authority</h1>
               <p className="text-sm text-gray-500 mt-0.5">
-                Onboard a new verified partner to receive and publish found items.
+                Add an authority and choose the urban problems it is responsible for.
               </p>
             </div>
           </div>
@@ -97,17 +142,37 @@ export default function CreateOrganisation() {
 
         {/* Banners */}
         {error && (
-          <div className="fade-up flex items-center gap-3 bg-red-50 border border-red-200
+          <div className="fade-up flex items-start gap-3 bg-red-50 border border-red-200
                           text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
-            <AlertCircle size={16} className="shrink-0" />
+            <AlertCircle size={16} className="shrink-0 mt-0.5" />
             <span className="flex-1">{error}</span>
           </div>
         )}
-        {success && (
-          <div className="fade-up flex items-center gap-3 bg-emerald-50 border border-emerald-200
-                          text-emerald-700 px-4 py-3 rounded-xl mb-6 text-sm">
-            <CheckCircle2 size={16} className="shrink-0" />
-            <span className="flex-1">{success}</span>
+        {created && (
+          <div className="fade-up bg-emerald-50 border border-emerald-200
+                          text-emerald-800 px-4 py-3.5 rounded-xl mb-6 text-sm">
+            <div className="flex items-start gap-3">
+              <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="font-bold">
+                  {created.organization_name || 'Organisation'} registered
+                </p>
+                <p className="mt-0.5 text-emerald-700">
+                  A temporary password has been emailed to {created.email || 'the organisation'}.
+                  They will be asked to change it on first sign in.
+                </p>
+                {created.problem_types?.length > 0 && (
+                  <p className="mt-2 text-xs text-emerald-700">
+                    Now receiving:{' '}
+                    <span className="font-semibold">
+                      {created.problem_types
+                        .map((type) => PROBLEM_TYPES.find((p) => p.value === type)?.label || type)
+                        .join(', ')}
+                    </span>
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -121,9 +186,9 @@ export default function CreateOrganisation() {
             {/* Organisation type */}
             <div>
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">
-                Organisation type
+                Authority type
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {ORG_TYPES.map((t) => {
                   const Icon = t.icon;
                   const active = form.organization_type === t.value;
@@ -132,17 +197,17 @@ export default function CreateOrganisation() {
                       type="button"
                       key={t.value}
                       onClick={() => selectType(t.value)}
-                      className={`flex items-start gap-3 p-4 rounded-xl border text-left transition-all
+                      className={`flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all
                         ${active
-                          ? 'border-[#1a56db] bg-[#eff6ff] ring-2 ring-[#1a56db]/20'
-                          : 'border-[#e2e8f0] hover:border-[#c7d2e3] hover:bg-gray-50'}`}
+                          ? 'border-[#0f766e] bg-[#f0fdfa] ring-2 ring-[#0f766e]/20'
+                          : 'border-[#e2e8f0] hover:border-[#c3d6d3] hover:bg-gray-50'}`}
                     >
                       <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0
-                        ${active ? 'bg-[#1a56db] text-white' : 'bg-gray-100 text-gray-400'}`}>
+                        ${active ? 'bg-[#0f766e] text-white' : 'bg-gray-100 text-gray-400'}`}>
                         <Icon size={16} />
                       </div>
-                      <div>
-                        <p className={`text-sm font-bold ${active ? 'text-[#1a56db]' : 'text-[#0f172a]'}`}>
+                      <div className="min-w-0">
+                        <p className={`text-sm font-bold ${active ? 'text-[#0f766e]' : 'text-[#0f172a]'}`}>
                           {t.label}
                         </p>
                         <p className="text-xs text-gray-400 mt-0.5">{t.description}</p>
@@ -153,17 +218,66 @@ export default function CreateOrganisation() {
               </div>
             </div>
 
+            {/* Problem types this authority is responsible for */}
+            <div>
+              <div className="flex items-end justify-between gap-3 mb-3">
+                <div>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                    Problems it is responsible for
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Reports of these types are routed here. At least one is required.
+                  </p>
+                </div>
+                <button type="button" onClick={toggleAll}
+                        className="shrink-0 text-xs font-bold text-[#0f766e] hover:underline">
+                  {allSelected ? 'Clear all' : 'Select all'}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {PROBLEM_TYPES.map((type) => {
+                  const Icon = type.icon;
+                  const active = problemTypes.includes(type.value);
+                  return (
+                    <button
+                      type="button"
+                      key={type.value}
+                      onClick={() => toggleProblemType(type.value)}
+                      aria-pressed={active}
+                      className={`relative flex items-center gap-2 px-3 py-2.5 rounded-xl border text-left transition-all
+                        ${active
+                          ? 'border-[#0f766e] bg-[#f0fdfa] text-[#0f766e]'
+                          : 'border-[#e2e8f0] text-gray-600 hover:border-[#c3d6d3] hover:bg-gray-50'}`}
+                    >
+                      <Icon size={15} className="shrink-0" />
+                      <span className="text-xs font-semibold truncate">{type.label}</span>
+                      {active && (
+                        <Check size={13} className="ml-auto shrink-0" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <p className="mt-2.5 text-xs text-gray-400">
+                {problemTypes.length === 0
+                  ? 'Nothing selected yet.'
+                  : `${problemTypes.length} of ${PROBLEM_TYPES.length} selected.`}
+              </p>
+            </div>
+
             {/* Organisation details */}
             <div>
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">
-                Organisation details
+                Authority details
               </p>
               <div className="space-y-4">
                 <Input label="Organisation Name" name="organization_name" required
-                       placeholder="e.g. Kariakoo Police Station"
+                       placeholder="e.g. TANROADS — Dar es Salaam"
                        onChange={handleChange} value={form.organization_name} />
                 <Input label="Description" name="description"
-                       placeholder="A short note about this organisation"
+                       placeholder="A short note about what this authority handles"
                        onChange={handleChange} value={form.description} />
               </div>
             </div>
@@ -175,30 +289,40 @@ export default function CreateOrganisation() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input label="Email" name="email" type="email" required
-                       placeholder="org@example.com"
+                       placeholder="office@authority.go.tz"
                        onChange={handleChange} value={form.email} />
                 <Input label="Mobile" name="mobile" required
-                       placeholder="255 7XX XXX XXX"
+                       placeholder="0712 345 678"
                        onChange={handleChange} value={form.mobile} />
               </div>
+              <p className="mt-2 text-xs text-gray-400">
+                The email receives the temporary password and every new report.
+              </p>
             </div>
 
             {/* Location — search-based, no manual lat/long entry */}
             <div>
               <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">
-                Location
+                Office location
               </p>
               <div className="flex items-start gap-2">
-                <MapPin size={17} className="text-[#1a56db] mt-2.5 shrink-0" />
+                <MapPin size={17} className="text-[#0f766e] mt-2.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <LocationPicker
                     locationName={form.location_name}
                     onChange={handleLocationChange}
                     initialLat={form.location_lat ? parseFloat(form.location_lat) : undefined}
                     initialLng={form.location_long ? parseFloat(form.location_long) : undefined}
-                    placeholder="Search for the organisation's location…"
+                    placeholder="Search for the office location…"
                   />
                 </div>
+              </div>
+              <div className="flex items-start gap-2 mt-3 p-3 rounded-xl bg-[#f0fdfa] border border-[#ccfbf1]">
+                <Info size={14} className="text-[#0f766e] shrink-0 mt-0.5" />
+                <p className="text-xs text-[#115e59]">
+                  When several authorities handle the same problem, the report goes to
+                  the closest one — and the crew navigates from here to the reporter’s pin.
+                </p>
               </div>
             </div>
 
@@ -210,10 +334,10 @@ export default function CreateOrganisation() {
               <Button type="submit" variant="primary" disabled={submitting} className="flex-1">
                 {submitting ? (
                   <span className="flex items-center justify-center gap-2">
-                    <Loader2 size={16} className="animate-spin" /> Creating…
+                    <Loader2 size={16} className="animate-spin" /> Registering…
                   </span>
                 ) : (
-                  'Create Organisation'
+                  'Register Authority'
                 )}
               </Button>
             </div>
@@ -228,15 +352,15 @@ export default function CreateOrganisation() {
 
               <div className="rounded-xl border border-[#e2e8f0] p-4 bg-gradient-to-br from-[#f8fafc] to-white">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-11 h-11 rounded-xl bg-[#1a56db] flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-[#0f766e] flex items-center justify-center shrink-0">
                     <Building2 size={20} className="text-white" />
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-[#0f172a] truncate">
-                      {form.organization_name || 'Organisation name'}
+                      {form.organization_name || 'Authority name'}
                     </p>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-                                     text-[10px] font-bold bg-[#dbeafe] text-[#1e40af] mt-1">
+                                     text-[10px] font-bold bg-[#ccfbf1] text-[#115e59] mt-1">
                       {activeType?.icon && <activeType.icon size={10} />}
                       {activeType?.label}
                     </span>
@@ -247,27 +371,46 @@ export default function CreateOrganisation() {
                   <p className="text-xs text-gray-500 mb-3 line-clamp-2">{form.description}</p>
                 )}
 
-                <div className="space-y-2 pt-3 border-t border-[#e2e8f0]">
+                <div className="space-y-2 py-3 border-t border-[#e2e8f0]">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <Mail size={13} className="text-gray-400 shrink-0" />
-                    <span className="truncate">{form.email || 'email@organisation.com'}</span>
+                    <span className="truncate">{form.email || 'office@authority.go.tz'}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <Phone size={13} className="text-gray-400 shrink-0" />
-                    <span className="truncate">{form.mobile || '255 7XX XXX XXX'}</span>
+                    <span className="truncate">{form.mobile || '0712 345 678'}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <MapPin size={13} className="text-gray-400 shrink-0" />
                     <span className="truncate">{form.location_name || 'Location not set'}</span>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-start gap-2 mt-4 p-3 rounded-xl bg-amber-50 border border-amber-100">
-                <FileText size={14} className="text-amber-600 shrink-0 mt-0.5" />
-                <p className="text-xs text-amber-700">
-                  A temporary password is emailed automatically once the organisation is created.
-                </p>
+                <div className="pt-3 border-t border-[#e2e8f0]">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-2">
+                    Will receive
+                  </p>
+                  {problemTypes.length === 0 ? (
+                    <p className="text-xs text-gray-400">
+                      No problems selected, so no reports would reach this authority.
+                    </p>
+                  ) : (
+                    <div className="flex flex-wrap gap-1.5">
+                      {problemTypes.map((value) => {
+                        const type = PROBLEM_TYPES.find((p) => p.value === value);
+                        return (
+                          <span key={value}
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+                                           text-[10px] font-semibold bg-[#f0fdfa] text-[#115e59]
+                                           border border-[#ccfbf1]">
+                            {type?.icon && <type.icon size={9} />}
+                            {type?.label || value}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@ import {
   Mail, Phone, FileText, MapPin,
   Loader2, CheckCircle2, AlertCircle, ArrowLeft
 } from 'lucide-react';
-import { updateOrganisationProfile } from '../../api/items';
+import { updateOrganisationProfile } from '../../api/organisation';
 import LocationPicker from '../../components/shared/LocationPicker/components/LocationPicker';
 
 // ─── Tanzania mobile number handling ───────────────────────────
@@ -136,14 +136,14 @@ export default function Profile() {
     <div className="p-4 sm:p-6 lg:p-8 max-w-2xl mx-auto">
       <button
         onClick={() => navigate('/org/dashboard')}
-        className="group flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-[#1a56db] mb-6 transition-colors"
+        className="group flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-[#0f766e] mb-6 transition-colors"
       >
         <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-0.5" />
         Back to Dashboard
       </button>
 
       {/* Header card */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a56db] to-[#1547c0] p-6 sm:p-7 mb-6 shadow-lg shadow-blue-100">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f766e] to-[#115e59] p-6 sm:p-7 mb-6 shadow-lg shadow-primary-soft">
         <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
         <div className="absolute -right-2 bottom-0 h-16 w-16 rounded-full bg-white/10" />
         <div className="relative flex items-center gap-4">
@@ -226,9 +226,9 @@ export default function Profile() {
           type="submit"
           disabled={saving}
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl
-                     bg-gradient-to-r from-[#1a56db] to-[#1547c0] text-white font-bold text-sm
+                     bg-gradient-to-r from-[#0f766e] to-[#115e59] text-white font-bold text-sm
                      hover:opacity-90 active:scale-[0.99] disabled:opacity-70 transition-all
-                     shadow-lg shadow-blue-100"
+                     shadow-lg shadow-primary-soft"
         >
           {saving ? (
             <><Loader2 size={16} className="animate-spin" /> Saving…</>
@@ -243,12 +243,12 @@ export default function Profile() {
 
 function Field({ label, icon, children, align = 'center' }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#e2e8f0] p-5 transition-colors focus-within:border-[#1a56db]/40 focus-within:ring-4 focus-within:ring-[#1a56db]/5">
+    <div className="bg-white rounded-2xl border border-[#e2e8f0] p-5 transition-colors focus-within:border-[#0f766e]/40 focus-within:ring-4 focus-within:ring-[#0f766e]/5">
       <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
         {label}
       </label>
       <div className={`flex gap-2.5 ${align === 'top' ? 'items-start' : 'items-center'}`}>
-        <span className={`shrink-0 text-[#1a56db] ${align === 'top' ? 'mt-0.5' : ''}`}>
+        <span className={`shrink-0 text-[#0f766e] ${align === 'top' ? 'mt-0.5' : ''}`}>
           {icon}
         </span>
         <div className="flex-1 min-w-0">

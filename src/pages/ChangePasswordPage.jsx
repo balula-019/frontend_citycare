@@ -66,9 +66,9 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 sm:px-6 py-10">
-      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl shadow-blue-100/50 border border-gray-100 overflow-hidden transition-all">
-        <div className="h-2 w-full bg-gradient-to-r from-[#1a56db] to-[#10b981]" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0fdfa] to-[#f8fafc] px-4 sm:px-6 py-10">
+      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl shadow-primary-soft/50 border border-gray-100 overflow-hidden transition-all">
+        <div className="h-2 w-full bg-gradient-to-r from-[#0f766e] to-[#10b981]" />
         
         <div className="px-6 py-8 sm:p-10">
           {/* Logo & Header */}
@@ -106,7 +106,7 @@ export default function ChangePasswordPage() {
               <label className="text-xs font-bold text-gray-600 uppercase tracking-wider">
                 Current (temporary) password
               </label>
-              <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/15 focus-within:bg-white">
+              <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/15 focus-within:bg-white">
                 <input
                   type={showCurrent ? 'text' : 'password'}
                   name="currentPassword"
@@ -121,7 +121,7 @@ export default function ChangePasswordPage() {
                   type="button"
                   onClick={() => setShowCurrent(!showCurrent)}
                   tabIndex={-1}
-                  className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
+                  className="px-4 text-gray-400 hover:text-[#0f766e] transition-colors flex-shrink-0"
                 >
                   {showCurrent ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -133,7 +133,7 @@ export default function ChangePasswordPage() {
               <label className="text-xs font-bold text-gray-600 uppercase tracking-wider">
                 New password
               </label>
-              <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/15 focus-within:bg-white">
+              <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/15 focus-within:bg-white">
                 <input
                   type={showNew ? 'text' : 'password'}
                   name="newPassword"
@@ -148,7 +148,7 @@ export default function ChangePasswordPage() {
                   type="button"
                   onClick={() => setShowNew(!showNew)}
                   tabIndex={-1}
-                  className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
+                  className="px-4 text-gray-400 hover:text-[#0f766e] transition-colors flex-shrink-0"
                 >
                   {showNew ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -160,7 +160,7 @@ export default function ChangePasswordPage() {
               <label className="text-xs font-bold text-gray-600 uppercase tracking-wider">
                 Confirm new password
               </label>
-              <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/15 focus-within:bg-white">
+              <div className="flex items-center bg-[#f8fafc] border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/15 focus-within:bg-white">
                 <input
                   type={showConfirm ? 'text' : 'password'}
                   name="confirmPassword"
@@ -175,7 +175,7 @@ export default function ChangePasswordPage() {
                   type="button"
                   onClick={() => setShowConfirm(!showConfirm)}
                   tabIndex={-1}
-                  className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
+                  className="px-4 text-gray-400 hover:text-[#0f766e] transition-colors flex-shrink-0"
                 >
                   {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>

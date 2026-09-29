@@ -12,29 +12,18 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 
-//  Partner With Us (public, 2-step flow)
-import PartnerSendOtp from './pages/PartnerSendOtp';
-import PartnerWithUs from './pages/PartnerWithUs';
-
 // Owner
-import SearchItems from './pages/owner/SearchItems';
-import ReportItem from './pages/owner/ReportItem';
-import ClaimItem from './pages/owner/ClaimItem';
-import PaymentDemo from './pages/owner/PaymentDemo';
-import MyReports from './pages/owner/MyReports';
-import EditReport from './pages/owner/EditReport';       
+import ReportUrbanProblem from './pages/owner/ReportUrbanProblem';
+import MyUrbanReports from './pages/owner/MyUrbanReports';
+import UrbanReportDetail from './pages/owner/UrbanReportDetail';
+import EditUrbanProblem from './pages/owner/EditUrbanProblem';
 import OwnerProfile from './pages/owner/Profile';
 
 // Organisation
 import OrgLayout from './pages/organisation/Layout';
 import OrgDashboard from './pages/organisation/Dashboard';
-import PublishItem from './pages/organisation/PublishItem';
-import MyItems from './pages/organisation/MyItems';
-import ViewItem from './pages/organisation/ViewItem';
-import EditItem from './pages/organisation/EditItem';
-import Claims from './pages/organisation/Claims';
+import UrbanProblemMap from './pages/organisation/UrbanProblemMap';
 import Notifications from './pages/organisation/Notifications';
-import Analytics from './pages/organisation/Analytics';
 import OrganisationProfile from './pages/organisation/Profile';
 import Settings from './pages/organisation/Settings';
 
@@ -44,9 +33,6 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import CreateOrganisation from './pages/admin/CreateOrganisation';
 import ManageUsers from './pages/admin/ManageUsers';
 import AdminProfile from './pages/admin/AdminProfile';
-import AdminItems from './pages/admin/AdminItems';
-import AdminEditItem from './pages/admin/AdminEditItem';
-import AdminPartnerRequests from './pages/admin/PartnerRequests';
 
 function AppRoutes() {
   return (
@@ -59,10 +45,6 @@ function AppRoutes() {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      {/* ✅ Partner With Us — PUBLIC */}
-      <Route path="/partner-with-us" element={<PartnerSendOtp />} />
-      <Route path="/partner-with-us/form" element={<PartnerWithUs />} />
-
       {/* ✅ Change Password */}
       <Route
         path="/change-password"
@@ -74,13 +56,11 @@ function AppRoutes() {
       />
 
       {/* Owner */}
-      <Route path="/owner/dashboard" element={<Navigate to="/owner/search" replace />} />
-      <Route path="/owner/search" element={<ProtectedRoute allowedRoles={['OWNER']}><SearchItems /></ProtectedRoute>} />
-      <Route path="/owner/report" element={<ProtectedRoute allowedRoles={['OWNER']}><ReportItem /></ProtectedRoute>} />
-      <Route path="/owner/claim/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><ClaimItem /></ProtectedRoute>} />
-      <Route path="/owner/payment/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><PaymentDemo /></ProtectedRoute>} />
-      <Route path="/owner/reports" element={<ProtectedRoute allowedRoles={['OWNER']}><MyReports /></ProtectedRoute>} />
-      <Route path="/owner/edit-report/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><EditReport /></ProtectedRoute>} />   {/* ✅ NEW */}
+      <Route path="/owner/dashboard" element={<Navigate to="/owner/reports" replace />} />
+      <Route path="/owner/report" element={<ProtectedRoute allowedRoles={['OWNER']}><ReportUrbanProblem /></ProtectedRoute>} />
+      <Route path="/owner/reports" element={<ProtectedRoute allowedRoles={['OWNER']}><MyUrbanReports /></ProtectedRoute>} />
+      <Route path="/owner/reports/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><UrbanReportDetail /></ProtectedRoute>} />
+      <Route path="/owner/edit-report/:reportId" element={<ProtectedRoute allowedRoles={['OWNER']}><EditUrbanProblem /></ProtectedRoute>} />
       <Route path="/owner/profile" element={<ProtectedRoute allowedRoles={['OWNER']}><OwnerProfile /></ProtectedRoute>} />
       <Route path="/owner/notifications" element={<ProtectedRoute allowedRoles={['OWNER']}><Notifications /></ProtectedRoute>} />
 
@@ -93,14 +73,10 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       >
+        <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<OrgDashboard />} />
-        <Route path="publish" element={<PublishItem />} />
-        <Route path="items" element={<MyItems />} />
-        <Route path="items/:itemId" element={<ViewItem />} />
-        <Route path="items/:itemId/edit" element={<EditItem />} />
-        <Route path="claims" element={<Claims />} />
+        <Route path="map" element={<UrbanProblemMap />} />
         <Route path="notifications" element={<Notifications />} />
-        <Route path="analytics" element={<Analytics />} />
         <Route path="profile" element={<OrganisationProfile />} />
         <Route path="settings" element={<Settings />} />
       </Route>
@@ -119,9 +95,6 @@ function AppRoutes() {
         <Route path="create-org" element={<CreateOrganisation />} />
         <Route path="manage-users" element={<ManageUsers />} />
         <Route path="profile" element={<AdminProfile />} />
-        <Route path="items" element={<AdminItems />} />
-        <Route path="edit-item/:itemId" element={<AdminEditItem />} />
-        <Route path="partner-requests" element={<AdminPartnerRequests />} />
         <Route
           path="settings"
           element={<div className="p-8 text-gray-500">Settings page coming soon.</div>}

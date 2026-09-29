@@ -1,0 +1,418 @@
+{
+  "cc": {
+    "nav": {
+      "howItWorks": "How it works",
+      "problemTypes": "What you can report",
+      "owner": {
+        "report": "Report a problem",
+        "reports": "My reports",
+        "notifications": "Updates"
+      },
+      "org": {
+        "map": "Reports map",
+        "notifications": "Updates"
+      }
+    },
+    "hero": {
+      "badge": "Every photo verified before it is sent",
+      "headingPart1": "See a problem in your city?",
+      "headingHighlight": "Report it in 30 seconds.",
+      "subtext": "Potholes, floods, blocked drains, broken streetlights. Take a photo, drop the pin on the map, and City Care sends your report straight to the authority responsible for it.",
+      "reportProblem": "Report a problem",
+      "seeHowItWorks": "See how it works",
+      "coverage": "Built for Tanzanian cities, ward by ward.",
+      "pillars": {
+        "snap": "Snap the problem",
+        "verify": "AI checks the photo",
+        "route": "Reaches the right office"
+      }
+    },
+    "preview": {
+      "reference": "Report",
+      "status": {
+        "verified": "Verified"
+      },
+      "photoCaption": "Pothole on Nyerere Road",
+      "aiCheck": "AI image check",
+      "checks": {
+        "topicMatch": "Topic match",
+        "descriptionMatch": "Description match",
+        "relevanceScore": "Relevance score"
+      },
+      "yes": "Yes",
+      "routedTo": "Sent to",
+      "decision": "Decision",
+      "accepted": "ACCEPTED"
+    },
+    "how": {
+      "badge": "How it works",
+      "title": "From your phone to the right authority",
+      "subtitle": "Four steps. No forms to collect, no queue at the council office.",
+      "steps": {
+        "snap": {
+          "title": "Snap and describe",
+          "desc": "Take up to five photos, choose the problem type, and drop the pin on the map so the exact spot is recorded."
+        },
+        "verify": {
+          "title": "AI checks the photo",
+          "desc": "Before anything is saved, the image is compared against your description. A photo that does not match is rejected on the spot."
+        },
+        "route": {
+          "title": "Routed to the right office",
+          "desc": "Every problem type belongs to a registered authority. The verified report goes to the nearest one that handles it."
+        },
+        "track": {
+          "title": "Track until resolved",
+          "desc": "Follow your report as it moves from verified to assigned, in progress, and finally resolved."
+        }
+      }
+    },
+    "problems": {
+      "badge": "What you can report",
+      "title": "Thirteen kinds of problem, one place to report them",
+      "subtitle": "Pick the type that fits and City Care already knows which authority owns it."
+    },
+    "problemTypes": {
+      "ROAD_POTHOLE": "Pothole",
+      "FLOODING": "Flooding",
+      "BLOCKED_DRAIN": "Blocked drain",
+      "BROKEN_STREETLIGHT": "Broken streetlight",
+      "WASTE_DUMPING": "Waste dumping",
+      "DAMAGED_ROAD": "Damaged road",
+      "DAMAGED_SIDEWALK": "Damaged sidewalk",
+      "DAMAGED_BRIDGE": "Damaged bridge",
+      "TRAFFIC_PROBLEM": "Traffic problem",
+      "WATER_LEAKAGE": "Water leakage",
+      "SEWER_PROBLEM": "Sewer problem",
+      "PUBLIC_INFRASTRUCTURE": "Public infrastructure",
+      "OTHER": "Something else"
+    },
+    "why": {
+      "badge": "Why City Care",
+      "title": "Reports that authorities can actually act on",
+      "subtitle": "A complaint on social media disappears. A verified, located, routed report does not.",
+      "items": {
+        "verifiedPhotos": {
+          "title": "Verified photos only",
+          "desc": "Every image is checked against the description before the report is stored, so authorities stop drowning in noise and fake reports."
+        },
+        "exactLocation": {
+          "title": "Exact location",
+          "desc": "Pick the spot on the map and the report carries the coordinates, region, district and ward with it."
+        },
+        "rightAuthority": {
+          "title": "The right authority",
+          "desc": "Roads, water, waste and streetlights all belong to different offices. Each report is routed to the one registered for that problem type."
+        },
+        "staysInformed": {
+          "title": "Nobody is left guessing",
+          "desc": "The assigned office is notified by email the moment a report lands, and you see every status change on your side."
+        },
+        "cityInsight": {
+          "title": "Insight for the city",
+          "desc": "Reports become statistics: which problems dominate, where they cluster, and how many residents are reporting them."
+        },
+        "swahiliFirst": {
+          "title": "Swahili and English",
+          "desc": "The whole platform works in both languages, because reporting a pothole should not require English."
+        }
+      }
+    },
+    "faq": {
+      "badge": "Questions",
+      "title": "Everything residents ask us",
+      "subtitle": "Short answers to what comes up before the first report.",
+      "items": {
+        "whatCanIReport": {
+          "q": "What can I report?",
+          "a": "Potholes, flooding, blocked drains, broken streetlights, illegal dumping, damaged roads, sidewalks and bridges, traffic problems, water leaks, sewer problems and other public infrastructure faults."
+        },
+        "whyPhoto": {
+          "q": "Why does a photo matter so much?",
+          "a": "The photo is the evidence. It is checked automatically against the problem type and your description, which is what lets an authority trust the report without sending someone to look first."
+        },
+        "rejected": {
+          "q": "My report was rejected. What happened?",
+          "a": "The photo did not match what you described, so it was not saved. You will see the reason and the relevance score. Take a clearer photo of the actual problem and submit again."
+        },
+        "whoReceives": {
+          "q": "Who receives my report?",
+          "a": "The authority registered for that problem type, and the nearest one when several cover it. They are notified by email as soon as the report is verified."
+        },
+        "canIEdit": {
+          "q": "Can I edit a report after sending it?",
+          "a": "Yes, while it is still submitted, verified or assigned. You can fix the description, change the type, adjust the location or replace photos. Once work has started it is locked."
+        },
+        "tracking": {
+          "q": "How do I know anything is happening?",
+          "a": "Each report carries a status: verified, assigned, in progress, then resolved. You see it change on your reports page."
+        },
+        "anonymous": {
+          "q": "Is my personal information shown?",
+          "a": "The authority sees the report, the photos and the location. Your account details are not published anywhere public."
+        },
+        "cost": {
+          "q": "Does it cost anything?",
+          "a": "No. Reporting a problem in your city is free."
+        },
+        "organisation": {
+          "q": "I work for an authority. How do we join?",
+          "a": "Register through Partner with us. An administrator sets up your organisation and selects the problem types you are responsible for, and reports of those types start reaching you."
+        }
+      }
+    },
+    "cta": {
+      "badge": "Your city, your report",
+      "heading": "The pothole you pass every morning",
+      "headingLine2": "can be fixed. Start by reporting it.",
+      "subtext": "It takes half a minute: a photo, a sentence, and a pin on the map. City Care does the rest.",
+      "reportProblem": "Report a problem",
+      "getStarted": "Create an account",
+      "forAuthorities": "I represent an authority",
+      "haveAccount": "Already registered?",
+      "signIn": "Sign in"
+    },
+    "about": {
+      "badge": "About City Care",
+      "headingLine1": "Residents see the problems first.",
+      "headingLine2": "We make sure someone hears about them.",
+      "para1": "Most urban problems are reported by nobody. Not because people do not care, but because there is no simple way to tell the right office, and no way to know whether the message arrived.",
+      "para2": "City Care closes that gap. A verified photo, an exact location, and a named authority for every report, so a problem stops being everybody and nobody's business.",
+      "carries": {
+        "photos": {
+          "title": "Up to five photos",
+          "desc": "The evidence, straight from your phone."
+        },
+        "location": {
+          "title": "An exact pin",
+          "desc": "Coordinates plus region, district and ward."
+        },
+        "verification": {
+          "title": "A verification result",
+          "desc": "Topic match, description match and a relevance score."
+        },
+        "owner": {
+          "title": "An accountable office",
+          "desc": "The authority responsible, notified and named."
+        }
+      }
+    },
+    "footer": {
+      "tagline": "Report the problems you see in your city and watch them reach the authority responsible.",
+      "reportProblem": "Report a problem",
+      "myReports": "My reports"
+    },
+    "floatingReport": "Report a problem",
+    "status": {
+      "SUBMITTED": "Submitted",
+      "VERIFIED": "Verified",
+      "ASSIGNED": "Assigned",
+      "IN_PROGRESS": "In progress",
+      "RESOLVED": "Resolved",
+      "REJECTED": "Rejected"
+    },
+    "severity": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "CRITICAL": "Critical"
+    },
+    "verification": {
+      "title": "AI image check",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "relevance": "Relevance score",
+      "threshold": "Minimum to be accepted: {{threshold}}",
+      "topicMatch": "Matches the problem type",
+      "descriptionMatch": "Matches your description",
+      "evidence": "What the AI saw",
+      "model": "Checked by {{model}}"
+    },
+    "form": {
+      "problemHeading": "What is the problem?",
+      "problemHelp": "The type you choose is what the photo is checked against, so pick the closest one.",
+      "description": "Describe what you see",
+      "descriptionPlaceholder": "A deep pothole across both lanes near the bus stop, filling with water when it rains.",
+      "descriptionHint": "Your photo is compared against this text.",
+      "solution": "What would fix it?",
+      "solutionPlaceholder": "Fill and reseal the damaged section.",
+      "optional": "(optional)",
+      "photosHeading": "Photos",
+      "photosHelp": "The first photo is the one the AI checks. Up to five, 5 MB each.",
+      "addPhoto": "Add",
+      "checked": "Checked",
+      "removePhoto": "Remove photo",
+      "photosToRemove": "{{count}} photo(s) will be removed when you save.",
+      "locationHeading": "Where is it?",
+      "locationHelp": "Search, use your current position, or drag the pin. The authority is chosen by how close it is to this point.",
+      "searchLocation": "Search for a street, ward or landmark…",
+      "region": "Region",
+      "selectRegion": "Select a region",
+      "district": "District",
+      "ward": "Ward",
+      "submit": "Send report",
+      "checkingPhoto": "Checking your photo…",
+      "saveChanges": "Save changes",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "problemType": "Choose what kind of problem this is.",
+        "description": "Describe the problem in at least 15 characters so the AI can match it to your photo.",
+        "region": "Select the region.",
+        "district": "Enter the district.",
+        "location": "Pick the exact spot on the map.",
+        "photoRequired": "Attach at least one photo of the problem.",
+        "photoTooBig": "Each photo must be smaller than 5 MB.",
+        "tooManyPhotos": "You can attach at most five photos."
+      }
+    },
+    "report": {
+      "heading": "Report a problem",
+      "subheading": "Your photo is checked against your description before the report is saved, then sent to the authority responsible for that kind of problem.",
+      "backToReports": "My reports",
+      "genericError": "Could not send your report.",
+      "rejectedHeading": "This photo was not accepted",
+      "rejectedHelp": "Nothing was saved. Adjust the problem type or the description, or attach a clearer photo of the problem itself, then send again.",
+      "successHeading": "Your report is in",
+      "successRouted": "It has been sent to {{organisation}}.",
+      "successUnrouted": "It has been verified and is waiting to be picked up by the responsible authority.",
+      "viewReport": "View report",
+      "reportAnother": "Report another problem"
+    },
+    "reports": {
+      "headingMine": "My reports",
+      "headingAll": "Reports across the city",
+      "count": "{{count}} report(s)",
+      "newReport": "Report a problem",
+      "allTypes": "All problem types",
+      "allStatuses": "Any status",
+      "onlyMine": "Only mine",
+      "refresh": "Refresh",
+      "loading": "Loading reports…",
+      "loadError": "Could not load reports.",
+      "emptyHeading": "Nothing here yet",
+      "emptyText": "Once you report a problem it will show up here.",
+      "view": "View",
+      "edit": "Edit",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} of {{total}}",
+      "stats": {
+        "total": "Reports in total",
+        "reporters": "People reporting",
+        "average": "Average reports per person",
+        "mostReported": "Most reported problems"
+      }
+    },
+    "detail": {
+      "loading": "Loading report…",
+      "error": "Could not load this report.",
+      "notFound": "This report could not be found.",
+      "backToReports": "Back to my reports",
+      "edit": "Edit report",
+      "description": "Description",
+      "suggestedSolution": "Suggested fix",
+      "location": "Location",
+      "noLocation": "No location recorded",
+      "authority": "Responsible authority",
+      "assignedAt": "Notified on {{date}}",
+      "noAuthority": "No authority is registered for this problem type yet, so the report is waiting to be picked up.",
+      "verifiedAt": "Photo checked on {{date}}",
+      "aiAssessment": "AI assessment",
+      "severity": "Severity",
+      "detectedType": "Detected as",
+      "priority": "Priority score"
+    },
+    "edit": {
+      "heading": "Correct your report",
+      "subheading": "Change what you need. If you change the problem type, the description or the photos, the image is checked again and the report may be routed to a different authority.",
+      "back": "Back to report",
+      "backToReports": "Back to my reports",
+      "loading": "Loading report…",
+      "loadError": "Could not load this report.",
+      "notFound": "This report could not be found.",
+      "saveError": "Could not save your changes.",
+      "rejectedHeading": "Your changes were not accepted",
+      "rejectedHelp": "The photo no longer matches what you described, so nothing was changed.",
+      "lockedHeading": "This report can no longer be edited",
+      "lockedText": "Work has already started on it, so its details are locked to keep the record straight.",
+      "viewReport": "View report"
+    },
+    "map": {
+      "title": "Reports on the map",
+      "subtitle": "Every place a resident pinned for your organisation.",
+      "refresh": "Refresh",
+      "allStatuses": "All statuses",
+      "allTypes": "All problems",
+      "loading": "Loading your reports…",
+      "loadFailed": "The reports on your map could not be loaded.",
+      "emptyTitle": "Nothing to travel to yet",
+      "emptyBody": "Reports routed to your organisation appear here with their exact location.",
+      "kmAway": "{{km}} km away",
+      "yourOrganisation": "Your organisation",
+      "unnamedPlace": "Location pinned by the reporter",
+      "routeLoading": "Working out the road route…",
+      "routeFailed": "The road route is unavailable right now, so the line below is a straight one.",
+      "byRoad": "{{km}} km by road",
+      "minutesDriving": "{{minutes}} min driving",
+      "straightLine": "{{km}} km straight line",
+      "noOrigin": "Your organisation has no coordinates on file, so no route can be drawn. An admin can add them to your profile.",
+      "openOsm": "Open in OpenStreetMap",
+      "openGoogle": "Google Maps",
+      "openPhone": "Phone",
+      "openPhoneHint": "Opens the map app on a phone",
+      "photoAlt": "Photo of the reported problem",
+      "pickHint": "Pick a pin to draw the route from your office"
+    },
+    "orgHome": {
+      "title": "What your city has reported to you",
+      "subtitle": "Every urban problem routed to {{name}}.",
+      "yourOrganisation": "your organisation",
+      "loading": "Loading your reports…",
+      "loadFailed": "Your reports could not be loaded.",
+      "refresh": "Refresh",
+      "openMap": "Open the map",
+      "assigned": "Assigned to you",
+      "waiting": "Waiting for you",
+      "inProgress": "Being worked on",
+      "resolved": "Resolved",
+      "nearest": "Nearest open report {{km}} km away",
+      "newest": "Newest reports",
+      "viewAll": "See all on the map",
+      "emptyTitle": "No reports yet",
+      "emptyBody": "When a resident reports a problem the admin registered you for, it lands here.",
+      "mix": "What you are asked to fix",
+      "mixEmpty": "Nothing has been routed to you yet.",
+      "national": "Across the country",
+      "nationalReports": "Reports filed",
+      "nationalReporters": "People reporting",
+      "nationalTop": "Most reported",
+      "nationalNote": "Your share of this is the reports above, routed to you by problem type and distance.",
+      "unread_one": "{{count}} new report you have not opened yet",
+      "unread_other": "{{count}} new reports you have not opened yet"
+    },
+    "notifications": {
+      "title": "Updates",
+      "subtitleOrg": "Residents reporting problems your organisation is responsible for.",
+      "subtitleOwner": "What happened to the problems you reported.",
+      "unreadOnly": "Unread only",
+      "markAll": "Mark all read",
+      "markAllFailed": "They could not all be marked as read.",
+      "refresh": "Refresh",
+      "loading": "Loading…",
+      "loadFailed": "Your notifications could not be loaded.",
+      "empty": "No updates yet",
+      "emptyUnread": "Nothing unread",
+      "emptyBodyOrg": "You will be told here the moment a resident reports a problem you are responsible for.",
+      "emptyBodyOwner": "Updates on your reports will appear here.",
+      "openMap": "Open on the map",
+      "openReport": "Open the report",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} of {{total}}"
+    }
+  },
+  "cc.notifications.pushBlocked": "Your browser is blocking notifications for this site. Allow them in the address bar to be told about new reports while City Care is closed.",
+  "cc.notifications.pushEnable": "Turn on",
+  "cc.notifications.pushPrompt": "Get told about new reports even when City Care is closed."
+}

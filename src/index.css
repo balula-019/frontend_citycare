@@ -1,29 +1,69 @@
-
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
+/*
+  City Care design tokens.
+  Everything in the app reads colour through these names, so the whole
+  product re-skins from this one block.
+*/
 @theme {
-  --color-primary: #1a56db;
-  --color-primary-hover: #1649c4;
-  --color-secondary: #e11d48;
-  --color-secondary-hover: #be123c;
-  --color-dark: #0f172a;
-  --color-surface: #f8fafc;
-  --color-border: #e2e8f0;
-  --color-success: #10b981;
+  /* Brand: municipal teal reads as civic and calm */
+  --color-primary: #0f766e;
+  --color-primary-hover: #115e59;
+  --color-primary-deep: #134e4a;
+  --color-primary-soft: #ccfbf1;
+  --color-primary-tint: #f0fdfa;
+
+  /* Action: hazard amber, the colour people already read as "roadworks" */
+  --color-accent: #f59e0b;
+  --color-accent-hover: #d97706;
+  --color-secondary: #f59e0b;
+  --color-secondary-hover: #d97706;
+
+  /* Neutrals */
+  --color-dark: #0b1f26;
+  --color-surface: #f5faf9;
+  --color-border: #dbe7e5;
+  --color-muted: #5b7580;
+
+  /* Feedback */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-info: #0ea5e9;
+
+  /* Report status, mirrors UrbanProblemStatus on the backend */
+  --color-status-submitted: #64748b;
+  --color-status-verified: #0f766e;
+  --color-status-assigned: #4f46e5;
+  --color-status-progress: #f59e0b;
+  --color-status-resolved: #16a34a;
+  --color-status-rejected: #dc2626;
+
+  /* Severity, mirrors UrbanProblemSeverity */
+  --color-severity-low: #16a34a;
+  --color-severity-medium: #f59e0b;
+  --color-severity-high: #ea580c;
+  --color-severity-critical: #dc2626;
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  border-bottom: 1px solid rgba(219, 231, 229, 0.7);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #1a56db, #e11d48);
+  background: linear-gradient(135deg, #0f766e, #f59e0b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Faint dotted grid used behind dark sections */
+.dot-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.22) 1px, transparent 0);
+  background-size: 28px 28px;
 }
 
 @keyframes float {
@@ -32,4 +72,13 @@
 }
 .animate-float {
   animation: float 4s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: translateY(420%); opacity: 0; }
+}
+.animate-scan {
+  animation: scan 2.6s ease-in-out infinite;
 }

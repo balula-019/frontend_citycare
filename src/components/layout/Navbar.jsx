@@ -24,29 +24,28 @@ export default function Navbar() {
   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
   const userType = storedUser.user_type;
 
-  // ✅ PUBLIC (guest) — sees Partner With Us
+  // ✅ PUBLIC (guest)
   const publicLinks = [
-    { name: t('nav.home'),          href: '/' },
-    { name: t('nav.about'),         href: '#about',  isHash: true },
-    { name: t('nav.partnerWithUs'), href: '/partner-with-us' },
-    { name: t('nav.contact'),       href: '#footer', isHash: true },
+    { name: t('nav.home'),                                   href: '/', isHome: true },
+    { name: t('cc.nav.howItWorks', 'How it works'),          href: '#how-it-works', isHash: true },
+    { name: t('cc.nav.problemTypes', 'What you can report'), href: '#problem-types', isHash: true },
+    { name: t('nav.about'),                                  href: '#about',  isHash: true },
   ];
 
-  // ✅ OWNER — no Partner With Us
+  // ✅ OWNER
   const ownerLinks = [
-    { name: t('nav.owner.dashboard'), href: '/owner/dashboard' },
-    { name: t('nav.owner.search'),    href: '/owner/search'    },
-    { name: t('nav.owner.report'),    href: '/owner/report'    },
-    { name: t('nav.owner.reports'),   href: '/owner/reports'   },
-    { name: t('nav.owner.profile'),   href: '/owner/profile'   },
+    { name: t('nav.home'),                                 href: '/', isHome: true },
+    { name: t('cc.nav.owner.report', 'Report a problem'),   href: '/owner/report' },
+    { name: t('cc.nav.owner.reports', 'My reports'),        href: '/owner/reports' },
+    { name: t('cc.nav.owner.notifications', 'Updates'),     href: '/owner/notifications' },
+    { name: t('nav.owner.profile'),                         href: '/owner/profile' },
   ];
 
-  // ✅ ORGANISATION — no Partner With Us
+  // ✅ ORGANISATION
   const orgLinks = [
     { name: t('nav.org.dashboard'), href: '/org/dashboard' },
-    { name: t('nav.org.publish'),   href: '/org/publish'   },
-    { name: t('nav.org.items'),     href: '/org/items'     },
-    { name: t('nav.org.claims'),    href: '/org/claims'    },
+    { name: t('cc.nav.org.map', 'Reports map'), href: '/org/map' },
+    { name: t('cc.nav.org.notifications', 'Updates'), href: '/org/notifications' },
     { name: t('nav.org.profile'),   href: '/org/profile'   },
   ];
 
@@ -55,8 +54,6 @@ export default function Navbar() {
     { name: t('nav.admin.dashboard'),        href: '/admin/dashboard'        },
     { name: t('nav.admin.manageUsers'),      href: '/admin/manage-users'     },
     { name: t('nav.admin.createOrg'),        href: '/admin/create-org'       },
-    { name: t('nav.admin.items'),            href: '/admin/items'            },
-    { name: t('nav.admin.partnerRequests'),  href: '/admin/partner-requests' },
     { name: t('nav.admin.profile'),          href: '/admin/profile'          },
   ];
 
@@ -109,7 +106,7 @@ export default function Navbar() {
   };
 
   const renderLink = (link) => {
-    if (link.name === t('nav.home')) {
+    if (link.isHome) {
       return (
         <a
           key={link.href}
@@ -159,11 +156,11 @@ export default function Navbar() {
           <a href="/" className="flex items-center gap-2 group cursor-pointer" onClick={handleHomeClick}>
             <img
               src={logoSrc}
-              alt="PataChako"
+              alt="City Care"
               className="w-11 h-11 object-contain transition-transform group-hover:scale-105"
             />
             <span className="text-xl font-bold text-dark tracking-tight">
-              Pata<span className="text-primary">Chako</span>
+              City<span className="text-primary">Care</span>
             </span>
           </a>
 
@@ -225,7 +222,7 @@ export default function Navbar() {
       >
         <div className="bg-white border-b border-border px-4 py-6 space-y-4">
           {navLinks.map((link) => {
-            if (link.name === t('nav.home')) {
+            if (link.isHome) {
               return (
                 <a
                   key={link.href}

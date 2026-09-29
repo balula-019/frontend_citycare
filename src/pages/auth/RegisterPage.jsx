@@ -202,7 +202,7 @@ export default function RegisterPage() {
       return { level: 4, label: t('register.strength.strong'), color: '#10b981' };
     }
     if (conditions >= 2) {
-      return { level: 3, label: t('register.strength.good'), color: '#1a56db' };
+      return { level: 3, label: t('register.strength.good'), color: '#0f766e' };
     }
     return { level: 2, label: t('register.strength.couldBeStronger'), color: '#f59e0b' };
   };
@@ -213,7 +213,7 @@ export default function RegisterPage() {
     `w-full px-4 py-3 text-sm text-gray-900 placeholder-gray-400 bg-[#f8fafc] border rounded-xl outline-none transition-all focus:ring-2 focus:bg-white disabled:opacity-50 ${
       fieldErrors[fieldName]
         ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
-        : 'border-gray-200 focus:border-[#1a56db] focus:ring-[#1a56db]/15'
+        : 'border-gray-200 focus:border-[#0f766e] focus:ring-[#0f766e]/15'
     }`;
 
   const labelClass =
@@ -230,7 +230,7 @@ export default function RegisterPage() {
       ═══════════════════════════════════════════ */}
       <div
         className="hidden lg:flex w-[420px] flex-shrink-0 min-h-screen relative flex-col overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #1a56db 0%, #1240a8 55%, #0b2878 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #0f766e 0%, #115e59 55%, #134e4a 100%)' }}
       >
         <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
         <div className="absolute top-1/2 -right-28 w-[340px] h-[340px] rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
@@ -277,7 +277,7 @@ export default function RegisterPage() {
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   ) : (
-                    <Icon size={14} color={step === id ? '#1a56db' : 'rgba(255,255,255,0.5)'} />
+                    <Icon size={14} color={step === id ? '#0f766e' : 'rgba(255,255,255,0.5)'} />
                   )}
                 </div>
 
@@ -323,10 +323,10 @@ export default function RegisterPage() {
       ═══════════════════════════════════════════ */}
       <div
         className="flex-1 flex flex-col items-center justify-between p-4 sm:p-6 overflow-y-auto"
-        style={{ background: '#f4f7fd' }}
+        style={{ background: '#f5faf9' }}
       >
-        <div className="w-full max-w-[460px] bg-white rounded-3xl border border-gray-100 shadow-2xl shadow-blue-100/30 overflow-hidden flex flex-col my-auto">
-          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
+        <div className="w-full max-w-[460px] bg-white rounded-3xl border border-gray-100 shadow-2xl shadow-primary-soft/30 overflow-hidden flex flex-col my-auto">
+          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #0f766e, #10b981)' }} />
 
           {/* ═══ STEPPER HEADER ═══ */}
           <div className="flex items-center justify-center gap-2 pt-6 pb-2 px-6 flex-shrink-0">
@@ -336,7 +336,7 @@ export default function RegisterPage() {
                   <div
                     className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all"
                     style={{
-                      background: step > id ? '#10b981' : step === id ? '#1a56db' : '#e8eef8',
+                      background: step > id ? '#10b981' : step === id ? '#0f766e' : '#dbe7e5',
                       color: step >= id ? '#fff' : '#94a3b8',
                     }}
                   >
@@ -352,7 +352,7 @@ export default function RegisterPage() {
                   <span
                     className="text-xs font-bold tracking-wide uppercase hidden sm:block"
                     style={{
-                      color: step === id ? '#1a56db' : step > id ? '#10b981' : '#94a3b8',
+                      color: step === id ? '#0f766e' : step > id ? '#10b981' : '#94a3b8',
                     }}
                   >
                     {t(labelKey)}
@@ -377,7 +377,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+                  className="focus:outline-none focus:ring-2 focus:ring-[#0f766e] rounded-2xl transition-transform hover:scale-105"
                   title={t('register.goHome')}
                 >
                   <img
@@ -468,7 +468,7 @@ export default function RegisterPage() {
                     onClick={nextStep}
                     className="w-full mt-2 py-3.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95 active:scale-[0.99]"
                     style={{
-                      background: 'linear-gradient(135deg, #1a56db, #1240a8)',
+                      background: 'linear-gradient(135deg, #0f766e, #115e59)',
                       boxShadow: '0 4px 12px rgba(26,86,219,0.2)',
                     }}
                   >
@@ -487,7 +487,7 @@ export default function RegisterPage() {
                       className={`flex items-center bg-[#f8fafc] border rounded-xl overflow-hidden transition-all focus-within:ring-2 focus-within:bg-white ${
                         fieldErrors.password
                           ? 'border-red-300 focus-within:border-red-500 focus-within:ring-red-200'
-                          : 'border-gray-200 focus-within:border-[#1a56db] focus-within:ring-[#1a56db]/15'
+                          : 'border-gray-200 focus-within:border-[#0f766e] focus-within:ring-[#0f766e]/15'
                       }`}
                     >
                       <input
@@ -503,7 +503,7 @@ export default function RegisterPage() {
                         type="button"
                         onClick={() => setShowPass(!showPass)}
                         tabIndex={-1}
-                        className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors"
+                        className="px-4 text-gray-400 hover:text-[#0f766e] transition-colors"
                       >
                         {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -534,7 +534,7 @@ export default function RegisterPage() {
                       className={`flex items-center bg-[#f8fafc] border rounded-xl overflow-hidden transition-all focus-within:ring-2 focus-within:bg-white ${
                         fieldErrors.confirm_password
                           ? 'border-red-300 focus-within:border-red-500 focus-within:ring-red-200'
-                          : 'border-gray-200 focus-within:border-[#1a56db] focus-within:ring-[#1a56db]/15'
+                          : 'border-gray-200 focus-within:border-[#0f766e] focus-within:ring-[#0f766e]/15'
                       }`}
                     >
                       <input
@@ -550,7 +550,7 @@ export default function RegisterPage() {
                         type="button"
                         onClick={() => setShowConfirmPass(!showConfirmPass)}
                         tabIndex={-1}
-                        className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors"
+                        className="px-4 text-gray-400 hover:text-[#0f766e] transition-colors"
                       >
                         {showConfirmPass ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
@@ -592,7 +592,7 @@ export default function RegisterPage() {
                       onClick={nextStep}
                       className="flex-1 py-3.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95"
                       style={{
-                        background: 'linear-gradient(135deg, #1a56db, #1240a8)',
+                        background: 'linear-gradient(135deg, #0f766e, #115e59)',
                         boxShadow: '0 4px 12px rgba(26,86,219,0.2)',
                       }}
                     >
@@ -606,9 +606,9 @@ export default function RegisterPage() {
               {/* ═══ STEP 2: LOCATION ═══ */}
               {step === 2 && (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                  <div className="flex items-start gap-2 p-3 rounded-xl text-xs bg-blue-50/60 border border-blue-100">
-                    <MapPin size={15} className="text-[#1a56db] mt-0.5 flex-shrink-0" />
-                    <p className="text-blue-700 leading-snug text-xs">
+                  <div className="flex items-start gap-2 p-3 rounded-xl text-xs bg-primary-tint/60 border border-primary-soft">
+                    <MapPin size={15} className="text-[#0f766e] mt-0.5 flex-shrink-0" />
+                    <p className="text-primary-hover leading-snug text-xs">
                       {t('register.locationHint')}
                     </p>
                   </div>
@@ -660,8 +660,8 @@ export default function RegisterPage() {
                       disabled={loading}
                       className="flex-1 py-3.5 flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl transition-all hover:opacity-95 disabled:opacity-70"
                       style={{
-                        background: 'linear-gradient(135deg, #10b981, #059669)',
-                        boxShadow: '0 4px 12px rgba(16,185,129,0.2)',
+                        background: 'linear-gradient(135deg, #0f766e, #115e59)',
+                        boxShadow: '0 4px 12px rgba(15,118,110,0.2)',
                       }}
                     >
                       {loading ? (
@@ -694,7 +694,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={() => navigate('/login')}
-                    className="font-bold text-[#1a56db] hover:underline"
+                    className="font-bold text-[#0f766e] hover:underline"
                   >
                     {t('register.signIn')}
                   </button>

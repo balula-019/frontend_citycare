@@ -147,7 +147,7 @@ export default function AdminDashboard() {
           </div>
         ) : stats ? (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <StatCard icon={Users}       label="Total Users"        value={stats.totalUsers || 0}          color="#1a56db" gradient="linear-gradient(135deg,#1a56db,#6366f1)" delay={0}   />
+            <StatCard icon={Users}       label="Total Users"        value={stats.totalUsers || 0}          color="#0f766e" gradient="linear-gradient(135deg,#0f766e,#6366f1)" delay={0}   />
             <StatCard icon={Building2}   label="Organisations"      value={stats.totalOrganizations || 0}  color="#f59e0b" gradient="linear-gradient(135deg,#f59e0b,#ef4444)" delay={80}  />
             <StatCard icon={Trophy}      label="Items Found"        value={stats.totalFoundItems || 0}     color="#22c55e" gradient="linear-gradient(135deg,#22c55e,#06b6d4)" delay={160} />
             <StatCard icon={UserCheck}   label="Active Users"       value={stats.activeUsers || 0}         color="#8b5cf6" gradient="linear-gradient(135deg,#8b5cf6,#ec4899)" delay={240} />
@@ -165,8 +165,8 @@ export default function AdminDashboard() {
                 <h2 className="text-base font-black text-[#0f172a]">Platform Activity</h2>
                 <p className="text-xs text-gray-400 mt-0.5">Found items reported across all organisations</p>
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-[#1a56db] font-semibold
-                              bg-blue-50 px-3 py-1.5 rounded-full">
+              <div className="flex items-center gap-1.5 text-xs text-[#0f766e] font-semibold
+                              bg-primary-tint px-3 py-1.5 rounded-full">
                 <Activity size={12} /> Live
               </div>
             </div>
@@ -187,8 +187,8 @@ export default function AdminDashboard() {
                 })()}
                 <defs>
                   <linearGradient id="adminAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%"   stopColor="#1a56db" stopOpacity="0.15" />
-                    <stop offset="100%" stopColor="#1a56db" stopOpacity="0.01" />
+                    <stop offset="0%"   stopColor="#0f766e" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#0f766e" stopOpacity="0.01" />
                   </linearGradient>
                 </defs>
                 {(() => {
@@ -203,14 +203,14 @@ export default function AdminDashboard() {
                   return (
                     <>
                       <path d={area} fill="url(#adminAreaGrad)" />
-                      <path d={d} fill="none" stroke="#1a56db" strokeWidth="2.5"
+                      <path d={d} fill="none" stroke="#0f766e" strokeWidth="2.5"
                             strokeLinecap="round" strokeLinejoin="round" />
                       {pts.map((p, i) => (
                         <g key={i}>
                           <circle cx={p.x} cy={p.y} r="5" fill="white"
-                                  stroke="#1a56db" strokeWidth="2.5" />
+                                  stroke="#0f766e" strokeWidth="2.5" />
                           <text x={p.x} y={p.y - 10} textAnchor="middle"
-                                fontSize="10" fill="#1a56db" fontWeight="700">{p.v}</text>
+                                fontSize="10" fill="#0f766e" fontWeight="700">{p.v}</text>
                           <text x={p.x} y="172" textAnchor="middle"
                                 fontSize="10" fill="#94a3b8">{MONTHLY_LABELS[i]}</text>
                         </g>
@@ -230,7 +230,7 @@ export default function AdminDashboard() {
             {(() => {
               const segments = [
                 { label: 'Matched',   value: stats?.totalMatched         || 0, color: '#22c55e' },
-                { label: 'Approved',  value: stats?.totalApprovedClaims  || 0, color: '#1a56db' },
+                { label: 'Approved',  value: stats?.totalApprovedClaims  || 0, color: '#0f766e' },
                 { label: 'Pending',   value: stats?.totalPendingClaims   || 0, color: '#f59e0b' },
                 { label: 'Lost Reports', value: stats?.totalLostReports  || 0, color: '#8b5cf6' },
               ];

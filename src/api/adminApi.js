@@ -43,19 +43,3 @@ export const deactivateUser = (userId) =>
 export const deleteUser = (userId) =>
   apiClient(`/v1/services/lost-reports/delete-user/${userId}`, { method: 'DELETE' });
 
-// PUT /v1/services/lost-reports/publish/{itemId}
-export const updatePublishedItem = (itemId, data) =>
-  apiClient(`/v1/services/lost-reports/publish/${itemId}`, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  });
-
-  // Add this at the end of your adminApi.js file
-export const getPublicItems = (params = {}) => {
-  const query = new URLSearchParams();
-  if (params.region) query.append('region', params.region);
-  query.append('page', params.page || 0);
-  query.append('size', params.size || 20);
-  return apiClient(`/v1/services/lost-reports/public/items?${query.toString()}`, { method: 'GET' });
-};
-

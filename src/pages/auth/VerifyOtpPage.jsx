@@ -82,12 +82,12 @@ export default function VerifyOtpPage() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 overflow-y-auto"
-      style={{ background: '#f4f7fd' }}
+      style={{ background: '#f5faf9' }}
     >
-      <div className="w-full max-w-[460px] bg-white rounded-3xl shadow-2xl shadow-blue-100/30 border border-gray-100 overflow-hidden flex flex-col my-auto">
+      <div className="w-full max-w-[460px] bg-white rounded-3xl shadow-2xl shadow-primary-soft/30 border border-gray-100 overflow-hidden flex flex-col my-auto">
         <div
           className="h-1.5 w-full flex-shrink-0"
-          style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }}
+          style={{ background: 'linear-gradient(90deg, #0f766e, #10b981)' }}
         />
 
         <div className="px-6 sm:px-8 py-8 flex-1 flex flex-col justify-center">
@@ -95,7 +95,7 @@ export default function VerifyOtpPage() {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+              className="focus:outline-none focus:ring-2 focus:ring-[#0f766e] rounded-2xl transition-transform hover:scale-105"
               title={t('verifyOtp.goHome')}
             >
               <img
@@ -154,7 +154,7 @@ export default function VerifyOtpPage() {
               className="w-full py-3.5 text-sm sm:text-base font-bold tracking-wide rounded-xl mt-2"
               disabled={loading}
               style={{
-                background: 'linear-gradient(135deg, #1a56db, #1240a8)',
+                background: 'linear-gradient(135deg, #0f766e, #115e59)',
                 boxShadow: '0 4px 12px rgba(26,86,219,0.2)',
               }}
             >
@@ -173,7 +173,7 @@ export default function VerifyOtpPage() {
             <button
               type="button"
               onClick={handleResend}
-              className="text-sm font-semibold text-[#1a56db] hover:underline"
+              className="text-sm font-semibold text-[#0f766e] hover:underline"
             >
               {t('verifyOtp.resendButton')}
             </button>
@@ -185,7 +185,7 @@ export default function VerifyOtpPage() {
               <button
                 type="button"
                 onClick={() => navigate('/login')}
-                className="font-bold text-[#1a56db] hover:underline"
+                className="font-bold text-[#0f766e] hover:underline"
               >
                 {t('verifyOtp.signIn')}
               </button>

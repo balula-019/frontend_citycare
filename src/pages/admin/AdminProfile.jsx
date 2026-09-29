@@ -71,18 +71,18 @@ export default function AdminProfile() {
     <div className="p-6 lg:p-8 max-w-2xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-[#1a56db] transition-colors mb-6 group"
+        className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-[#0f766e] transition-colors mb-6 group"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
         Back
       </button>
 
       <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-sm">
-        <div className="h-1.5 w-full bg-gradient-to-r from-[#1a56db] to-[#10b981] rounded-t-2xl" />
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#0f766e] to-[#10b981] rounded-t-2xl" />
         <div className="p-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-11 h-11 rounded-xl bg-[#dbeafe] flex items-center justify-center">
-              <UserCircle size={22} className="text-[#1a56db]" />
+            <div className="w-11 h-11 rounded-xl bg-[#ccfbf1] flex items-center justify-center">
+              <UserCircle size={22} className="text-[#0f766e]" />
             </div>
             <div>
               <h1 className="text-xl font-extrabold text-[#0f172a]">My Profile</h1>
@@ -122,7 +122,7 @@ export default function AdminProfile() {
                 Location
               </label>
               <div className="flex items-start gap-2">
-                <MapPin size={17} className="text-[#1a56db] mt-2.5 shrink-0" />
+                <MapPin size={17} className="text-[#0f766e] mt-2.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <LocationPicker
                     locationName={form.location_name}

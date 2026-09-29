@@ -149,7 +149,7 @@ export default function LocationSearch({
           aria-haspopup="listbox"
           role="combobox"
           className="w-full pl-9 pr-16 py-2.5 rounded-xl border border-[#e2e8f0]
-                     focus:ring-2 focus:ring-[#1a56db]/20 focus:border-[#1a56db]
+                     focus:ring-2 focus:ring-[#0f766e]/20 focus:border-[#0f766e]
                      outline-none text-sm text-[#0f172a] bg-white transition-all
                      placeholder:text-gray-400"
         />

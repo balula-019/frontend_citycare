@@ -1,0 +1,418 @@
+{
+  "cc": {
+    "nav": {
+      "howItWorks": "Inafanya kazi vipi",
+      "problemTypes": "Unaweza kuripoti nini",
+      "owner": {
+        "report": "Ripoti tatizo",
+        "reports": "Ripoti zangu",
+        "notifications": "Taarifa"
+      },
+      "org": {
+        "map": "Ramani ya ripoti",
+        "notifications": "Taarifa"
+      }
+    },
+    "hero": {
+      "badge": "Kila picha inathibitishwa kabla ya kutumwa",
+      "headingPart1": "Umeona tatizo katika mji wako?",
+      "headingHighlight": "Ripoti kwa sekunde 30.",
+      "subtext": "Mashimo ya barabara, mafuriko, mitaro iliyofungwa, taa za barabara zilizovunjika. Piga picha, weka alama kwenye ramani, na City Care itatuma ripoti yako moja kwa moja kwa mamlaka inayohusika.",
+      "reportProblem": "Ripoti tatizo",
+      "seeHowItWorks": "Ona inafanya kazi vipi",
+      "coverage": "Imeundwa kwa miji ya Tanzania, kata kwa kata.",
+      "pillars": {
+        "snap": "Piga picha ya tatizo",
+        "verify": "AI inaangalia picha",
+        "route": "Inafika ofisi sahihi"
+      }
+    },
+    "preview": {
+      "reference": "Ripoti",
+      "status": {
+        "verified": "Imethibitishwa"
+      },
+      "photoCaption": "Shimo barabara ya Nyerere",
+      "aiCheck": "Uthibitisho wa picha kwa AI",
+      "checks": {
+        "topicMatch": "Inalingana na aina",
+        "descriptionMatch": "Inalingana na maelezo",
+        "relevanceScore": "Alama ya ulinganifu"
+      },
+      "yes": "Ndiyo",
+      "routedTo": "Imetumwa kwa",
+      "decision": "Uamuzi",
+      "accepted": "IMEKUBALIWA"
+    },
+    "how": {
+      "badge": "Inafanya kazi vipi",
+      "title": "Kutoka simu yako hadi mamlaka sahihi",
+      "subtitle": "Hatua nne. Hakuna fomu za kukusanya, hakuna kusubiri ofisi ya manispaa.",
+      "steps": {
+        "snap": {
+          "title": "Piga picha na eleza",
+          "desc": "Piga hadi picha tano, chagua aina ya tatizo, na weka alama kwenye ramani ili eneo halisi lihifadhiwe."
+        },
+        "verify": {
+          "title": "AI inaangalia picha",
+          "desc": "Kabla ya kuhifadhi kitu chochote, picha inalinganishwa na maelezo yako. Picha isiyolingana inakataliwa papo hapo."
+        },
+        "route": {
+          "title": "Inaelekezwa ofisi sahihi",
+          "desc": "Kila aina ya tatizo ina mamlaka iliyosajiliwa. Ripoti iliyothibitishwa inakwenda kwa mamlaka ya karibu inayoshughulikia aina hiyo."
+        },
+        "track": {
+          "title": "Fuatilia hadi kutatuliwa",
+          "desc": "Fuatilia ripoti yako inavyosonga kutoka imethibitishwa, imepangwa, inafanyiwa kazi, hadi imetatuliwa."
+        }
+      }
+    },
+    "problems": {
+      "badge": "Unaweza kuripoti nini",
+      "title": "Aina kumi na tatu za matatizo, sehemu moja ya kuripoti",
+      "subtitle": "Chagua aina inayolingana na City Care inajua mamlaka inayohusika."
+    },
+    "problemTypes": {
+      "ROAD_POTHOLE": "Shimo la barabara",
+      "FLOODING": "Mafuriko",
+      "BLOCKED_DRAIN": "Mtaro uliofungwa",
+      "BROKEN_STREETLIGHT": "Taa ya barabara imevunjika",
+      "WASTE_DUMPING": "Utupaji wa taka",
+      "DAMAGED_ROAD": "Barabara iliyoharibika",
+      "DAMAGED_SIDEWALK": "Njia ya waenda kwa miguu imeharibika",
+      "DAMAGED_BRIDGE": "Daraja lililoharibika",
+      "TRAFFIC_PROBLEM": "Tatizo la usafiri",
+      "WATER_LEAKAGE": "Uvujaji wa maji",
+      "SEWER_PROBLEM": "Tatizo la maji taka",
+      "PUBLIC_INFRASTRUCTURE": "Miundombinu ya umma",
+      "OTHER": "Jambo lingine"
+    },
+    "why": {
+      "badge": "Kwa nini City Care",
+      "title": "Ripoti ambazo mamlaka zinaweza kuzifanyia kazi",
+      "subtitle": "Lalamiko la mitandao ya kijamii linapotea. Ripoti iliyothibitishwa, yenye eneo na mwenye dhamana haipotei.",
+      "items": {
+        "verifiedPhotos": {
+          "title": "Picha zilizothibitishwa pekee",
+          "desc": "Kila picha inaangaliwa kulingana na maelezo kabla ya ripoti kuhifadhiwa, hivyo mamlaka haziziwi na ripoti za uongo."
+        },
+        "exactLocation": {
+          "title": "Eneo halisi",
+          "desc": "Chagua eneo kwenye ramani na ripoti inakwenda na viambajengo, mkoa, wilaya na kata."
+        },
+        "rightAuthority": {
+          "title": "Mamlaka sahihi",
+          "desc": "Barabara, maji, taka na taa za barabara ni ofisi tofauti. Kila ripoti inaelekezwa kwa ile iliyosajiliwa kwa aina hiyo ya tatizo."
+        },
+        "staysInformed": {
+          "title": "Hakuna anayebaki kubahatisha",
+          "desc": "Ofisi iliyopangiwa inapata barua pepe mara ripoti inapofika, na wewe unaona kila mabadiliko ya hali."
+        },
+        "cityInsight": {
+          "title": "Taarifa kwa mji",
+          "desc": "Ripoti zinakuwa takwimu: matatizo yapi yanaongoza, yanakusanyika wapi, na wakazi wangapi wanaripoti."
+        },
+        "swahiliFirst": {
+          "title": "Kiswahili na Kiingereza",
+          "desc": "Mfumo wote unafanya kazi kwa lugha zote mbili, kwa sababu kuripoti shimo la barabara hakupaswi kuhitaji Kiingereza."
+        }
+      }
+    },
+    "faq": {
+      "badge": "Maswali",
+      "title": "Kila kitu wakazi wanatuuliza",
+      "subtitle": "Majibu mafupi ya yanayoulizwa kabla ya ripoti ya kwanza.",
+      "items": {
+        "whatCanIReport": {
+          "q": "Naweza kuripoti nini?",
+          "a": "Mashimo ya barabara, mafuriko, mitaro iliyofungwa, taa za barabara zilizovunjika, utupaji haramu wa taka, barabara, njia za waenda kwa miguu na madaraja yaliyoharibika, matatizo ya usafiri, uvujaji wa maji, matatizo ya maji taka na hitilafu nyingine za miundombinu ya umma."
+        },
+        "whyPhoto": {
+          "q": "Kwa nini picha ni muhimu sana?",
+          "a": "Picha ni ushahidi. Inaangaliwa kiotomatiki kulingana na aina ya tatizo na maelezo yako, na hiyo ndiyo inayofanya mamlaka kuiamini ripoti bila kutuma mtu kwenda kuangalia kwanza."
+        },
+        "rejected": {
+          "q": "Ripoti yangu ilikataliwa. Kuna nini?",
+          "a": "Picha hailingani na ulivyoeleza, hivyo haikuhifadhiwa. Utaona sababu na alama ya ulinganifu. Piga picha ya wazi ya tatizo halisi na tuma tena."
+        },
+        "whoReceives": {
+          "q": "Nani anapokea ripoti yangu?",
+          "a": "Mamlaka iliyosajiliwa kwa aina hiyo ya tatizo, na ile ya karibu zaidi ikiwa ni nyingi. Wanapata barua pepe mara ripoti inapothibitishwa."
+        },
+        "canIEdit": {
+          "q": "Naweza kubadilisha ripoti baada ya kuituma?",
+          "a": "Ndiyo, wakati ingali imetumwa, imethibitishwa au imepangwa. Unaweza kurekebisha maelezo, kubadilisha aina, kurekebisha eneo au kubadilisha picha. Kazi ikianza inafungwa."
+        },
+        "tracking": {
+          "q": "Nitajuaje kuna kinachoendelea?",
+          "a": "Kila ripoti ina hali: imethibitishwa, imepangwa, inafanyiwa kazi, kisha imetatuliwa. Unaiona inabadilika kwenye ukurasa wa ripoti zako."
+        },
+        "anonymous": {
+          "q": "Taarifa zangu binafsi zinaonekana?",
+          "a": "Mamlaka inaona ripoti, picha na eneo. Taarifa za akaunti yako hazichapishwi hadharani."
+        },
+        "cost": {
+          "q": "Kuna malipo yoyote?",
+          "a": "Hapana. Kuripoti tatizo katika mji wako ni bure."
+        },
+        "organisation": {
+          "q": "Nafanya kazi kwa mamlaka. Tunajiungaje?",
+          "a": "Jisajili kupitia Shirikiana nasi. Msimamizi atasajili taasisi yako na kuchagua aina za matatizo unazoshughulikia, na ripoti za aina hizo zitaanza kukufikia."
+        }
+      }
+    },
+    "cta": {
+      "badge": "Mji wako, ripoti yako",
+      "heading": "Shimo unalolipita kila asubuhi",
+      "headingLine2": "linaweza kurekebishwa. Anza kwa kuliripoti.",
+      "subtext": "Inachukua nusu dakika: picha, sentensi moja, na alama kwenye ramani. City Care inafanya mengine.",
+      "reportProblem": "Ripoti tatizo",
+      "getStarted": "Fungua akaunti",
+      "forAuthorities": "Nawakilisha mamlaka",
+      "haveAccount": "Umesajiliwa tayari?",
+      "signIn": "Ingia"
+    },
+    "about": {
+      "badge": "Kuhusu City Care",
+      "headingLine1": "Wakazi wanaona matatizo kwanza.",
+      "headingLine2": "Sisi tunahakikisha mtu anayasikia.",
+      "para1": "Matatizo mengi ya mijini hayaripotiwi na mtu yeyote. Sio kwa sababu watu hawajali, bali kwa sababu hakuna njia rahisi ya kuiambia ofisi sahihi, na hakuna njia ya kujua kama ujumbe ulifika.",
+      "para2": "City Care inafunga pengo hilo. Picha iliyothibitishwa, eneo halisi, na mamlaka iliyotajwa kwa kila ripoti, ili tatizo liache kuwa jukumu la kila mtu na wakati huo huo la hakuna mtu.",
+      "carries": {
+        "photos": {
+          "title": "Hadi picha tano",
+          "desc": "Ushahidi, moja kwa moja kutoka simu yako."
+        },
+        "location": {
+          "title": "Alama halisi",
+          "desc": "Viambajengo pamoja na mkoa, wilaya na kata."
+        },
+        "verification": {
+          "title": "Matokeo ya uthibitisho",
+          "desc": "Ulinganifu wa aina, wa maelezo na alama ya ulinganifu."
+        },
+        "owner": {
+          "title": "Ofisi inayohusika",
+          "desc": "Mamlaka yenye dhamana, imetajwa na imetaarifiwa."
+        }
+      }
+    },
+    "footer": {
+      "tagline": "Ripoti matatizo unayoyaona katika mji wako na yaone yanafika mamlaka inayohusika.",
+      "reportProblem": "Ripoti tatizo",
+      "myReports": "Ripoti zangu"
+    },
+    "floatingReport": "Ripoti tatizo",
+    "status": {
+      "SUBMITTED": "Imetumwa",
+      "VERIFIED": "Imethibitishwa",
+      "ASSIGNED": "Imepangwa",
+      "IN_PROGRESS": "Inafanyiwa kazi",
+      "RESOLVED": "Imetatuliwa",
+      "REJECTED": "Imekataliwa"
+    },
+    "severity": {
+      "LOW": "Ndogo",
+      "MEDIUM": "Ya kati",
+      "HIGH": "Kubwa",
+      "CRITICAL": "Hatari sana"
+    },
+    "verification": {
+      "title": "Uthibitisho wa picha kwa AI",
+      "accepted": "Imekubaliwa",
+      "rejected": "Imekataliwa",
+      "relevance": "Alama ya ulinganifu",
+      "threshold": "Kiwango cha chini kukubaliwa: {{threshold}}",
+      "topicMatch": "Inalingana na aina ya tatizo",
+      "descriptionMatch": "Inalingana na maelezo yako",
+      "evidence": "AI iliona nini",
+      "model": "Imeangaliwa na {{model}}"
+    },
+    "form": {
+      "problemHeading": "Tatizo ni lipi?",
+      "problemHelp": "Aina unayochagua ni ile picha inayolinganishwa nayo, hivyo chagua inayokaribiana zaidi.",
+      "description": "Eleza unachokiona",
+      "descriptionPlaceholder": "Shimo kubwa linavuka njia zote mbili karibu na kituo cha daladala, linajaa maji mvua inaponyesha.",
+      "descriptionHint": "Picha yako inalinganishwa na maandishi haya.",
+      "solution": "Nini kingerekebisha?",
+      "solutionPlaceholder": "Kufukia na kuweka lami sehemu iliyoharibika.",
+      "optional": "(si lazima)",
+      "photosHeading": "Picha",
+      "photosHelp": "Picha ya kwanza ni ile AI inayoiangalia. Hadi tano, kila moja MB 5.",
+      "addPhoto": "Ongeza",
+      "checked": "Inaangaliwa",
+      "removePhoto": "Ondoa picha",
+      "photosToRemove": "Picha {{count}} zitaondolewa utakapohifadhi.",
+      "locationHeading": "Ni wapi?",
+      "locationHelp": "Tafuta, tumia eneo lako la sasa, au sogeza alama. Mamlaka huchaguliwa kwa ukaribu na eneo hili.",
+      "searchLocation": "Tafuta mtaa, kata au eneo maarufu…",
+      "region": "Mkoa",
+      "selectRegion": "Chagua mkoa",
+      "district": "Wilaya",
+      "ward": "Kata",
+      "submit": "Tuma ripoti",
+      "checkingPhoto": "Inaangalia picha yako…",
+      "saveChanges": "Hifadhi mabadiliko",
+      "saving": "Inahifadhi…",
+      "cancel": "Ghairi",
+      "errors": {
+        "problemType": "Chagua aina ya tatizo hili.",
+        "description": "Eleza tatizo kwa herufi 15 au zaidi ili AI iweze kulinganisha na picha yako.",
+        "region": "Chagua mkoa.",
+        "district": "Weka wilaya.",
+        "location": "Chagua eneo halisi kwenye ramani.",
+        "photoRequired": "Ambatisha angalau picha moja ya tatizo.",
+        "photoTooBig": "Kila picha iwe chini ya MB 5.",
+        "tooManyPhotos": "Unaweza kuambatisha picha tano kwa juu."
+      }
+    },
+    "report": {
+      "heading": "Ripoti tatizo",
+      "subheading": "Picha yako inaangaliwa kulingana na maelezo yako kabla ya ripoti kuhifadhiwa, kisha inatumwa kwa mamlaka inayohusika na aina hiyo ya tatizo.",
+      "backToReports": "Ripoti zangu",
+      "genericError": "Imeshindikana kutuma ripoti yako.",
+      "rejectedHeading": "Picha hii haikukubaliwa",
+      "rejectedHelp": "Hakuna kilichohifadhiwa. Rekebisha aina ya tatizo au maelezo, au ambatisha picha ya wazi ya tatizo lenyewe, kisha tuma tena.",
+      "successHeading": "Ripoti yako imefika",
+      "successRouted": "Imetumwa kwa {{organisation}}.",
+      "successUnrouted": "Imethibitishwa na inasubiri kuchukuliwa na mamlaka inayohusika.",
+      "viewReport": "Ona ripoti",
+      "reportAnother": "Ripoti tatizo lingine"
+    },
+    "reports": {
+      "headingMine": "Ripoti zangu",
+      "headingAll": "Ripoti za mji wote",
+      "count": "Ripoti {{count}}",
+      "newReport": "Ripoti tatizo",
+      "allTypes": "Aina zote za matatizo",
+      "allStatuses": "Hali yoyote",
+      "onlyMine": "Zangu tu",
+      "refresh": "Pakia upya",
+      "loading": "Inapakia ripoti…",
+      "loadError": "Imeshindikana kupakia ripoti.",
+      "emptyHeading": "Hakuna kitu bado",
+      "emptyText": "Ukiripoti tatizo litaonekana hapa.",
+      "view": "Ona",
+      "edit": "Badilisha",
+      "previous": "Iliyotangulia",
+      "next": "Ifuatayo",
+      "pageOf": "Ukurasa {{page}} kati ya {{total}}",
+      "stats": {
+        "total": "Ripoti zote",
+        "reporters": "Watu wanaoripoti",
+        "average": "Wastani wa ripoti kwa mtu",
+        "mostReported": "Matatizo yanayoripotiwa zaidi"
+      }
+    },
+    "detail": {
+      "loading": "Inapakia ripoti…",
+      "error": "Imeshindikana kupakia ripoti hii.",
+      "notFound": "Ripoti hii haikupatikana.",
+      "backToReports": "Rudi kwenye ripoti zangu",
+      "edit": "Badilisha ripoti",
+      "description": "Maelezo",
+      "suggestedSolution": "Pendekezo la marekebisho",
+      "location": "Eneo",
+      "noLocation": "Hakuna eneo lililorekodiwa",
+      "authority": "Mamlaka inayohusika",
+      "assignedAt": "Imetaarifiwa {{date}}",
+      "noAuthority": "Hakuna mamlaka iliyosajiliwa kwa aina hii ya tatizo bado, hivyo ripoti inasubiri kuchukuliwa.",
+      "verifiedAt": "Picha iliangaliwa {{date}}",
+      "aiAssessment": "Tathmini ya AI",
+      "severity": "Ukubwa",
+      "detectedType": "Imetambuliwa kama",
+      "priority": "Alama ya kipaumbele"
+    },
+    "edit": {
+      "heading": "Rekebisha ripoti yako",
+      "subheading": "Badilisha unachotaka. Ukibadilisha aina ya tatizo, maelezo au picha, picha inaangaliwa tena na ripoti inaweza kuelekezwa kwa mamlaka nyingine.",
+      "back": "Rudi kwenye ripoti",
+      "backToReports": "Rudi kwenye ripoti zangu",
+      "loading": "Inapakia ripoti…",
+      "loadError": "Imeshindikana kupakia ripoti hii.",
+      "notFound": "Ripoti hii haikupatikana.",
+      "saveError": "Imeshindikana kuhifadhi mabadiliko yako.",
+      "rejectedHeading": "Mabadiliko yako hayakukubaliwa",
+      "rejectedHelp": "Picha hailingani tena na ulivyoeleza, hivyo hakuna kilichobadilishwa.",
+      "lockedHeading": "Ripoti hii haiwezi kubadilishwa tena",
+      "lockedText": "Kazi imeanza tayari, hivyo maelezo yake yamefungwa ili rekodi ibaki sahihi.",
+      "viewReport": "Ona ripoti"
+    },
+    "map": {
+      "title": "Ripoti kwenye ramani",
+      "subtitle": "Kila eneo mkazi alilochagua kwa shirika lako.",
+      "refresh": "Pakia upya",
+      "allStatuses": "Hali zote",
+      "allTypes": "Matatizo yote",
+      "loading": "Inapakia ripoti zako…",
+      "loadFailed": "Ripoti za ramani yako hazikuweza kupakiwa.",
+      "emptyTitle": "Hakuna eneo la kwenda bado",
+      "emptyBody": "Ripoti zinazoelekezwa kwa shirika lako zitaonekana hapa na eneo lake kamili.",
+      "kmAway": "Km {{km}} kutoka hapa",
+      "yourOrganisation": "Shirika lako",
+      "unnamedPlace": "Eneo alilochagua mtoa ripoti",
+      "routeLoading": "Inatafuta njia ya barabara…",
+      "routeFailed": "Njia ya barabara haipatikani sasa, hivyo mstari ulio hapa chini ni wa moja kwa moja.",
+      "byRoad": "Km {{km}} kwa barabara",
+      "minutesDriving": "Dakika {{minutes}} kwa gari",
+      "straightLine": "Km {{km}} mstari wa moja kwa moja",
+      "noOrigin": "Shirika lako hakuna viwianishi vilivyorekodiwa, hivyo njia haiwezi kuchorwa. Msimamizi anaweza kuviongeza kwenye wasifu wako.",
+      "openOsm": "Fungua kwenye OpenStreetMap",
+      "openGoogle": "Google Maps",
+      "openPhone": "Simu",
+      "openPhoneHint": "Hufungua programu ya ramani kwenye simu",
+      "photoAlt": "Picha ya tatizo lililoripotiwa",
+      "pickHint": "Chagua alama ili kuchora njia kutoka ofisi yako"
+    },
+    "orgHome": {
+      "title": "Yale jiji lako limekuripoti",
+      "subtitle": "Kila tatizo la mijini lililoelekezwa kwa {{name}}.",
+      "yourOrganisation": "shirika lako",
+      "loading": "Inapakia ripoti zako…",
+      "loadFailed": "Ripoti zako hazikuweza kupakiwa.",
+      "refresh": "Pakia upya",
+      "openMap": "Fungua ramani",
+      "assigned": "Zilizoelekezwa kwako",
+      "waiting": "Zinakusubiri",
+      "inProgress": "Zinafanyiwa kazi",
+      "resolved": "Zilizotatuliwa",
+      "nearest": "Ripoti iliyo karibu zaidi ni km {{km}}",
+      "newest": "Ripoti mpya zaidi",
+      "viewAll": "Zione zote kwenye ramani",
+      "emptyTitle": "Hakuna ripoti bado",
+      "emptyBody": "Mkazi anaporipoti tatizo ambalo msimamizi alikuandikisha kwalo, litafika hapa.",
+      "mix": "Unachoombwa kutengeneza",
+      "mixEmpty": "Hakuna kitu kilichoelekezwa kwako bado.",
+      "national": "Nchini kote",
+      "nationalReports": "Ripoti zilizowasilishwa",
+      "nationalReporters": "Watu wanaoripoti",
+      "nationalTop": "Linaloripotiwa zaidi",
+      "nationalNote": "Sehemu yako ni ripoti zilizo juu, zilizoelekezwa kwako kwa aina ya tatizo na umbali.",
+      "unread_one": "Ripoti mpya {{count}} ambayo hujaifungua",
+      "unread_other": "Ripoti mpya {{count}} ambazo hujazifungua"
+    },
+    "notifications": {
+      "title": "Taarifa",
+      "subtitleOrg": "Wakazi wanaoripoti matatizo ambayo shirika lako linahusika nayo.",
+      "subtitleOwner": "Yaliyotokea kwa matatizo uliyoripoti.",
+      "unreadOnly": "Zisizofunguliwa tu",
+      "markAll": "Weka zote kama zimefunguliwa",
+      "markAllFailed": "Hazikuweza kuwekwa zote kama zimefunguliwa.",
+      "refresh": "Pakia upya",
+      "loading": "Inapakia…",
+      "loadFailed": "Taarifa zako hazikuweza kupakiwa.",
+      "empty": "Hakuna taarifa bado",
+      "emptyUnread": "Hakuna isiyofunguliwa",
+      "emptyBodyOrg": "Utaambiwa hapa mara mkazi anaporipoti tatizo unalohusika nalo.",
+      "emptyBodyOwner": "Taarifa za ripoti zako zitaonekana hapa.",
+      "openMap": "Fungua kwenye ramani",
+      "openReport": "Fungua ripoti",
+      "previous": "Iliyotangulia",
+      "next": "Inayofuata",
+      "pageOf": "Ukurasa {{page}} kati ya {{total}}"
+    }
+  },
+  "cc.notifications.pushBlocked": "Kivinjari chako kinazuia taarifa za tovuti hii. Ziruhusu kwenye upau wa anwani ili upate taarifa za ripoti mpya wakati City Care imefungwa.",
+  "cc.notifications.pushEnable": "Washa",
+  "cc.notifications.pushPrompt": "Pata taarifa za ripoti mpya hata City Care ikiwa imefungwa."
+}

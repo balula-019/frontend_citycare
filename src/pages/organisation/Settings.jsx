@@ -60,7 +60,7 @@ export default function Settings() {
 
       <button
         onClick={() => navigate('/org/dashboard')}
-        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1a56db] mb-6 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#0f766e] mb-6 transition-colors"
       >
         <ArrowLeft size={15} /> Back to Dashboard
       </button>
@@ -82,8 +82,8 @@ export default function Settings() {
         {/* Max Published Items */}
         <div className="bg-white rounded-2xl border border-[#e2e8f0] p-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
-              <Package size={18} className="text-[#1a56db]" />
+            <div className="w-9 h-9 rounded-xl bg-primary-tint flex items-center justify-center">
+              <Package size={18} className="text-[#0f766e]" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-[#0f172a]">Maximum Published Items</h3>
@@ -95,7 +95,7 @@ export default function Settings() {
             min="1"
             value={settings.maxItems}
             onChange={e => handleChange('maxItems', e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] outline-none focus:ring-2 focus:ring-[#1a56db]/20 text-sm font-semibold text-[#0f172a]"
+            className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] outline-none focus:ring-2 focus:ring-[#0f766e]/20 text-sm font-semibold text-[#0f172a]"
           />
         </div>
 
@@ -115,7 +115,7 @@ export default function Settings() {
             min="1"
             value={settings.maxPending}
             onChange={e => handleChange('maxPending', e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] outline-none focus:ring-2 focus:ring-[#1a56db]/20 text-sm font-semibold text-[#0f172a]"
+            className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] outline-none focus:ring-2 focus:ring-[#0f766e]/20 text-sm font-semibold text-[#0f172a]"
           />
         </div>
 
@@ -135,7 +135,7 @@ export default function Settings() {
             min="1"
             value={settings.maxApproved}
             onChange={e => handleChange('maxApproved', e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] outline-none focus:ring-2 focus:ring-[#1a56db]/20 text-sm font-semibold text-[#0f172a]"
+            className="w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0] outline-none focus:ring-2 focus:ring-[#0f766e]/20 text-sm font-semibold text-[#0f172a]"
           />
         </div>
 
@@ -144,8 +144,8 @@ export default function Settings() {
           onClick={handleSave}
           disabled={saving}
           className="w-full flex items-center justify-center gap-2 py-3 rounded-xl
-                     bg-gradient-to-r from-[#1a56db] to-[#1547c0] text-white font-bold text-sm
-                     hover:opacity-90 disabled:opacity-70 transition-all shadow-lg shadow-blue-100"
+                     bg-gradient-to-r from-[#0f766e] to-[#115e59] text-white font-bold text-sm
+                     hover:opacity-90 disabled:opacity-70 transition-all shadow-lg shadow-primary-soft"
         >
           {saving ? (
             <><Loader2 size={16} className="animate-spin" /> Saving…</>

@@ -9,7 +9,7 @@ import patachakoVideo from '../../assets/patachako.mp4';
 // import patachakoPoster from '../../assets/patachako-poster.jpg';
 
 /* ── Brand palette ──────────────────────────────────────────────── */
-const BLUE  = '#1A56DB';
+const BLUE  = '#0f766e';
 const GREEN = '#10B981';
 
 /* ── Chapter definitions — text is resolved via i18n at render time ── */
@@ -67,7 +67,7 @@ const HeroImageCarousel = () => {
   }, []);
 
   return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 py-16 md:py-24 px-6 md:px-12 bg-gradient-to-b from-slate-950 via-[#0B1330] to-slate-950 overflow-hidden">
+    <section className="relative left-1/2 w-screen -translate-x-1/2 py-16 md:py-24 px-6 md:px-12 bg-gradient-to-b from-slate-950 via-[#0b1f26] to-slate-950 overflow-hidden">
       {/* Ambient brand glow */}
       <div
         className="absolute -top-40 left-1/2 -translate-x-1/2 w-[640px] h-[640px] rounded-full pointer-events-none"

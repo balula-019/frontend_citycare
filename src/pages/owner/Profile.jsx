@@ -27,7 +27,7 @@ function Field({ label, icon: Icon, error, children }) {
 }
 
 const cls = `w-full px-4 py-2.5 rounded-xl border border-[#e2e8f0]
-             focus:ring-2 focus:ring-[#1a56db] focus:border-transparent
+             focus:ring-2 focus:ring-[#0f766e] focus:border-transparent
              outline-none bg-white text-[#0f172a] text-sm transition-all
              disabled:bg-[#f8fafc] disabled:text-gray-400 disabled:cursor-not-allowed`;
 
@@ -129,7 +129,7 @@ export default function Profile() {
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-8">
         <Link
-          to="/owner/search"
+          to="/owner/reports"
           className="p-2 rounded-xl border border-[#e2e8f0] text-gray-500
                      hover:bg-gray-50 hover:text-gray-800 transition-all"
         >
@@ -147,13 +147,13 @@ export default function Profile() {
 
       {/* Avatar card */}
       <div className="bg-white border border-[#e2e8f0] rounded-2xl p-6 mb-6 flex items-center gap-5">
-        <div className="w-16 h-16 rounded-full bg-[#dbeafe] flex items-center justify-center text-[#1a56db] text-xl font-bold shrink-0">
+        <div className="w-16 h-16 rounded-full bg-[#ccfbf1] flex items-center justify-center text-[#0f766e] text-xl font-bold shrink-0">
           {initials}
         </div>
         <div>
           <p className="font-bold text-[#0f172a] text-base">{form.name || '—'}</p>
           <p className="text-sm text-gray-500">{form.email || '—'}</p>
-          <span className="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-[#1a56db]">
+          <span className="inline-block mt-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary-tint text-[#0f766e]">
             {t('profile.roleOwner')}
           </span>
         </div>
@@ -239,8 +239,8 @@ export default function Profile() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#1a56db] text-white
-                       text-sm font-semibold hover:bg-[#1547c0] active:scale-95 transition-all
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#0f766e] text-white
+                       text-sm font-semibold hover:bg-[#115e59] active:scale-95 transition-all
                        disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {saving ? (

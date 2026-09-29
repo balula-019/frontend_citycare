@@ -262,7 +262,7 @@ export default function LoginPage() {
       {/* LEFT PANEL */}
       <div
         className="hidden lg:flex w-[480px] flex-shrink-0 relative flex-col justify-start overflow-hidden pt-12 pb-8"
-        style={{ background: 'linear-gradient(160deg, #1a56db 0%, #1240a8 55%, #0b2878 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #0f766e 0%, #115e59 55%, #134e4a 100%)' }}
       >
         <div className="absolute -top-40 -left-40 w-[520px] h-[520px] rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
         <div className="absolute top-1/2 -right-32 w-[380px] h-[380px] rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
@@ -319,17 +319,17 @@ export default function LoginPage() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-6 px-6 pb-8 overflow-y-auto" style={{ background: '#f8fafd' }}>
+      <div className="flex-1 flex flex-col items-center justify-start pt-6 px-6 pb-8 overflow-y-auto" style={{ background: '#f5faf9' }}>
 
         <div className="w-full max-w-[440px] bg-white rounded-3xl border border-gray-100 shadow-xl shadow-slate-200/60 overflow-hidden min-h-[580px] flex flex-col mt-4">
-          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
+          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #0f766e, #10b981)' }} />
 
           <div className="px-8 pt-6 pb-6 flex-1 flex flex-col">
             <div className="flex flex-col items-center mb-5">
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+                className="focus:outline-none focus:ring-2 focus:ring-[#0f766e] rounded-2xl transition-transform hover:scale-105"
                 title={t('login.goHome')}
               >
                 <img
@@ -380,7 +380,7 @@ export default function LoginPage() {
                 <label className="text-sm font-semibold text-gray-700">
                   {t('login.fields.password')}
                 </label>
-                <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#1a56db] focus-within:ring-2 focus-within:ring-[#1a56db]/20 focus-within:bg-white">
+                <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden transition-all focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/20 focus-within:bg-white">
                   <input
                     type={showPass ? 'text' : 'password'}
                     placeholder={t('login.placeholders.password')}
@@ -394,7 +394,7 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPass(!showPass)}
                     tabIndex={-1}
-                    className="px-4 text-gray-400 hover:text-[#1a56db] transition-colors flex-shrink-0"
+                    className="px-4 text-gray-400 hover:text-[#0f766e] transition-colors flex-shrink-0"
                   >
                     {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -405,7 +405,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => navigate('/forgot-password')}
-                  className="text-xs font-semibold text-[#1a56db] hover:underline"
+                  className="text-xs font-semibold text-[#0f766e] hover:underline"
                 >
                   {t('login.forgotPassword')}
                 </button>
@@ -436,7 +436,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => navigate('/register')}
-                  className="font-bold text-[#1a56db] hover:underline transition-colors"
+                  className="font-bold text-[#0f766e] hover:underline transition-colors"
                 >
                   {t('login.createAccount')}
                 </button>

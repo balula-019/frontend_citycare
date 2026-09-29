@@ -40,10 +40,10 @@ const Footer = () => {
   };
 
   const platformLinks = [
-    { label: t('footer.searchItems'),     path: '/owner/search',    protected: true },
-    { label: t('footer.reportLostItem'),  path: '/owner/report',    protected: true },
-    { label: t('footer.partnerWithUs'),   path: '/partner-with-us' },
-    { label: t('footer.howItWorks'),      path: '#how-it-works',    isHash: true },
+    { label: t('cc.footer.reportProblem', 'Report a problem'), path: '/owner/report', protected: true },
+    { label: t('cc.footer.myReports', 'My reports'),           path: '/owner/reports', protected: true },
+    { label: t('footer.howItWorks'),                          path: '#how-it-works', isHash: true },
+    { label: t('cc.nav.problemTypes', 'What you can report'), path: '#problem-types', isHash: true },
   ];
 
   const socialLinks = [
@@ -62,13 +62,13 @@ const Footer = () => {
           {/* Column 1: Brand & Socials */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <img src={logoSrc} alt="PataChako" className="w-10 h-10 object-contain" />
+              <img src={logoSrc} alt="City Care" className="w-10 h-10 object-contain" />
               <span className="text-2xl font-bold tracking-tight">
-                Pata<span className="text-primary">Chako</span>
+                City<span className="text-primary">Care</span>
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-              {t('footer.tagline')}
+              {t('cc.footer.tagline', 'Report the problems you see in your city and watch them reach the authority responsible.')}
             </p>
             <div className="flex gap-3 pt-2">
               {socialLinks.map(({ Icon, href, label, color }) => (
@@ -166,7 +166,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} PataChako. {t('footer.rightsReserved')}
+            © {new Date().getFullYear()} City Care. {t('footer.rightsReserved')}
           </p>
           <p className="text-xs text-gray-500">
             {t('footer.builtWith')}

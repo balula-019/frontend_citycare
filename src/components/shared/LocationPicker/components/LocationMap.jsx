@@ -11,13 +11,13 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
-/** Custom blue marker that matches PataChako brand */
+/** Custom marker that matches the City Care brand */
 const brandIcon = new L.DivIcon({
   className: '',
   html: `
     <div style="
       width:26px; height:26px; border-radius:50% 50% 50% 0;
-      background:#1a56db; border:3px solid #fff;
+      background:#0f766e; border:3px solid #fff;
       box-shadow:0 2px 8px rgba(26,86,219,0.4);
       transform:rotate(-45deg);
       transform-origin:center;

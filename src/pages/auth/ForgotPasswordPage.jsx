@@ -56,17 +56,17 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-[#f0f4ff] to-[#f8fafc] px-4 py-8">
+    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-[#f0fdfa] to-[#f8fafc] px-4 py-8">
       <div className="flex-1 flex items-center justify-center my-auto">
         <div className="w-full max-w-[440px] bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-gray-100 overflow-hidden min-h-[520px] flex flex-col">
-          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #1a56db, #10b981)' }} />
+          <div className="h-1.5 w-full flex-shrink-0" style={{ background: 'linear-gradient(90deg, #0f766e, #10b981)' }} />
 
           <div className="px-8 pt-8 pb-8 flex-1 flex flex-col">
             <div className="flex flex-col items-center mb-6">
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="focus:outline-none focus:ring-2 focus:ring-[#1a56db] rounded-2xl transition-transform hover:scale-105"
+                className="focus:outline-none focus:ring-2 focus:ring-[#0f766e] rounded-2xl transition-transform hover:scale-105"
                 title={t('forgotPassword.goHome')}
               >
                 <img
@@ -132,7 +132,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="button"
                   onClick={() => navigate('/login')}
-                  className="font-bold text-[#1a56db] hover:underline transition-colors"
+                  className="font-bold text-[#0f766e] hover:underline transition-colors"
                 >
                   {t('forgotPassword.signIn')}
                 </button>

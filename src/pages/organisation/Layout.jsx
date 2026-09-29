@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, PlusCircle, Package, FileText, Bell,
-  BarChart3, User, Settings, LogOut,
-  ChevronLeft, ChevronRight, Search, Menu, X, Sparkles
+  LayoutDashboard, Map, Bell, User, Settings, LogOut,
+  ChevronLeft, ChevronRight, Menu, X, Sparkles
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../context/NotificationContext';
 
 const NAV = [
   { to: '/org/dashboard',        icon: LayoutDashboard, label: 'Dashboard'        },
-  { to: '/org/publish',          icon: PlusCircle,      label: 'Publish Item'     },
-  { to: '/org/items',            icon: Package,         label: 'My Items'         },
-  { to: '/org/claims',           icon: FileText,        label: 'Claims'           },  // ✅ single Claims
+  { to: '/org/map',              icon: Map,             label: 'Reports Map'      },
   { to: '/org/notifications',    icon: Bell,            label: 'Notifications'    },
-  { to: '/org/analytics',        icon: BarChart3,       label: 'Analytics'        },
   { to: '/org/profile',          icon: User,            label: 'Profile'          },
   { to: '/org/settings',         icon: Settings,        label: 'Settings'         },
 ];
@@ -51,12 +48,11 @@ const STYLES = `
 
 export default function OrgLayout() {
   const { user, logout, loggingOut } = useAuth();
+  const { unreadCount: notifCount } = useNotifications();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [collapsed,    setCollapsed]    = useState(false);
   const [mobileOpen,   setMobileOpen]   = useState(false);
-  const [searchQuery,  setSearchQuery]  = useState('');
-  const [notifCount,   setNotifCount]   = useState(5);
 
   const orgName   = user?.organizationName || user?.name || 'Organisation';
   const initials  = orgName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
@@ -74,11 +70,11 @@ export default function OrgLayout() {
         bg-[#0f172a] text-white relative overflow-hidden
       `}
     >
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1a56db] via-[#6366f1] to-[#22c55e]" />
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0f766e] via-[#6366f1] to-[#22c55e]" />
 
       <div className={`flex items-center gap-3 px-4 pt-6 pb-5 border-b border-white/8
                         ${collapsed && !mobile ? 'justify-center px-2' : ''}`}>
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db] to-[#6366f1]
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0f766e] to-[#6366f1]
                         flex items-center justify-center shrink-0 shadow-lg">
           <Sparkles size={17} className="text-white" />
         </div>
@@ -105,7 +101,7 @@ export default function OrgLayout() {
           return (
             <NavLink key={to} to={to}
               className={`nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl group relative
-                          ${active ? 'bg-gradient-to-r from-[#1a56db] to-[#1547c0] text-white shadow-lg shadow-blue-900/30'
+                          ${active ? 'bg-gradient-to-r from-[#0f766e] to-[#115e59] text-white shadow-lg shadow-primary-deep/30'
                                     : 'text-white/55 hover:text-white hover:bg-white/8'}
                           ${collapsed && !mobile ? 'justify-center px-2' : ''}`}
               title={collapsed && !mobile ? label : undefined}
@@ -129,7 +125,7 @@ export default function OrgLayout() {
           </button>
         ) : (
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db]/60 to-[#6366f1]/60 flex items-center justify-center text-white text-xs font-black shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0f766e]/60 to-[#6366f1]/60 flex items-center justify-center text-white text-xs font-black shrink-0">
               {initials}
             </div>
             <div className="min-w-0 flex-1">
@@ -173,14 +169,11 @@ export default function OrgLayout() {
               <Menu size={18} className="text-gray-600" />
             </button>
 
-            <div className="flex-1 max-w-md relative">
-              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search items, claims, owners…"
-                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-[#e2e8f0] bg-white/70 focus:bg-white focus:ring-2 focus:ring-[#1a56db]/20 focus:border-[#1a56db] outline-none transition-all"
-              />
+            <div className="flex-1 min-w-0">
+              <p className="truncate text-sm font-bold text-dark">{orgName}</p>
+              <p className="truncate text-[11px] text-muted">
+                Urban problems routed to your organisation
+              </p>
             </div>
 
             <div className="flex items-center gap-2 ml-auto">
@@ -195,7 +188,7 @@ export default function OrgLayout() {
               </button>
 
               <button onClick={() => navigate('/org/profile')}
-                      className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#1a56db] to-[#6366f1] flex items-center justify-center text-white text-xs font-black hover:opacity-90 transition-all shadow-sm">
+                      className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0f766e] to-[#6366f1] flex items-center justify-center text-white text-xs font-black hover:opacity-90 transition-all shadow-sm">
                 {initials}
               </button>
             </div>

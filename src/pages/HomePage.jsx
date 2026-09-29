@@ -1,475 +1,68 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Camera, ArrowRight, ScanLine, MapPinned, ClipboardCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Hero from '../components/sections/Hero';
 import HowItWorks from '../components/sections/HowItWorks';
-import Categories from '../components/sections/Categories';
+import ProblemTypes from '../components/sections/ProblemTypes';
 import WhyChoose from '../components/sections/WhyChoose';
-import Testimonials from '../components/sections/Testimonials';
 import FAQ from '../components/sections/FAQ';
 import FloatingReportButton from '../components/shared/FloatingReportButton';
-import { createLostReport } from '../api/items';
-import Input from '../components/shared/Input';
-import aboutImg from '../assets/about.png';
-import {
-  Search, Megaphone, ArrowRight,
-  X, AlertCircle, CheckCircle, Brain, Upload, Trash2,
-  LayoutDashboard, List, MapPin, Building2, Calendar, Tag
-} from 'lucide-react';
+
+const REPORT_PATH = '/owner/report';
 
 /* ──────────────────────────────────────────────
-   Constants
+   Closing call to action
 ────────────────────────────────────────────── */
-const CATEGORIES = [
-  'PHONES','LAPTOPS','DOCUMENTS','IDS','PASSPORTS','BAGS','WALLETS','KEYS',
-  'ELECTRONICS','CLOTHES','JEWELRY','WATCHES','MONEY','BOOKS','VEHICLE_ITEMS',
-  'HEADPHONES','CHARGERS_PHONE','CHARGERS_OTHERS','WATER_BOTTLES','TOYS',
-  'MEDICAL_ITEMS','SPORTS_ITEMS','PET_ITEMS','FOOD_CONTAINERS','UMBRELLAS',
-  'CALCULATOR','OTHERS'
-];
-const REGIONS = [
-  'ARUSHA','DAR_ES_SALAAM','DODOMA','GEITA','IRINGA','KAGERA','KATAVI',
-  'KIGOMA','KILIMANJARO','LINDI','MANYARA','MARA','MBEYA','MOROGORO',
-  'MTWARA','MWANZA','NJOMBE','PWANI','RUKWA','RUVUMA','SHINYANGA',
-  'SIMIYU','SINGIDA','TABORA','TANGA','UNGUJA_KASKAZINI','UNGUJA_KUSINI',
-  'UNGUJA_MJINI_MAGHARIBI','PEMBA'
-];
-
-const animStyles = `
-  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes dotBounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
-  .ai-spinner-outer { animation: spin-slow 1.4s linear infinite; }
-  .ai-spinner-inner { animation: spin-slow 1s linear infinite reverse; }
-  .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
-  .dot-bounce { animation: dotBounce 1.2s ease-in-out infinite; }
-`;
-
-function SelectField({ label, name, value, onChange, options, placeholder, required }) {
-  return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
-      </label>
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white text-gray-800 transition-all"
-      >
-        <option value="">{placeholder}</option>
-        {options.map(o => (
-          <option key={o.value} value={o.value}>{o.label}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-/* ──────────────────────────────────────────────
-   ReportItemModal
-────────────────────────────────────────────── */
-function ReportItemModal({ onClose, onSuccess }) {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState({
-    itemName: '', description: '', category: '', lostDate: '', region: '',
-    area: '', lostLocation: '', dominantColor: '', latitude: '', longitude: '',
-    imageUrls: [],
-  });
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [reportId, setReportId] = useState(null);
-  const [matchResult, setMatchResult] = useState(null);
-  const [isDragOver, setIsDragOver] = useState(false);
-
-  const stepTitles = [
-    t('home.reportModal.steps.basic'),
-    t('home.reportModal.steps.location'),
-    t('home.reportModal.steps.images'),
-  ];
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const addImageFiles = useCallback((files) => {
-    const imageOnly = files.filter(f => f.type.startsWith('image/'));
-    if (!imageOnly.length) return;
-    const newPreviews = imageOnly.map(file => URL.createObjectURL(file));
-    setImagePreviews(prev => [...prev, ...newPreviews]);
-    setForm(prev => ({ ...prev, imageUrls: [...prev.imageUrls, ...newPreviews] }));
-  }, []);
-
-  const handleImageUpload = (e) => {
-    addImageFiles(Array.from(e.target.files));
-    e.target.value = '';
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    addImageFiles(Array.from(e.dataTransfer.files));
-  };
-
-  const removeImage = (index) => {
-    URL.revokeObjectURL(imagePreviews[index]);
-    setImagePreviews(prev => prev.filter((_, i) => i !== index));
-    setForm(prev => ({
-      ...prev,
-      imageUrls: prev.imageUrls.filter((_, i) => i !== index),
-    }));
-  };
-
-  const validateStep = () => {
-    setError('');
-    if (step === 0) {
-      if (!form.itemName.trim()) { setError(t('home.reportModal.errItemName')); return false; }
-      if (!form.category) { setError(t('home.reportModal.errCategory')); return false; }
-      if (!form.description.trim()) { setError(t('home.reportModal.errDescription')); return false; }
-    }
-    if (step === 1) {
-      if (!form.region) { setError(t('home.reportModal.errRegion')); return false; }
-      if (!form.area.trim()) { setError(t('home.reportModal.errArea')); return false; }
-      if (!form.lostDate) { setError(t('home.reportModal.errLostDate')); return false; }
-      if (!form.lostLocation.trim()) { setError(t('home.reportModal.errLostLocation')); return false; }
-    }
-    return true;
-  };
-
-  const nextStep = () => { if (validateStep()) setStep(prev => Math.min(prev + 1, 2)); };
-  const prevStep = () => { setError(''); setStep(prev => Math.max(prev - 1, 0)); };
-
-  const handleSubmit = async () => {
-    if (!validateStep()) return;
-    setSubmitting(true);
-    setError('');
-    try {
-      const payload = {
-        itemName: form.itemName,
-        description: form.description,
-        category: form.category,
-        lostDate: form.lostDate,
-        region: form.region,
-        area: form.area,
-        lostLocation: form.lostLocation,
-        ...(form.dominantColor && { dominantColor: form.dominantColor }),
-        ...(form.latitude && { latitude: parseFloat(form.latitude) }),
-        ...(form.longitude && { longitude: parseFloat(form.longitude) }),
-        ...(form.imageUrls.length > 0 && { imageUrls: form.imageUrls }),
-      };
-
-      const response = await createLostReport(payload);
-      const data = response?.data || response;
-      setReportId(data.id || null);
-      setMatchResult(data);
-
-      setSubmitting(false);
-      setStep(3);
-      setTimeout(() => setStep(4), 1200);
-    } catch (err) {
-      setError(err.message || t('common.somethingWentWrong'));
-      setSubmitting(false);
-    }
-  };
-
-  const isFormStep = step <= 2;
-  const canClose = step !== 3;
-
-  const categoryOptions = CATEGORIES.map(c => ({
-    value: c,
-    label: t(`categories.${c}`, c.replace(/_/g, ' ').charAt(0) + c.replace(/_/g, ' ').slice(1).toLowerCase())
-  }));
-  const regionOptions = REGIONS.map(r => ({ value: r, label: t(`regions.${r}`, r.replace(/_/g, ' ')) }));
-
-  const hasMatch = matchResult?.matched === true;
-  const matchDetails = matchResult?.matchDetails || {};
-  const matchLevel = matchResult?.matchLevel || matchDetails?.matchLevel;
-
-  const getMatchBadge = (level) => {
-    if (level === 'POTENTIAL_MATCH') return { bg: '#dbeafe', text: '#1e40af', label: t('home.reportModal.potentialMatch') };
-    if (level === 'NO_MATCH') return { bg: '#fee2e2', text: '#991b1b', label: t('home.reportModal.noMatch') };
-    return null;
-  };
-  const matchBadge = matchLevel ? getMatchBadge(matchLevel) : null;
-
-  return (
-    <>
-      <style>{animStyles}</style>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}>
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col" style={{ maxHeight: '92vh' }}>
-
-          <div className="flex items-center justify-between px-8 pt-7 pb-4 border-b border-gray-100 shrink-0">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">
-                {step === 3 ? t('home.reportModal.analyzingTitle')
-                 : step === 4 ? t('home.reportModal.resultTitle')
-                 : t('home.reportModal.title')}
-              </h2>
-              {isFormStep && (
-                <p className="text-sm text-gray-500 mt-0.5">
-                  {t('home.reportModal.stepOf', { current: step + 1, total: 3 })} — {stepTitles[step]}
-                </p>
-              )}
-            </div>
-            <button onClick={canClose ? onClose : undefined} disabled={!canClose}
-              className={`rounded-full p-1.5 transition-colors ${canClose ? 'text-gray-400 hover:text-gray-700 hover:bg-gray-100 cursor-pointer' : 'text-gray-200 cursor-not-allowed'}`}
-              aria-label={t('common.close')}>
-              <X size={22} />
-            </button>
-          </div>
-
-          {isFormStep && (
-            <div className="px-8 pt-4 shrink-0">
-              <div className="flex gap-2">
-                {[0, 1, 2].map(i => (
-                  <div key={i} className="flex-1 h-1.5 rounded-full transition-all duration-500"
-                    style={{ backgroundColor: i <= step ? '#1a56db' : '#e2e8f0' }} />
-                ))}
-              </div>
-              <div className="flex justify-between mt-1.5">
-                {stepTitles.map((title, i) => (
-                  <span key={i} className="text-xs transition-colors duration-300"
-                    style={{ color: i <= step ? '#1a56db' : '#94a3b8' }}>{title}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="overflow-y-auto flex-1 px-8 py-6">
-            {error && isFormStep && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 flex items-center gap-2 text-sm">
-                <AlertCircle size={16} className="shrink-0" /> {error}
-              </div>
-            )}
-
-            {step === 0 && (
-              <div className="space-y-5 fade-in-up">
-                <Input label={t('home.reportModal.itemName')} name="itemName" placeholder={t('home.reportModal.itemNamePh')} value={form.itemName} onChange={handleChange} required />
-                <SelectField label={t('home.reportModal.category')} name="category" value={form.category} onChange={handleChange} options={categoryOptions} placeholder={t('home.reportModal.categoryPh')} required />
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('home.reportModal.description')} <span className="text-red-500">*</span></label>
-                  <textarea name="description" rows={4} placeholder={t('home.reportModal.descriptionPh')} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-gray-800 transition-all text-sm" value={form.description} onChange={handleChange} />
-                </div>
-              </div>
-            )}
-
-            {step === 1 && (
-              <div className="space-y-5 fade-in-up">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <SelectField label={t('home.reportModal.region')} name="region" value={form.region} onChange={handleChange} options={regionOptions} placeholder={t('home.reportModal.regionPh')} required />
-                  <Input label={t('home.reportModal.area')} name="area" placeholder={t('home.reportModal.areaPh')} value={form.area} onChange={handleChange} required />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Input label={t('home.reportModal.dateLost')} type="date" name="lostDate" value={form.lostDate} onChange={handleChange} required max={new Date().toISOString().split('T')[0]} />
-                  <Input label={t('home.reportModal.dominantColor')} name="dominantColor" placeholder={t('home.reportModal.dominantColorPh')} value={form.dominantColor} onChange={handleChange} />
-                </div>
-                <Input label={t('home.reportModal.lostLocation')} name="lostLocation" placeholder={t('home.reportModal.lostLocationPh')} value={form.lostLocation} onChange={handleChange} required />
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('home.reportModal.gpsCoords')} <span className="text-gray-400 font-normal">{t('home.reportModal.optional')}</span></label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <Input name="latitude" placeholder={t('home.reportModal.latitudePh')} value={form.latitude} onChange={handleChange} />
-                    <Input name="longitude" placeholder={t('home.reportModal.longitudePh')} value={form.longitude} onChange={handleChange} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {step === 2 && (
-              <div className="space-y-4 fade-in-up">
-                <p className="text-sm text-gray-500">
-                  {t('home.reportModal.uploadHint')}{' '}
-                  <span className="text-gray-400">{t('home.reportModal.optional')}</span>
-                </p>
-                <div
-                  onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
-                  onDragLeave={() => setIsDragOver(false)}
-                  onDrop={handleDrop}
-                  className="rounded-xl border-2 border-dashed p-8 text-center transition-all duration-200 cursor-pointer"
-                  style={{ borderColor: isDragOver ? '#1a56db' : '#d1d5db', backgroundColor: isDragOver ? '#eff6ff' : '#f9fafb' }}
-                  onClick={() => document.getElementById('modalImageUpload').click()}
-                >
-                  <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" id="modalImageUpload" />
-                  <Upload size={32} className="mx-auto mb-3" style={{ color: isDragOver ? '#1a56db' : '#9ca3af' }} />
-                  <p className="font-medium text-gray-600 text-sm">
-                    {isDragOver ? t('home.reportModal.dropHere') : t('home.reportModal.clickOrDrag')}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">{t('home.reportModal.uploadFormats')}</p>
-                </div>
-                {imagePreviews.length > 0 && (
-                  <div>
-                    <p className="text-xs font-medium text-gray-500 mb-2">
-                      {t('home.reportModal.imagesSelected', { count: imagePreviews.length })}
-                    </p>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                      {imagePreviews.map((src, idx) => (
-                        <div key={idx} className="relative group rounded-xl overflow-hidden aspect-square bg-gray-100">
-                          <img src={src} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex items-center justify-center">
-                            <button onClick={(e) => { e.stopPropagation(); removeImage(idx); }} className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5" aria-label={t('home.reportModal.removeImage')}><Trash2 size={14} /></button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {step === 3 && (
-              <div className="flex flex-col items-center justify-center py-10 fade-in-up">
-                <div className="relative flex items-center justify-center mb-8" style={{ width: 120, height: 120 }}>
-                  <div className="absolute rounded-full" style={{ width: 120, height: 120, border: '3px solid #1a56db20', animation: 'pulse-ring 2s ease-out infinite' }} />
-                  <div className="absolute rounded-full" style={{ width: 120, height: 120, border: '3px solid #1a56db20', animation: 'pulse-ring 2s ease-out 0.5s infinite' }} />
-                  <svg width="90" height="90" viewBox="0 0 90 90" className="ai-spinner-outer">
-                    <circle cx="45" cy="45" r="40" fill="none" stroke="#e2e8f0" strokeWidth="4" />
-                    <circle cx="45" cy="45" r="40" fill="none" stroke="#1a56db" strokeWidth="4" strokeLinecap="round" strokeDasharray="251" strokeDashoffset="190" />
-                  </svg>
-                  <svg width="60" height="60" viewBox="0 0 60 60" className="absolute ai-spinner-inner">
-                    <circle cx="30" cy="30" r="24" fill="none" stroke="#e2e8f0" strokeWidth="4" />
-                    <circle cx="30" cy="30" r="24" fill="none" stroke="#e11d48" strokeWidth="4" strokeLinecap="round" strokeDasharray="150" strokeDashoffset="110" />
-                  </svg>
-                  <Brain size={22} className="absolute" style={{ color: '#1a56db' }} />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{t('home.reportModal.analyzingHeading')}</h3>
-                <p className="text-gray-500 text-sm text-center max-w-xs">{t('home.reportModal.analyzingText')}</p>
-                <div className="flex gap-2 mt-6">
-                  {[0, 1, 2].map(i => (
-                    <div key={i} className="w-2.5 h-2.5 rounded-full dot-bounce" style={{ backgroundColor: '#1a56db', animationDelay: `${i * 0.2}s` }} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {step === 4 && (
-              <div className="flex flex-col py-4 fade-in-up">
-                {hasMatch ? (
-                  <div className="space-y-5">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle size={28} className="text-green-500" />
-                      <h3 className="text-xl font-bold text-gray-900">
-                        {matchLevel === 'POTENTIAL_MATCH' ? t('home.reportModal.potentialMatchHeading') : t('home.reportModal.matchFoundHeading')}
-                      </h3>
-                      {matchBadge && (
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: matchBadge.bg, color: matchBadge.text }}>
-                          {matchBadge.label}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600">{t('home.reportModal.matchFoundText')}</p>
-                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 space-y-3">
-                      {matchDetails.previewImage && <img src={matchDetails.previewImage} alt="Matched item" className="w-full h-48 object-cover rounded-lg mb-3" />}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                        <div className="flex items-center gap-2"><Tag size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.item')}:</span><span className="font-medium text-gray-800">{matchDetails.itemName || '—'}</span></div>
-                        <div className="flex items-center gap-2"><Building2 size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.organization')}:</span><span className="font-medium text-gray-800">{matchDetails.organizationName || '—'}</span></div>
-                        <div className="flex items-center gap-2"><MapPin size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.regionLabel')}:</span><span className="font-medium text-gray-800">{matchDetails.region || '—'}</span></div>
-                        <div className="flex items-center gap-2"><MapPin size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.areaLabel')}:</span><span className="font-medium text-gray-800">{matchDetails.area || '—'}</span></div>
-                        <div className="flex items-center gap-2 col-span-full"><Calendar size={16} className="text-gray-500" /><span className="text-gray-600">{t('home.reportModal.foundDate')}:</span><span className="font-medium text-gray-800">{matchDetails.foundDate || '—'}</span></div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3 mt-2">
-                      <button onClick={() => navigate(`/owner/claim/${reportId}`)} className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}>{t('home.reportModal.viewDetails')}</button>
-                      <button onClick={() => { onSuccess?.(); onClose(); }} className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-gray-100 active:scale-95" style={{ color: '#1a56db', border: '1.5px solid #1a56db' }}><List size={18} /> {t('home.reportModal.myReports')}</button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-6">
-                    <div className="w-16 h-16 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto mb-4"><AlertCircle size={32} /></div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{t('home.reportModal.noMatchHeading')}</h3>
-                    <p className="text-gray-500 mb-6 max-w-md mx-auto">{t('home.reportModal.noMatchText')}</p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <button onClick={() => { onSuccess?.(); onClose(); }} className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 hover:bg-gray-100 active:scale-95" style={{ color: '#1a56db', border: '1.5px solid #1a56db' }}><List size={18} /> {t('home.reportModal.myReports')}</button>
-                      <button onClick={() => navigate('/owner/dashboard')} className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}><LayoutDashboard size={18} /> {t('home.reportModal.dashboard')}</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {isFormStep && (
-            <div className="px-8 py-5 border-t border-gray-100 flex justify-between items-center shrink-0">
-              <button onClick={prevStep} disabled={step === 0} className="px-5 py-2.5 rounded-xl border font-medium text-sm transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50" style={{ borderColor: '#e2e8f0', color: '#374151' }}>← {t('common.back')}</button>
-              {step < 2 ? (
-                <button onClick={nextStep} className="px-6 py-2.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ backgroundColor: '#1a56db' }}>{t('common.next')} →</button>
-              ) : (
-                <button onClick={handleSubmit} disabled={submitting} className="px-6 py-2.5 rounded-xl font-semibold text-sm text-white transition-all duration-200 hover:opacity-90 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed" style={{ backgroundColor: '#1a56db', minWidth: 140 }}>
-                  {submitting ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent" style={{ animation: 'spin-slow 0.8s linear infinite' }} />
-                      {t('home.reportModal.submitting')}
-                    </span>
-                  ) : t('home.reportModal.submitReport')}
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
-
-/* ──────────────────────────────────────────────
-   HomeCTA
-────────────────────────────────────────────── */
-function HomeCTA({ isOwner, onReportClick }) {
+function HomeCTA({ isOwner, onReport }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
-    <section className="py-24 bg-[#1a56db] relative overflow-hidden">
-      <div
-        className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-          backgroundSize: '28px 28px',
-        }}
-      />
-      <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-        <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white text-xs font-semibold tracking-wider uppercase mb-5 border border-white/20">
-          {t('home.cta.badge')}
+    <section className="relative overflow-hidden bg-primary py-24">
+      <div className="absolute inset-0 dot-grid opacity-20" />
+      <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
+
+      <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
+        <span className="mb-5 inline-block rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
+          {t('cc.cta.badge', 'Your city, your report')}
         </span>
-        <h2 className="text-3xl md:text-5xl font-bold text-white mb-5 leading-tight">
-          {t('home.cta.headingLine1')}<br className="hidden sm:block" /> {t('home.cta.headingLine2')}
+        <h2 className="mb-5 text-3xl font-bold leading-tight text-white md:text-5xl">
+          {t('cc.cta.heading', 'The pothole you pass every morning')}
+          <br className="hidden sm:block" />{' '}
+          {t('cc.cta.headingLine2', 'can be fixed. Start by reporting it.')}
         </h2>
-        <p className="text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-          {t('home.cta.subtext')}
+        <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/80">
+          {t(
+            'cc.cta.subtext',
+            'It takes half a minute: a photo, a sentence, and a pin on the map. City Care does the rest.',
+          )}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex justify-center">
           <button
-            onClick={isOwner ? onReportClick : () => navigate('/register')}
-            className="flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-white text-[#1a56db] font-bold text-sm hover:bg-blue-50 active:scale-95 transition-all shadow-lg shadow-black/20"
+            onClick={onReport}
+            className="flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-primary shadow-lg shadow-black/20 transition-all hover:bg-primary-soft active:scale-95"
           >
-            <Megaphone size={18} />
-            {isOwner ? t('home.cta.reportLostItem') : t('home.cta.getStarted')}
+            <Camera size={18} />
+            {isOwner
+              ? t('cc.cta.reportProblem', 'Report a problem')
+              : t('cc.cta.getStarted', 'Create an account')}
             <ArrowRight size={16} />
-          </button>
-          <button
-            onClick={() => navigate(isOwner ? '/owner/search' : '/register')}
-            className="flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl border-2 border-white/40 text-white font-bold text-sm hover:bg-white/10 hover:border-white/70 active:scale-95 transition-all"
-          >
-            <Search size={17} />
-            {t('home.cta.searchFound')}
           </button>
         </div>
 
         {!isOwner && (
-          <p className="text-white/50 text-xs mt-6">
-            {t('home.cta.haveAccount')}{' '}
+          <p className="mt-6 text-xs text-white/60">
+            {t('cc.cta.haveAccount', 'Already registered?')}{' '}
             <button
               onClick={() => navigate('/login')}
-              className="text-white/80 underline hover:text-white transition-colors"
+              className="underline transition-colors hover:text-white"
             >
-              {t('home.cta.signIn')}
+              {t('cc.cta.signIn', 'Sign in')}
             </button>
           </p>
         )}
@@ -479,41 +72,83 @@ function HomeCTA({ isOwner, onReportClick }) {
 }
 
 /* ──────────────────────────────────────────────
-   AboutSection
+   About
 ────────────────────────────────────────────── */
 function AboutSection() {
   const { t } = useTranslation();
+
+  const carries = [
+    {
+      key: 'photos',
+      icon: Camera,
+      title: 'Up to five photos',
+      desc: 'The evidence, straight from your phone.',
+    },
+    {
+      key: 'location',
+      icon: MapPinned,
+      title: 'An exact pin',
+      desc: 'Coordinates plus region, district and ward.',
+    },
+    {
+      key: 'verification',
+      icon: ScanLine,
+      title: 'A verification result',
+      desc: 'Topic match, description match and a relevance score.',
+    },
+    {
+      key: 'owner',
+      icon: ClipboardCheck,
+      title: 'An accountable office',
+      desc: 'The authority responsible, notified and named.',
+    },
+  ];
+
   return (
-    <section id="about" className="py-24 bg-[#f8fafc]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-          {/* Left Content Side */}
-          <div className="lg:col-span-6 space-y-6">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#1a56db] text-xs font-bold tracking-wider uppercase border border-blue-100">
-              {t('home.about.badge')}
+    <section id="about" className="bg-surface py-24">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="space-y-6">
+            <span className="inline-block rounded-full border border-primary/15 bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
+              {t('cc.about.badge', 'About City Care')}
             </span>
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#0f172a] leading-[1.15] tracking-tight">
-              {t('home.about.headingLine1')} <br className="hidden sm:block" />
-              {t('home.about.headingLine2')}
+            <h2 className="text-4xl font-extrabold leading-[1.15] tracking-tight text-dark sm:text-5xl">
+              {t('cc.about.headingLine1', 'Residents see the problems first.')}{' '}
+              <br className="hidden sm:block" />
+              {t('cc.about.headingLine2', 'We make sure someone hears about them.')}
             </h2>
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-              {t('home.about.para1')}
+            <p className="text-base leading-relaxed text-muted sm:text-lg">
+              {t(
+                'cc.about.para1',
+                'Most urban problems are reported by nobody. Not because people do not care, but because there is no simple way to tell the right office, and no way to know whether the message arrived.',
+              )}
             </p>
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-              {t('home.about.para2')}
+            <p className="text-base leading-relaxed text-muted sm:text-lg">
+              {t(
+                'cc.about.para2',
+                'City Care closes that gap. A verified photo, an exact location, and a named authority for every report, so a problem stops being everybody and nobody\u2019s business.',
+              )}
             </p>
           </div>
 
-          {/* Right Image Side */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end items-center">
-            <img
-              src={aboutImg}
-              alt="About PataChako"
-              className="w-full max-w-lg lg:max-w-xl h-auto max-h-[520px] object-contain mix-blend-multiply transition-transform duration-300 hover:scale-[1.02]"
-            />
+          <div className="grid gap-4 sm:grid-cols-2">
+            {carries.map((item) => (
+              <div
+                key={item.key}
+                className="rounded-2xl border border-border bg-white p-6 transition-shadow hover:shadow-lg"
+              >
+                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                  <item.icon size={20} />
+                </span>
+                <h3 className="mb-1.5 font-bold text-dark">
+                  {t(`cc.about.carries.${item.key}.title`, item.title)}
+                </h3>
+                <p className="text-sm leading-relaxed text-muted">
+                  {t(`cc.about.carries.${item.key}.desc`, item.desc)}
+                </p>
+              </div>
+            ))}
           </div>
-
         </div>
       </div>
     </section>
@@ -521,88 +156,54 @@ function AboutSection() {
 }
 
 /* ──────────────────────────────────────────────
-   HomePage (main export)
+   HomePage
 ────────────────────────────────────────────── */
 export default function HomePage() {
   const navigate = useNavigate();
   const { user, isOwner: checkIsOwner } = useAuth();
 
   const storedUser = (() => {
-    try { return JSON.parse(localStorage.getItem('user') || '{}'); }
-    catch { return {}; }
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}');
+    } catch {
+      return {};
+    }
   })();
+
   const isOwner = !!(
-    user && (
-      (typeof checkIsOwner === 'function' ? checkIsOwner() : false) ||
+    user &&
+    ((typeof checkIsOwner === 'function' ? checkIsOwner() : false) ||
       storedUser.user_type === 'OWNER' ||
       user.role === 'OWNER' ||
-      user.userType === 'OWNER'
-    )
+      user.userType === 'OWNER')
   );
 
-  const [showModal, setShowModal] = useState(false);
-  const [loadingReportBtn, setLoadingReportBtn] = useState(false);
-  const [loadingSearchBtn, setLoadingSearchBtn] = useState(false);
-
-  const handleHeroReport = () => {
-    if (!isOwner) {
-      navigate('/register?redirect=' + encodeURIComponent('/owner/report'));
+  // Reporting needs an account, so send visitors to register and bring them back.
+  const handleReport = useCallback(() => {
+    if (isOwner) {
+      navigate(REPORT_PATH);
       return;
     }
-    setLoadingReportBtn(true);
-    setTimeout(() => {
-      setShowModal(true);
-      setLoadingReportBtn(false);
-    }, 300);
-  };
-
-  const handleHeroSearch = () => {
-    if (!isOwner) {
-      navigate('/register?redirect=' + encodeURIComponent('/owner/search'));
-      return;
-    }
-    setLoadingSearchBtn(true);
-    navigate('/owner/search');
-    setTimeout(() => setLoadingSearchBtn(false), 500);
-  };
+    navigate(`/register?redirect=${encodeURIComponent(REPORT_PATH)}`);
+  }, [isOwner, navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col font-sans">
+    <div className="flex min-h-screen flex-col font-sans">
       <Navbar />
 
       <main className="flex-grow">
-        <Hero
-          onReportClick={handleHeroReport}
-          onSearchClick={handleHeroSearch}
-          isLoadingReport={loadingReportBtn}
-          isLoadingSearch={loadingSearchBtn}
-        />
+        <Hero onReport={handleReport} />
         <HowItWorks />
-        <Categories />
+        <ProblemTypes onReport={handleReport} />
         <WhyChoose />
-        <Testimonials />
         <FAQ />
-
-        <HomeCTA
-          isOwner={isOwner}
-          onReportClick={() => setShowModal(true)}
-        />
-
+        <HomeCTA isOwner={isOwner} onReport={handleReport} />
         <AboutSection />
       </main>
 
       <Footer />
 
-      {isOwner && (
-        <FloatingReportButton onClick={() => setShowModal(true)} />
-      )}
-
-      {showModal && (
-        <ReportItemModal
-          onClose={() => setShowModal(false)}
-          onSuccess={() => setShowModal(false)}
-        />
-      )}
+      {isOwner && <FloatingReportButton onClick={handleReport} />}
     </div>
   );
 }

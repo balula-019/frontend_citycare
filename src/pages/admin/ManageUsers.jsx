@@ -110,19 +110,19 @@ export default function ManageUsers() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f7fd] p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f5faf9] p-4 sm:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
         <button
           onClick={() => navigate('/admin')}
-          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#1a56db] mb-6"
+          className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#0f766e] mb-6"
         >
           <ArrowLeft size={15} /> Back to Dashboard
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#dbeafe] flex items-center justify-center">
-              <Users size={20} className="text-[#1a56db]" />
+            <div className="w-10 h-10 rounded-xl bg-[#ccfbf1] flex items-center justify-center">
+              <Users size={20} className="text-[#0f766e]" />
             </div>
             <h1 className="text-xl font-extrabold text-gray-900" style={{ fontFamily: "'Sora', sans-serif" }}>
               Manage Users
@@ -169,7 +169,7 @@ export default function ManageUsers() {
             <button
               onClick={() => fetchUsers()}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1a56db] text-white text-sm font-bold hover:bg-[#1547c0] transition-all disabled:opacity-60"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0f766e] text-white text-sm font-bold hover:bg-[#115e59] transition-all disabled:opacity-60"
             >
               <Search size={16} /> Search
             </button>
@@ -186,7 +186,7 @@ export default function ManageUsers() {
         <div className="bg-white rounded-2xl border border-[#e2e8f0] overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center p-12">
-              <Loader2 size={32} className="animate-spin text-[#1a56db]" />
+              <Loader2 size={32} className="animate-spin text-[#0f766e]" />
             </div>
           ) : users.length === 0 ? (
             <div className="p-12 text-center">
@@ -221,7 +221,7 @@ export default function ManageUsers() {
                         <td className="px-4 py-3 text-gray-600">{user.email}</td>
                         <td className="px-4 py-3 text-gray-600">{user.phoneNumber || '—'}</td>
                         <td className="px-4 py-3">
-                          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
+                          <span className="px-2 py-0.5 bg-primary-soft text-primary-hover text-xs font-bold rounded-full">
                             {user.userType}
                           </span>
                         </td>

@@ -1,1099 +1,975 @@
 {
-    "common": {
-  "back": "Nyuma",
-  "next": "Endelea",
-  "backToSearch": "Rudi kwa Utafutaji",
-  "refresh": "Sasisha",
-  "loading": "Inapakia…",
-  "save": "Hifadhi",
-  "saving": "Inahifadhi…",
-  "cancel": "Ghairi",
-  "delete": "Futa",
-  "deleting": "Inafuta…",
-  "edit": "Hariri",
-  "retry": "Jaribu tena",
-  "yes": "Ndiyo",
-  "no": "Hapana",
-  "close": "Funga",
-  "somethingWentWrong": "Kuna kitu kilienda vibaya.",
-  "logout": "Toka"
-},
-  
-    "nav": {
-      "home": "Nyumbani",
-      "about": "Kuhusu",
-      "contact": "Wasiliana",
-      "partnerWithUs": "Shirikiana Nasi",
-      "login": "Ingia",
-      "register": "Fungua Akaunti",
-      "logout": "Toka",
-      "language": "Lugha",
-      "owner": {
-        "dashboard": "Dashibodi",
-        "search": "Tafuta Vitu",
-        "report": "Ripoti Kitu Kilichopotea",
-        "reports": "Ripoti Zangu",
-        "profile": "Wasifu"
-      },
-      "org": {
-        "dashboard": "Dashibodi",
-        "publish": "Tangaza Kitu",
-        "items": "Vitu Vyangu",
-        "claims": "Madai",
-        "profile": "Wasifu"
-      },
-      "admin": {
-        "dashboard": "Dashibodi",
-        "manageUsers": "Simamia Watumiaji",
-        "createOrg": "Unda Taasisi",
-        "items": "Vitu",
-        "partnerRequests": "Maombi ya Ushirikiano",
-        "profile": "Wasifu"
-      }
-    },
-  
-    "home": {
-      "cta": {
-        "badge": "Anza leo — ni bure",
-        "headingLine1": "Anza Safari Yako",
-        "headingLine2": "ya Kurejesha leo",
-        "subtext": "Usiruhusu kitu kilichopotea kuvuruga maisha yako. Jiunge na maelfu ya Watanzania wanaotumaini PataChako kwa urejeshaji salama na wa haraka.",
-        "reportLostItem": "Ripoti kitu kilichopotea",
-        "getStarted": "Anza bure",
-        "searchFound": "Tafuta vitu vilivyopatikana",
-        "haveAccount": "Tayari una akaunti?",
-        "signIn": "Ingia"
-      },
-      "about": {
-        "badge": "Kuhusu sisi",
-        "headingLine1": "Jukwaa la Tanzania",
-        "headingLine2": "la kutafuta vitu lililoaminika zaidi",
-        "para1": "PataChako inaunganisha watu waliopoteza vitu na taasisi zilizothibitishwa zilizovipata. Mfumo wetu wa AI unalinganisha maelfu ya ripoti kwa sekunde.",
-        "para2": "Tunashirikiana na taasisi zilizothibitishwa katika mikoa yote 31 ya Tanzania — kutoka Dar es Salaam hadi Zanzibar."
-      },
-      "reportModal": {
-        "title": "Ripoti Kitu Kilichopotea",
-        "analyzingTitle": "Tunachambua Ripoti Yako",
-        "resultTitle": "Matokeo ya Ripoti",
-        "stepOf": "Hatua {{current}} kati ya {{total}}",
-        "steps": {
-          "basic": "Taarifa za Msingi",
-          "location": "Maelezo ya Mahali",
-          "images": "Picha"
-        },
-        "itemName": "Jina la Kitu",
-        "itemNamePh": "Weka jina la kitu kilichopotea",
-        "category": "Aina",
-        "categoryPh": "Chagua aina",
-        "description": "Maelezo",
-        "descriptionPh": "Eleza kitu chako kilichopotea",
-        "region": "Mkoa",
-        "regionPh": "Chagua mkoa",
-        "area": "Eneo",
-        "areaPh": "mf., Kijitonyama",
-        "dateLost": "Tarehe ya Kupotea",
-        "dominantColor": "Rangi Kuu",
-        "dominantColorPh": "mf., Nyeusi, Fedha",
-        "lostLocation": "Mahali Kilipopotea",
-        "lostLocationPh": "mf., Kituo cha basi karibu na Posta",
-        "gpsCoords": "Kuratibu za GPS",
-        "optional": "(hiari)",
-        "latitudePh": "Latitudo: -6.7924",
-        "longitudePh": "Longitudo: 39.2083",
-        "uploadHint": "Pakia picha za kitu kilichopotea ili kuboresha usahihi wa AI.",
-        "dropHere": "Achia picha hapa",
-        "clickOrDrag": "Bofya au buruta picha hapa",
-        "uploadFormats": "PNG, JPG, WEBP — hadi 5MB kila moja",
-        "imagesSelected": "Picha {{count}} imechaguliwa",
-        "imagesSelected_plural": "Picha {{count}} zimechaguliwa",
-        "removeImage": "Ondoa picha",
-        "analyzingHeading": "Tunachambua ripoti yako...",
-        "analyzingText": "Mfumo wetu wa kulinganisha unalinganisha ripoti yako na vitu vilivyopatikana.",
-        "matchFoundHeading": "Ulinganisho Umepatikana!",
-        "potentialMatchHeading": "Ulinganisho Unaowezekana Umepatikana!",
-        "noMatchHeading": "Hakuna Kitu Kilicholingana",
-        "noMatchText": "Hakuna kitu kilicholingana bado. Ripoti yako imehifadhiwa kikamilifu. Vitu vitakavyopatikana baadaye vinaweza kulinganishwa moja kwa moja.",
-        "matchFoundText": "Ulinganisho unaowezekana wa kitu chako umepatikana.",
-        "potentialMatch": "Ulinganisho Unaowezekana",
-        "noMatch": "Hakuna Ulinganisho",
-        "item": "Kitu",
-        "organization": "Taasisi",
-        "regionLabel": "Mkoa",
-        "areaLabel": "Eneo",
-        "foundDate": "Tarehe Iliyopatikana",
-        "viewDetails": "Ona Maelezo",
-        "myReports": "Ripoti Zangu",
-        "dashboard": "Dashibodi",
-        "submitReport": "Tuma Ripoti",
-        "submitting": "Inatuma...",
-        "errItemName": "Jina la kitu linahitajika",
-        "errCategory": "Tafadhali chagua aina",
-        "errDescription": "Maelezo yanahitajika",
-        "errRegion": "Mkoa unahitajika",
-        "errArea": "Eneo linahitajika",
-        "errLostDate": "Tarehe ya kupotea inahitajika",
-        "errLostLocation": "Mahali kilipopotea panahitajika"
-      }
-    },
-    "footer": {
-  "tagline": "Jukwaa la Tanzania lililoaminika zaidi kwa kuripoti, kutafuta, na kurejesha vitu vilivyopotea kwa usalama na ufanisi.",
-  "platformNavigation": "Urambazaji wa Jukwaa",
-  "searchItems": "Tafuta Vitu",
-  "reportLostItem": "Ripoti Kitu Kilichopotea",
-  "partnerWithUs": "Shirikiana Nasi",
-  "howItWorks": "Inavyofanya Kazi",
-  "company": "Kampuni",
-  "aboutUs": "Kuhusu Sisi",
-  "faqs": "Maswali Yanayoulizwa",
-  "location": "Dar es Salaam, Tanzania",
-  "rightsReserved": "Haki zote zimehifadhiwa.",
-  "builtWith": "Imejengwa kwa uaminifu na usalama kwa Tanzania."
-},
-"categoriesSection": {
-  "badge": "Aina",
-  "title": "Unaweza Kurejesha Nini?",
-  "subtitle": "Kutoka nyaraka muhimu hadi vifaa vya kielektroniki vya thamani, tunakusaidia kurejesha aina mbalimbali za mali zako za kibinafsi."
-},
-"categoriesGrid": {
-  "items": {
-    "phones": "Simu",
-    "ids": "Vitambulisho",
-    "laptops": "Laptops",
-    "wallets": "Pochi",
-    "bags": "Mikoba",
-    "passports": "PasPoti",
-    "documents": "Nyaraka",
-    "keys": "Funguo",
-    "electronics": "Vifaa vya Kielektroniki",
-    "clothes": "Nguo",
-    "jewelry": "Vitu vya thamani kama thahabu",
-    "watches": "Saa",
-    "money": "Pesa",
-    "books": "Vitabu",
-    "vehicleItems": "Vifaa vya Gari",
-    "headphones": "Vipokea Sauti",
-    "chargerOfPhone": "Chaja ya Simu",
-    "chargerOfLaptop": "Chaja ya Laptop",
-    "chargerOfVehicle": "Chaja ya Honda",
-    "otherChargers": "Chaja Nyingine",
-    "waterBottles": "Chupa za Chai",
-    "toys": "Vichezeo",
-    "medicalItems": "Vifaa vya Matibabu",
-    "sportsItems": "Vifaa vya Michezo",
-    "petItems": "Vifaa vya Wanyama",
-    "foodContainers": "Vyombo vya Chakula",
-    "umbrellas": "Miawati",
-    "calculator": "Kikokotoo",
-    "otherItems": "Vitu Vingine"
-  }
-},
-"faqSection": {
-  "badge": "Maswali",
-  "title": "Maswali Yanayoulizwa Sana",
-  "subtitle": "Kila kitu unachohitaji kujua kuhusu kurejesha vitu vyako vilivyopotea kwa usalama.",
-  "items": {
-    "partner": {
-      "q": "Ninawezaje kushirikiana na PataChako?",
-      "a": "Bofya \"Shirikiana Nasi\" kwenye menyu ya urambazaji na ujaze fomu ya ushirikiano. Unaweza kushirikiana na PataChako tu ikiwa wewe ni taasisi kama chuo kikuu, mmiliki wa ukumbi wa harusi, mmiliki wa jumba la biashara, au sehemu nyingine ambapo watu wengi hukusanyika."
-    },
-    "report": {
-      "q": "Ninaripotije kitu kilichopotea?",
-      "a": "Bofya \"Ripoti Kitu Kilichopotea\" kwenye menyu ya urambazaji. Jaza fomu salama na maelezo kuhusu kitu chako. Kisha subiri ulinganishaji mara kitu chako kitakapopatikana."
-    },
-    "search": {
-      "q": "Ninatafutaje kitu changu?",
-      "a": "Tumia kipengele cha \"Tafuta Vitu Vilivyopatikana\" kutafuta kwa mkoa uliopoteza kitu chako. Ukikuta kitu chako kinahusiana na mkoa fulani, unaweza kuendelea kuripoti kitu chako. Ikiwa hukipati lakini una uhakika ulipoteza kitu chako cha thamani, nenda tu kwenye kitufe cha Ripoti Kitu Kilichopotea."
-    },
-    "claim": {
-      "q": "Je, mtu yeyote anaweza kudai kitu changu?",
-      "a": "Hapana. Madai yote yanahitaji uthibitisho mkali. Lazima utoe uthibitisho wa umiliki, kama vile lostReportId. Kisha unaweza hata kumpa na rafiki yako kwa kuchukua."
-    },
-    "verify": {
-      "q": "Umiliki unathibitishwaje?",
-      "a": "Taasisi zetu washirika hufanya mchakato wa uthibitisho wa hatua nyingi, unaoweza kujumuisha ukaguzi wa vitambulisho kama vile lostReportId, na kujibu maswali maalum kuhusu kitu hicho."
-    },
-    "secure": {
-      "q": "Taarifa zangu ziko salama?",
-      "a": "Bila shaka. Tunatumia usimbaji fiche wa mwanzo hadi mwisho kwa mawasiliano yote ya data na kufuata sera kali za faragha. Maelezo yako ya mawasiliano hayaonyeshwi hadharani kamwe."
-    },
-    "noLocation": {
-      "q": "Je, ikiwa sijui mahali kamili?",
-      "a": "Toa mahali pa mwisho panapojulikana au eneo la jumla. Mfumo wetu hutumia ulinganishaji wa kijiografia kukuarifu ikiwa kitu kitapatikana karibu."
-    },
-    "retention": {
-      "q": "Vitu huhifadhiwa kwa muda gani?",
-      "a": "Vipindi vya kuhifadhi vinatofautiana kwa kila taasisi mshirika, lakini kwa kawaida vitu huhifadhiwa kwa usalama kwa siku 30 hadi 90 kabla ya kushughulikiwa kulingana na kanuni za nchi."
-    },
-    "beOrganisation": {
-      "q": "Ninawezaje kuwa taasisi kwenye PataChako?",
-      "a": "Unaweza kuwa taasisi kwenye PataChako tu ikiwa wewe ni mmiliki wa jumba la biashara, ukumbi, chuo kikuu, au sehemu yoyote ambapo watu wengi hukusanyika au matukio hutokea mara kwa mara."
-    },
-    "free": {
-      "q": "PataChako ni bure kutumia?",
-      "a": "Kuripoti na kutafuta ni bure kabisa kwa watu binafsi. Mpaka Ai inahakikisha kuwa kitu ni chakwako hatua inayofata itakuwa ndo kulipia."
-    }
-  }
-},
-"hero": {
-  "badge": "Jukwaa la Vitu Vilivyopotea",
-  "headingPart1": "Tunarejesha kitu kilichopotea",
-  "headingHighlight": "Kurudi nyumbani",
-  "subtext": "Jukwaa la Tanzania linaloaminika kwa kuripoti, kutafuta, na kurejesha vitu vilivyopotea kwa usalama na ufanisi kupitia taasisi zilizothibitishwa.",
-  "reportLostItem": "Ripoti Kitu Kilichopotea",
-  "searchFoundItems": "Tafuta Vitu Vilivyopatikana"
-},
-
-"howItWorks": {
-  "badge": "Inavyofanya Kazi",
-  "title": "Rahisi, Salama, na Yenye Ufanisi",
-  "subtitle": "Mchakato wetu uliorahisishwa unahakikisha vitu vyako vilivyopotea vinarejeshwa kwa usalama bila kuweka wazi taarifa zako za kibinafsi.",
-  "steps": {
-    "report": {
-      "title": "Ripoti Kitu Kilichopotea",
-      "desc": "Tuma maelezo kuhusu kitu chako kilichopotea kwa usalama kupitia jukwaa letu lililosimbwa fiche."
-    },
-    "publish": {
-      "title": "Taasisi Zinatangaza",
-      "desc": "Washirika na taasisi zilizothibitishwa hutangaza vitu vilivyopatikana kwenye hifadhidata salama."
-    },
-    "search": {
-      "title": "Tafuta Vitu Vilivyotangazwa",
-      "desc": "Tumia utafutaji wetu wa hali ya juu kupata vinavyolingana na vitu vyako vilivyopotea."
-    },
-    "verify": {
-      "title": "Thibitisha na Urejeshe",
-      "desc": "Kamilisha mchakato wetu wa uthibitisho salama ili kurejesha kitu chako kwa usalama."
-    }
-  }
-},
-"testimonialsSection": {
-  "badge": "Ushuhuda",
-  "title": "Inaaminika na Jamii",
-  "subtitle": "Sikia kutoka kwa watu walioweza kurejesha mali zao za thamani kwa mafanikio.",
-  "items": {
-    "shinuna": {
-      "name": "Shinuna Khamis",
-      "role": "Mwanafunzi wa Chuo Kikuu",
-      "text": "Nilipoteza kitambulisho changu cha mwanafunzi na begi la laptop kwenye basi. Ndani ya saa 24, nilikipata kimeorodheshwa kwenye PataChako na kampuni ya usafiri. Uthibitisho ulikuwa rahisi na salama."
-    },
-    "massoud": {
-      "name": "Massoud Rashid",
-      "role": "Daktari wa Macho",
-      "text": "Kama daktari wa macho nikiwa safarini kutoka Kivukoni kuelekea Kigamboni kwa ziara ya kliniki, niliacha kwa bahati mbaya vifaa vyangu vya kuchunguza macho kwenye gari na sikuweza kukumbuka nilipoviweka. Kwa bahati nzuri, mtu aliripoti kitu hicho kupitia PataChako na kukiweka kwa taasisi iliyo karibu, hivyo ikawa rahisi na salama zaidi kwangu kukirejesha."
-    },
-    "seif": {
-      "name": "Seif Ali",
-      "role": "Mhandisi wa Ujenzi",
-      "text": "Kama mhandisi wa ujenzi anayefanya kazi kwenye maeneo ya ujenzi, nasafiri mara nyingi na mara nyingi hubeba vifaa na nyaraka muhimu. Baada ya kuacha vifaa vyangu vya upimaji kwenye gari la usafiri, PataChako ilinisaidia kuripoti na kunipa utulivu wa akili kwa kujua kwamba vinaweza kurejeshwa kwa usalama."
-    }
-  }
-},
-"whyChoose": {
-  "badge": "Kwa Nini Utuchague",
-  "title": "Imejengwa kwa Uaminifu na Usalama",
-  "subtitle": "Tunatilia mkazo usalama wako na utulivu wa akili katika kila hatua ya mchakato wa kurejesha.",
-  "items": {
-    "secureVerification": {
-      "title": "Uthibitisho Salama",
-      "desc": "Uthibitisho wa utambulisho wa hatua nyingi huhakikisha vitu hupewa wamiliki halali tu."
-    },
-    "trustedOrganizations": {
-      "title": "Taasisi Zinazoaminika",
-      "desc": "Tunashirikiana na vituo vya polisi vilivyothibitishwa, vyuo vikuu, na vituo vya usafiri."
-    },
-    "privacyProtection": {
-      "title": "Ulinzi wa Faragha",
-      "desc": "Data yako ya kibinafsi imesimbwa fiche na haishirikiwi na watu wasioidhinishwa kamwe."
-    },
-    "fastRecovery": {
-      "title": "Urejeshaji wa Haraka",
-      "desc": "Arifa za wakati halisi hukuarifu mara moja kitu kinacholingana kinapopatikana."
-    },
-    "digitalTracking": {
-      "title": "Ufuatiliaji wa Kidijitali",
-      "desc": "Fuatilia hali ya ripoti yako na mchakato wa kurejesha kwa wakati halisi."
-    },
-    "fraudPrevention": {
-      "title": "Kuzuia Udanganyifu",
-      "desc": "Algorithms za hali ya juu na ukaguzi wa mikono huzuia madai ya udanganyifu."
-    }
-  }
-},
-"heroCarousel": {
-  "headingPart1": "Ona jinsi kitu kilichopotea",
-  "headingHighlight": "kinavyorudi nyumbani",
-  "subtext": "Ripoti moja, mtandao mmoja, mechi moja ya AI — tazama safari nzima.",
-  "play": "Cheza video",
-  "pause": "Simamisha video",
-  "mute": "Nyamazisha sauti",
-  "unmute": "Washa sauti",
-  "chapters": {
-    "search": {
-      "label": "Tafuta kwenye mtandao",
-      "detail": "Polisi, viwanja vya ndege na vyuo vikuu mahali pamoja"
-    },
-    "report": {
-      "label": "Ripoti kwa sekunde",
-      "detail": "Fomu ya haraka na inayoongoza — hakuna karatasi"
-    },
-    "match": {
-      "label": "AI hupata mechi",
-      "detail": "Ripoti yako inalinganishwa moja kwa moja"
-    }
-  }
-},
-"ownerDashboard": {
-  "greeting": "Habari, {{name}}! Karibu PataChako.",
-  "defaultName": "Mtumiaji",
-  "cards": {
-    "search": {
-      "title": "🔍 Tafuta Vitu Vilivyopatikana",
-      "desc": "Chuja kwa mkoa na upate vitu vyako vilivyopotea."
-    },
-    "report": {
-      "title": "📝 Ripoti Kitu Kilichopotea",
-      "desc": "Tuma ripoti mpya ya kitu kilichopotea."
-    },
-    "reports": {
-      "title": "📋 Ripoti Zangu",
-      "desc": "Ona ripoti zako za awali."
-    }
-  }
-},
-"searchPage": {
-  "defaultName": "Mtumiaji",
-  "greeting": "Habari, {{name}}! 👋",
-  "subtitle": "Tafuta vitu vilivyopatikana kote Tanzania",
-  "backToHome": "Rudi nyumbani",
-  "myReports": "Ripoti Zangu",
-  "filterLabel": "Chuja kwa mkoa",
-  "allRegions": "Mikoa Yote",
-  "search": "Tafuta",
-  "searching": "Inatafuta...",
-  "errorLoad": "Imeshindwa kupakia vitu. Tafadhali jaribu tena.",
-  "itemsFoundInRegion": "Kitu {{count}} kimepatikana katika {{region}}",
-  "itemsFoundInRegion_plural": "Vitu {{count}} vimepatikana katika {{region}}",
-  "itemsFoundAllRegions": "Kitu {{count}} kimepatikana katika mikoa yote",
-  "itemsFoundAllRegions_plural": "Vitu {{count}} vimepatikana katika mikoa yote",
-  "noItemsTitle": "Hakuna vitu vilivyopatikana",
-  "noItemsHint": "Jaribu mkoa mwingine au angalia tena baadaye.",
-  "idleTitle": "Pata kitu kilichoripotiwa",
-  "idleHint": "Chagua mkoa na ubofye Tafuta ili kuona vitu vilivyopatikana katika eneo lako.",
-  "ctaText": "Umepoteza kitu? Ruhusu AI yetu ikupatie.",
-  "reportLostItem": "Ripoti Kitu Kilichopotea"
-},
-"regions": {
-  "ARUSHA": "Arusha",
-  "DAR_ES_SALAAM": "Dar es Salaam",
-  "DODOMA": "Dodoma",
-  "GEITA": "Geita",
-  "IRINGA": "Iringa",
-  "KAGERA": "Kagera",
-  "KATAVI": "Katavi",
-  "KIGOMA": "Kigoma",
-  "KILIMANJARO": "Kilimanjaro",
-  "LINDI": "Lindi",
-  "MANYARA": "Manyara",
-  "MARA": "Mara",
-  "MBEYA": "Mbeya",
-  "MOROGORO": "Morogoro",
-  "MTWARA": "Mtwara",
-  "MWANZA": "Mwanza",
-  "NJOMBE": "Njombe",
-  "PWANI": "Pwani",
-  "RUKWA": "Rukwa",
-  "RUVUMA": "Ruvuma",
-  "SHINYANGA": "Shinyanga",
-  "SIMIYU": "Simiyu",
-  "SINGIDA": "Singida",
-  "TABORA": "Tabora",
-  "TANGA": "Tanga",
-  "UNGUJA_KASKAZINI": "Unguja Kaskazini",
-  "UNGUJA_KUSINI": "Unguja Kusini",
-  "UNGUJA_MJINI_MAGHARIBI": "Unguja Mjini Magharibi",
-  "PEMBA": "Pemba"
-},
-"profile": {
-  "title": "Wasifu Wangu",
-  "subtitle": "Simamia maelezo ya akaunti yako",
-  "roleOwner": "Mmiliki",
-  "accountInfo": "Taarifa za akaunti",
-  "fields": {
-    "fullName": "Jina kamili",
-    "email": "Barua pepe",
-    "mobile": "Namba ya simu"
-  },
-  "placeholders": {
-    "fullName": "Jina lako kamili",
-    "email": "wewe@mfano.com",
-    "mobile": "+255 7XX XXX XXX"
-  },
-  "location": {
-    "heading": "Mahali Ulipo",
-    "optional": "(hiari)",
-    "placeholder": "Tafuta eneo lako…",
-    "hint": "Buruta ramani au tafuta ili kuweka kuratibu zako."
-  },
-  "saveChanges": "Hifadhi mabadiliko",
-  "saving": "Inahifadhi...",
-  "success": "Wasifu umesasishwa kikamilifu!",
-  "errors": {
-    "nameRequired": "Jina linahitajika",
-    "emailRequired": "Barua pepe inahitajika",
-    "emailInvalid": "Weka barua pepe halali",
-    "numberInvalid": "Lazima iwe namba halali",
-    "updateFailed": "Imeshindwa kusasisha wasifu."
-  }
-},
-"reportItem": {
-  "title": "Ripoti Kitu Kilichopotea",
-  "stepOf": "Hatua {{current}} kati ya {{total}}",
-  "steps": {
-    "basic": "Taarifa za Msingi",
-    "location": "Maelezo ya Mahali",
-    "images": "Picha"
-  },
-  "fields": {
-    "itemName": "Jina la Kitu",
-    "category": "Aina",
-    "description": "Maelezo",
-    "dominantColor": "Rangi Kuu",
-    "region": "Mkoa",
-    "area": "Eneo / Kitongoji",
-    "dateLost": "Tarehe ya Kupotea",
-    "lostLocation": "Mahali Kilipopotea (Alama ya Ramani)"
-  },
-  "placeholders": {
-    "itemName": "mfano, Samsung Galaxy S22 Ultra, HP Pavilion Laptop, Kitambulisho cha Taifa",
-    "category": "Chagua aina",
-    "description": "Jumuisha sifa muhimu kwa ulinganishaji sahihi wa AI:\n• Chapa, modeli, au muundo\n• Alama za kipekee (mikwaruzo, stika, skrini iliyovunjika)\n• Rangi au mtindo wa kifuniko\n• Maelezo ya kitambulisho (Jina, Namba ya NIDA/Kitambulisho cha Mwanafunzi)\n• Vitu vilivyomo ndani (ikiwa ni begi au pochi)",
-    "dominantColor": "mfano, Nyeusi, Fedha, Bluu Iliyokolea",
-    "region": "Chagua mkoa",
-    "area": "mf., Magufuli Hostel, Block B234",
-    "lostLocation": "Tafuta jengo, barabara, au alama ya karibu..."
-  },
-  "upload": {
-    "hint": "Pakia picha za kitu kilichopotea au picha za mfano ili kuboresha usahihi wa ulinganishaji wa AI.",
-    "optional": "(hiari)",
-    "dropHere": "Achia picha hapa",
-    "clickOrDrag": "Bofya au buruta picha hapa",
-    "formats": "PNG, JPG, WEBP — hadi 5MB kila moja",
-    "imagesSelected": "Picha {{count}} imechaguliwa",
-    "imagesSelected_plural": "Picha {{count}} zimechaguliwa",
-    "removeImage": "Ondoa picha"
-  },
-  "saving": {
-    "title": "Inahifadhi Ripoti...",
-    "subtitle": "Inaingiza maelezo kwenye rejista yetu ya AI"
-  },
-  "success": {
-    "title": "Ripoti ya Kupotea Imewasilishwa Kikamilifu!",
-    "text1": "Injini yetu ya AI inatafuta kwa bidii. Mara taasisi itakaposajili kitu kinacholingana, tutakujulisha mara moja kupitia",
-    "emailWord": "barua pepe",
-    "text2": "yako.",
-    "automatedTitle": "Ulinganishaji wa AI wa Kiotomatiki",
-    "automatedText1": "Huhitaji kuangalia tena mara kwa mara. Tutakujulisha kupitia barua pepe yako. Na mara utakapojulishwa, nenda kwenye",
-    "myReportWord": "Ripoti Zangu",
-    "automatedText2": "ili kudai kitu chako.",
-    "goToDashboard": "Nenda Dashibodi",
-    "viewMyReports": "Ona Ripoti Zangu"
-  },
-  "submitReport": "Tuma Ripoti",
-  "submitting": "Inatuma...",
-  "errors": {
-    "itemName": "Jina la kitu linahitajika",
-    "category": "Tafadhali chagua aina",
-    "description": "Maelezo yanahitajika",
-    "region": "Mkoa unahitajika",
-    "area": "Eneo linahitajika",
-    "lostDate": "Tarehe ya kupotea inahitajika",
-    "pickLocation": "Tafadhali chagua mahali kwenye ramani.",
-    "submitFailed": "Kuna kitu kilienda vibaya wakati wa kuwasilisha ripoti."
-  }
-},
-"ctaSection": {
-  "heading": "Anza Safari Yako ya Kurejesha Leo",
-  "subtext": "Usiruhusu kitu kilichopotea kuvuruga maisha yako. Jiunge na maelfu ya Watanzania wanaotumaini PataChako kwa urejeshaji salama na wa haraka.",
-  "reportLostItem": "Ripoti Kitu Kilichopotea",
-  "searchFoundItems": "Tafuta Vitu Vilivyopatikana"
-},
-"reportModal": {
-  "title": "Ripoti Kitu Kilichopotea",
-  "stepOf": "Hatua {{current}} kati ya {{total}}",
-  "steps": {
-    "basic": "Taarifa za Msingi",
-    "location": "Maelezo ya Mahali",
-    "images": "Picha"
-  },
-  "fields": {
-    "itemName": "Jina la Kitu",
-    "category": "Aina",
-    "description": "Maelezo ya Kina",
-    "dominantColor": "Rangi Kuu",
-    "region": "Mkoa",
-    "area": "Eneo / Wilaya Maalum",
-    "lostDate": "Tarehe ya Kupotea",
-    "lostLocation": "Mahali Hasa Palipopotea"
-  },
-  "placeholders": {
-    "itemName": "mfano, Laptop, iPhone 13",
-    "category": "Chagua aina ya kitu",
-    "description": "Toa namba za serial za kipekee, mchoro wa mikwaruzo, au usanidi...",
-    "dominantColor": "mf., Nyeusi Isiyong'aa",
-    "region": "Chagua mkoa",
-    "area": "mfano, Ubungo maji, Mwendo kasi",
-    "lostLocation": "mfano., COICT Chumba B-12"
-  },
-  "ready": {
-    "title": "Tayari kwa Uthibitisho wa AI",
-    "subtitle": "Data yako ya kiufundi na faharasa za maelezo zitafananishwa moja kwa moja dhidi ya hifadhidata hai."
-  },
-  "submitAndMatch": "Tuma na Linganisha",
-  "retrySubmit": "Jaribu Kutuma Tena",
-
-  "ai": {
-    "title": "AI inalinganisha kitu chako…",
-    "errNetwork": "Mawasiliano ya mtandao yameshindwa kutekelezwa"
-  },
-
-  "aiStages": {
-    "ingest": "Inapokea data ya ripoti",
-    "nlp": "Inaendesha NLP kwenye maelezo",
-    "embed": "Inatengeneza embeddings za kisemantiki",
-    "image": "Inakagua faharasa ya ufanano wa picha",
-    "geo": "Inalinganisha eneo la kijiografia",
-    "color": "Inalinganisha sifa za rangi kuu",
-    "category": "Inapima ulinganifu wa aina",
-    "rank": "Inapanga mechi zinazowezekana",
-    "score": "Inakokotoa alama ya mwisho ya uhakika",
-    "done": "Inakamilisha na kuhifadhi matokeo"
-  },
-
-  "badges": {
-    "excellent": "Mechi Bora Kabisa",
-    "high": "Mechi ya Juu",
-    "possible": "Mechi Inayowezekana",
-    "low": "Mechi ya Chini"
-  },
-
-  "result": {
-    "submittedBadge": "Ripoti Imewasilishwa Kikamilifu",
-    "noMatchTitle": "Hakuna Mechi Zilizopatikana Mara Moja",
-    "noMatchText1": "Ripoti yako imewasilishwa kikamilifu chini ya Kitambulisho",
-    "noMatchText2": ". Mfumo utaendelea kuchunguza mfululizo.",
-    "dashboard": "Dashibodi",
-    "myReports": "Ripoti Zangu",
-    "registeredItem": "Kitu Kikuu Kilichosajiliwa",
-    "lostItemFallback": "Kazi ya Kitu Kilichopotea",
-    "highestMatch": "Asilimia ya Mechi ya Juu Kabisa",
-    "totalMatches": "Jumla ya Mechi Zilizothibitishwa Mtandaoni: {{count}}",
-    "matchRank": "Nafasi ya Mechi #{{number}}",
-    "goToMyReports": "Nenda kwa Ripoti Zangu",
-    "scoreLabels": {
-      "name": "Ulinganifu wa Jina",
-      "description": "Uzito wa Maelezo",
-      "location": "Ukaribu wa Kijiografia",
-      "date": "Tofauti ya Tarehe",
-      "color": "Kipimo cha Rangi"
-    }
-  },
-
-  "errors": {
-    "itemName": "Jina la kitu linahitajika",
-    "category": "Tafadhali chagua aina",
-    "description": "Maelezo yanahitajika",
-    "region": "Mkoa unahitajika",
-    "area": "Eneo linahitajika",
-    "lostDate": "Tarehe ya kupotea inahitajika",
-    "lostLocation": "Mahali kilipopotea panahitajika",
-    "statusCodeMismatch": "Hitilafu ya mpangilio wa msimbo wa biashara. Tafadhali thibitisha ramani za hali.",
-    "networkFailed": "Mawasiliano ya mtandao yameshindwa kutekelezwa",
-    "emptyResponse": "Mtandao ulirudisha jibu tupu kabisa.",
-    "missingEnvelope": "Muunganisho ulifanikiwa, lakini sifa za bahasha ya data zinakosekana."
-  }
-},
-"claimItem": {
-  "loading": "Inapakia maelezo ya mechi…",
-  "unknownOrganisation": "Taasisi Isiyojulikana",
-
-  "success": {
-    "title": "Dai Limewasilishwa!",
-    "pendingReview": "Inasubiri Ukaguzi",
-    "detailsHeading": "Maelezo Muhimu",
-    "lostReportIdLabel": "Kitambulisho cha Ripoti Yako:",
-    "organisationLabel": "Taasisi:",
-    "shareHint1": "Unaweza kushiriki",
-    "shareHintBold": "Kitambulisho cha Ripoti",
-    "shareHint2": "na rafiki ili achukue kitu kwa niaba yako.",
-    "pendingText": "Dai lako limetumwa kwa taasisi. Wataikagua na kukujibu.",
-    "processedText": "Taasisi imeshughulikia dai lako.",
-    "myReports": "Ripoti Zangu",
-    "backToSearch": "Rudi kwa Utafutaji"
-  },
-
-  "error": {
-    "title": "Imekwisha daiwa",
-    "noMatchYet": "Ripoti hii haijalinganishwa na kitu chochote kilichopatikana bado.",
-    "backToMyReports": "Rudi kwa Ripoti Zangu",
-    "goToSearch": "Nenda kwa Utafutaji"
-  },
-
-  "ownClaimed": {
-    "title": "Imekwisha Daiwa",
-    "text": "Umekwisha dai kitu hiki. Unaweza kuona hali ya dai lako katika Ripoti Zangu.",
-    "myReports": "Ripoti Zangu",
-    "backToSearch": "Rudi kwa Utafutaji"
-  },
-
-  "unavailable": {
-    "title": "Kitu Hakipatikani Tena",
-    "text": "Kitu hiki kilicholingana hakipatikani tena kudaiwa. Huenda kimekwisha chukuliwa au kufungwa na taasisi.",
-    "myReports": "Ripoti Zangu",
-    "backToSearch": "Rudi kwa Utafutaji"
-  },
-
-  "matchCard": {
-    "title": "Tumepata mechi!",
-    "subtitle": "Kitu chako kilichopotea huenda kimepatikana na taasisi.",
-    "organisationFallback": "Taasisi",
-    "itemFallback": "Kitu Kilicholingana",
-    "aiConfidence": "Uhakika wa AI",
-    "matchWord": "mechi",
-    "claimButton": "Dai Kitu Hiki",
-    "submittingClaim": "Inawasilisha Dai…",
-    "disclaimer": "Kwa kudai, unathibitisha kuwa kitu hiki ni chako. Taasisi itathibitisha ombi lako."
-  },
-
-  "errors": {
-    "reportNotFound": "Ripoti haipatikani.",
-    "loadFailed": "Imeshindwa kupakia ripoti",
-    "noMatchedItem": "Hakuna kitu kilicholingana cha kudai.",
-    "claimFailed": "Dai halikuweza kukamilika. Tafadhali jaribu tena.",
-    "claimFailedShort": "Dai limeshindwa"
-  }
-},
-"editReport": {
-  "title": "Hariri Ripoti",
-  "subtitlePart1": "Unaweza kuhariri ripoti hii wakati hali yake ni",
-  "subtitlePart2": ". Jaza tu sehemu unazotaka kubadilisha.",
-  "backToMyReports": "Rudi kwa Ripoti Zangu",
-  "pinnedLocation": "Mahali Palipowekwa Alama",
-  "accountLocked": "Akaunti Imefungwa",
-  "saveChanges": "Hifadhi Mabadiliko",
-
-  "fields": {
-    "itemName": "Jina la Kitu",
-    "category": "Aina",
-    "description": "Maelezo",
-    "region": "Mkoa",
-    "area": "Eneo",
-    "dateLost": "Tarehe ya Kupotea",
-    "dominantColor": "Rangi Kuu",
-    "lostLocation": "Mahali Kilipopotea (Alama ya Ramani)",
-    "images": "Picha"
-  },
-
-  "placeholders": {
-    "itemName": "Weka jina la kitu kilichopotea",
-    "category": "Chagua aina",
-    "description": "Eleza kitu chako kilichopotea",
-    "region": "Chagua mkoa",
-    "area": "mf., Kijitonyama",
-    "dominantColor": "mf., Nyeusi, Fedha",
-    "lostLocation": "Tafuta jengo, barabara, au alama ya karibu..."
-  },
-
-  "imagesOptional": "(hiari)",
-
-  "imageUpload": {
-    "clickToAdd": "Bofya kuongeza picha",
-    "formats": "PNG, JPG, WEBP",
-    "removeImage": "Ondoa picha"
-  },
-
-  "success": {
-    "title": "Ripoti Imesasishwa!",
-    "subtitle": "Ripoti yako imesasishwa kikamilifu. Inaelekeza…"
-  },
-
-  "errors": {
-    "itemNameLength": "Jina la kitu lazima liwe kati ya herufi 2 na 105",
-    "descriptionTooLong": "Maelezo ni marefu mno (kiwango cha juu ni herufi 2000)",
-    "areaTooLong": "Eneo ni kubwa mno (kiwango cha juu ni herufi 150)",
-    "dateInFuture": "Tarehe ya kupotea haiwezi kuwa ya baadaye",
-    "fixHighlighted": "Tafadhali rekebisha sehemu zilizoangaziwa."
-  }
-},
-"partnerSendOtp": {
-  "title": "Shirikiana Nasi",
-  "stepLabel": "Hatua 1 kati ya 2 — Thibitisha barua pepe yako",
-  "goHome": "Nenda nyumbani",
-  "instructions": "Weka anwani ya barua pepe unayotaka tutumie kwa ombi lako la ushirikiano. Tutatuma msimbo wa mara moja ili kuithibitisha.",
-  "emailLabel": "Barua Pepe",
-  "emailPlaceholder": "wewe@mfano.com",
-  "sendOtp": "Tuma OTP",
-  "sending": "Inatuma OTP…",
-  "accountLocked": "Akaunti Imefungwa",
-  "otpInfo": "OTP inaisha baada ya dakika {{expiry}}. Upeo wa majaribio {{attempts}}. Muda wa kusubiri kutuma tena sekunde {{cooldown}}, hadi {{daily}} kwa siku.",
-  "otpInfoFallback": "OTP yako ni halali kwa muda mfupi. Vikomo vya kasi vinatumika kwa maombi ya kutuma tena.",
-  "errors": {
-    "emailRequired": "Barua pepe inahitajika.",
-    "emailInvalid": "Weka barua pepe halali.",
-    "fillAll": "Tafadhali jaza sehemu zote kwa usahihi."
-  }
-},
-"partnerWithUs": {
-  "title": "Shirikiana Nasi",
-  "stepLabel": "Hatua 2 kati ya 2 — Tuambie kuhusu taasisi yako",
-  "goHome": "Nenda nyumbani",
-
-  "fields": {
-    "orgName": "Jina la Taasisi",
-    "contactPerson": "Mtu wa Kuwasiliana",
-    "emailVerified": "Barua Pepe (imethibitishwa)",
-    "phone": "Namba ya Simu",
-    "partnershipType": "Aina ya Ushirikiano",
-    "message": "Ujumbe"
-  },
-
-  "placeholders": {
-    "orgName": "mf., Vyuo Vikuu, Jumba la Biashara,...",
-    "contactPerson": "Jina kamili",
-    "email": "wewe@mfano.com",
-    "phone": "255 7XX XXX XXX",
-    "message": "Tuambie kuhusu taasisi yako na jinsi ungependa kushirikiana…"
-  },
-
-  "partnershipTypes": {
-    "UNIVERSITY": "Chuo Kikuu",
-    "BUSINESS": "Biashara",
-    "NGO": "Asasi Isiyo ya Kiserikali",
-    "GOVERNMENT": "Serikali",
-    "TECHNOLOGY": "Teknolojia",
-    "SECURITY": "Usalama",
-    "OTHER": "Nyingine"
-  },
-
-  "otp": {
-    "heading": "Uthibitisho wa Barua Pepe",
-    "locked": "Imefungwa",
-    "sending": "Inatuma…",
-    "resendIn": "Tuma tena baada ya sekunde {{seconds}}",
-    "resend": "Tuma OTP Tena",
-    "placeholder": "Weka msimbo wa OTP wa tarakimu 6",
-    "sentTo1": "Tumetuma msimbo kwa",
-    "sentTo2": ".",
-    "expiresIn": "Inaisha baada ya dakika {{minutes}}."
-  },
-
-  "buttons": {
-    "submitting": "Inawasilisha…",
-    "accountLocked": "Akaunti Imefungwa",
-    "submitRequest": "Tuma Ombi"
-  },
-
-  "messages": {
-    "resendSuccess": "OTP mpya imetumwa kwenye barua pepe yako."
-  },
-
-  "success": {
-    "title": "Ombi Limewasilishwa!",
-    "message": "Asante kwa nia yako ya kushirikiana na PataChako. Timu yetu itakagua ombi lako na kukujibu hivi karibuni.",
-    "backHome": "Rudi Nyumbani"
-  },
-
-  "errors": {
-    "orgNameRequired": "Jina la taasisi linahitajika",
-    "orgNameLength": "Jina la taasisi lazima liwe kati ya herufi 2 na 100",
-    "orgNameLettersOnly": "Jina la taasisi lazima liwe na herufi na nafasi tu",
-    "contactRequired": "Mtu wa kuwasiliana anahitajika",
-    "contactLength": "Jina la mtu wa kuwasiliana lazima liwe kati ya herufi 2 na 50",
-    "contactLettersOnly": "Jina la mtu wa kuwasiliana lazima liwe na herufi na nafasi tu",
-    "emailRequired": "Barua pepe inahitajika",
-    "emailInvalid": "Barua pepe si sahihi",
-    "phoneRequired": "Namba ya simu inahitajika",
-    "phoneInvalid": "Muundo wa namba ya simu si sahihi",
-    "messageRequired": "Ujumbe unahitajika",
-    "messageLength": "Ujumbe lazima uwe kati ya herufi 10 na 1000",
-    "otpRequired": "Msimbo wa OTP unahitajika",
-    "otpInvalid": "Weka msimbo halali wa OTP wa tarakimu 6",
-    "fixBeforeSubmit": "Tafadhali rekebisha hitilafu za uthibitisho kabla ya kuwasilisha."
-  }
-},
-"register": {
-  "goHome": "Nenda nyumbani",
-  "activeBadge": "Inaendelea",
-
-  "steps": {
-    "personal": "Binafsi",
-    "security": "Usalama",
-    "location": "Mahali"
-  },
-
-  "leftPanel": {
-    "headingLine1": "Jiunge na Mtandao",
-    "headingLine2": "wa Tanzania",
-    "headingLine3": "wa Kupata Vitu",
-    "subtext": "Fungua akaunti yako ya bure na uunganishe tena na kile kilicho muhimu zaidi — kwa msaada wa washirika waliohakikiwa kitaifa."
-  },
-
-  "stats": {
-    "itemsFound": "Vitu Vilivyopatikana",
-    "success": "Mafanikio",
-    "partners": "Washirika"
-  },
-
-  "titles": {
-    "personal": "Taarifa Binafsi",
-    "security": "Linda Akaunti Yako",
-    "location": "Mahali Ulipo"
-  },
-
-  "subtitles": {
-    "personal": "Tuambie taarifa zako za msingi ili kuanza.",
-    "security": "Weka nenosiri imara ili kulinda akaunti yako.",
-    "location": "Hiari — inasaidia kukulinganisha na vitu vya karibu vilivyopotea."
-  },
-
-  "fields": {
-    "fullName": "Jina Kamili",
-    "email": "Barua Pepe",
-    "mobile": "Namba ya Simu",
-    "password": "Nenosiri",
-    "confirmPassword": "Thibitisha Nenosiri",
-    "yourLocation": "Mahali Ulipo"
-  },
-
-  "placeholders": {
-    "fullName": "mf. Amina Hassan",
-    "email": "wewe@mfano.com",
-    "mobile": "7XX XXX XXX",
-    "password": "Angalau herufi 8, herufi 1 kubwa, 1 ndogo, 1 namba",
-    "confirmPassword": "Weka nenosiri tena",
-    "location": "Tafuta eneo lako…"
-  },
-
-  "strength": {
-    "enterPassword": "Weka nenosiri",
-    "tooWeak": "Dhaifu sana",
-    "weakLength": "Dhaifu – tumia angalau herufi 8",
-    "strong": "Nenosiri imara",
-    "good": "Nenosiri zuri",
-    "couldBeStronger": "Inaweza kuwa imara zaidi – ongeza herufi kubwa/namba"
-  },
-
-  "matchIndicator": {
-    "match": "✓ Manenosiri yanalingana",
-    "noMatch": "✕ Manenosiri hayalingani"
-  },
-
-  "buttons": {
-    "continue": "Endelea",
+  "common": {
     "back": "Nyuma",
-    "creating": "Inaunda…",
-    "createAccount": "Fungua Akaunti ✓"
+    "next": "Endelea",
+    "backToSearch": "Rudi kwa Utafutaji",
+    "refresh": "Sasisha",
+    "loading": "Inapakia…",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "cancel": "Ghairi",
+    "delete": "Futa",
+    "deleting": "Inafuta…",
+    "edit": "Hariri",
+    "retry": "Jaribu tena",
+    "yes": "Ndiyo",
+    "no": "Hapana",
+    "close": "Funga",
+    "somethingWentWrong": "Kuna kitu kilienda vibaya.",
+    "logout": "Toka"
   },
-
-  "locationHint": "Kuongeza mahali ulipo husaidia kukulinganisha na vitu vya karibu. Hii ni hiari kabisa.",
-
-  "smsNotice": {
-    "label": "SMS OTP:",
-    "message": " Tutatuma msimbo wa uthibitisho kwa SMS kwenye namba yako ya simu (+255 {{mobile}})."
-  },
-
-  "loginPrompt": "Tayari una akaunti?",
-  "signIn": "Ingia",
-  "footer": "Kwa kujiandikisha unakubali Masharti na Sera zetu za Faragha.",
-
-  "errors": {
-    "nameRequired": "Jina kamili linahitajika.",
-    "emailRequired": "Barua pepe inahitajika.",
-    "emailInvalid": "Tafadhali weka barua pepe halali.",
-    "mobileRequired": "Namba ya simu inahitajika.",
-    "mobileInvalid": "Weka namba halali ya simu ya tarakimu 9 (inaanza na 6 au 7, mf. 712345678).",
-    "passwordRequired": "Nenosiri linahitajika.",
-    "passwordTooShort": "Nenosiri lazima liwe na angalau herufi 8.",
-    "passwordWeak": "Nenosiri lazima lijumuishe herufi moja kubwa, moja ndogo, na namba moja.",
-    "confirmPasswordRequired": "Tafadhali thibitisha nenosiri lako.",
-    "passwordsDoNotMatch": "Manenosiri hayalingani.",
-    "genericFailure": "Usajili umeshindwa. Tafadhali jaribu tena."
-  }
-},
-"login": {
-  "goHome": "Nenda nyumbani",
-  "title": "Karibu tena",
-  "subtitle": "Ingia kwenye akaunti yako ya PataChako",
-
-  "leftPanel": {
-    "headingLine1": "Jukwaa la Tanzania",
-    "headingLine2": "la Kupata Vitu",
-    "headingLine3": "Vilivyopotea",
-    "subtext": "Tunaunganisha watu na kile kilicho muhimu zaidi — kilichothibitishwa, salama, na kuaminiwa kote nchini."
-  },
-
-  "features": {
-    "verifiedPartners": {
-      "title": "Washirika Waliohakikiwa",
-      "sub": "Polisi, viwanja vya ndege na vyuo vikuu"
+  "nav": {
+    "home": "Nyumbani",
+    "about": "Kuhusu",
+    "contact": "Wasiliana",
+    "login": "Ingia",
+    "register": "Fungua Akaunti",
+    "logout": "Toka",
+    "language": "Lugha",
+    "owner": {
+      "dashboard": "Dashibodi",
+      "search": "Tafuta Vitu",
+      "report": "Ripoti Kitu Kilichopotea",
+      "reports": "Ripoti Zangu",
+      "profile": "Wasifu"
     },
-    "smartMatching": {
-      "title": "Ulinganishaji Mahiri",
-      "sub": "Utambuzi wa vitu kwa msaada wa AI"
+    "org": {
+      "dashboard": "Dashibodi",
+      "publish": "Tangaza Kitu",
+      "items": "Vitu Vyangu",
+      "claims": "Madai",
+      "profile": "Wasifu"
     },
-    "nationwide": {
-      "title": "Ufikiaji wa Kitaifa",
-      "sub": "Mikoa yote ya Tanzania"
+    "admin": {
+      "dashboard": "Dashibodi",
+      "manageUsers": "Simamia Watumiaji",
+      "createOrg": "Unda Taasisi",
+      "profile": "Wasifu"
     }
   },
-
-  "stats": {
-    "itemsFound": "Vitu Vilivyopatikana",
-    "successRate": "Kiwango cha Mafanikio",
-    "partners": "Washirika"
+  "home": {
+    "cta": {
+      "badge": "Anza leo — ni bure",
+      "headingLine1": "Anza Safari Yako",
+      "headingLine2": "ya Kurejesha leo",
+      "subtext": "Usiruhusu kitu kilichopotea kuvuruga maisha yako. Jiunge na maelfu ya Watanzania wanaotumaini PataChako kwa urejeshaji salama na wa haraka.",
+      "reportLostItem": "Ripoti kitu kilichopotea",
+      "getStarted": "Anza bure",
+      "searchFound": "Tafuta vitu vilivyopatikana",
+      "haveAccount": "Tayari una akaunti?",
+      "signIn": "Ingia"
+    },
+    "about": {
+      "badge": "Kuhusu sisi",
+      "headingLine1": "Jukwaa la Tanzania",
+      "headingLine2": "la kutafuta vitu lililoaminika zaidi",
+      "para1": "PataChako inaunganisha watu waliopoteza vitu na taasisi zilizothibitishwa zilizovipata. Mfumo wetu wa AI unalinganisha maelfu ya ripoti kwa sekunde.",
+      "para2": "Tunashirikiana na taasisi zilizothibitishwa katika mikoa yote 31 ya Tanzania — kutoka Dar es Salaam hadi Zanzibar."
+    },
+    "reportModal": {
+      "title": "Ripoti Kitu Kilichopotea",
+      "analyzingTitle": "Tunachambua Ripoti Yako",
+      "resultTitle": "Matokeo ya Ripoti",
+      "stepOf": "Hatua {{current}} kati ya {{total}}",
+      "steps": {
+        "basic": "Taarifa za Msingi",
+        "location": "Maelezo ya Mahali",
+        "images": "Picha"
+      },
+      "itemName": "Jina la Kitu",
+      "itemNamePh": "Weka jina la kitu kilichopotea",
+      "category": "Aina",
+      "categoryPh": "Chagua aina",
+      "description": "Maelezo",
+      "descriptionPh": "Eleza kitu chako kilichopotea",
+      "region": "Mkoa",
+      "regionPh": "Chagua mkoa",
+      "area": "Eneo",
+      "areaPh": "mf., Kijitonyama",
+      "dateLost": "Tarehe ya Kupotea",
+      "dominantColor": "Rangi Kuu",
+      "dominantColorPh": "mf., Nyeusi, Fedha",
+      "lostLocation": "Mahali Kilipopotea",
+      "lostLocationPh": "mf., Kituo cha basi karibu na Posta",
+      "gpsCoords": "Kuratibu za GPS",
+      "optional": "(hiari)",
+      "latitudePh": "Latitudo: -6.7924",
+      "longitudePh": "Longitudo: 39.2083",
+      "uploadHint": "Pakia picha za kitu kilichopotea ili kuboresha usahihi wa AI.",
+      "dropHere": "Achia picha hapa",
+      "clickOrDrag": "Bofya au buruta picha hapa",
+      "uploadFormats": "PNG, JPG, WEBP — hadi 5MB kila moja",
+      "imagesSelected": "Picha {{count}} imechaguliwa",
+      "imagesSelected_plural": "Picha {{count}} zimechaguliwa",
+      "removeImage": "Ondoa picha",
+      "analyzingHeading": "Tunachambua ripoti yako...",
+      "analyzingText": "Mfumo wetu wa kulinganisha unalinganisha ripoti yako na vitu vilivyopatikana.",
+      "matchFoundHeading": "Ulinganisho Umepatikana!",
+      "potentialMatchHeading": "Ulinganisho Unaowezekana Umepatikana!",
+      "noMatchHeading": "Hakuna Kitu Kilicholingana",
+      "noMatchText": "Hakuna kitu kilicholingana bado. Ripoti yako imehifadhiwa kikamilifu. Vitu vitakavyopatikana baadaye vinaweza kulinganishwa moja kwa moja.",
+      "matchFoundText": "Ulinganisho unaowezekana wa kitu chako umepatikana.",
+      "potentialMatch": "Ulinganisho Unaowezekana",
+      "noMatch": "Hakuna Ulinganisho",
+      "item": "Kitu",
+      "organization": "Taasisi",
+      "regionLabel": "Mkoa",
+      "areaLabel": "Eneo",
+      "foundDate": "Tarehe Iliyopatikana",
+      "viewDetails": "Ona Maelezo",
+      "myReports": "Ripoti Zangu",
+      "dashboard": "Dashibodi",
+      "submitReport": "Tuma Ripoti",
+      "submitting": "Inatuma...",
+      "errItemName": "Jina la kitu linahitajika",
+      "errCategory": "Tafadhali chagua aina",
+      "errDescription": "Maelezo yanahitajika",
+      "errRegion": "Mkoa unahitajika",
+      "errArea": "Eneo linahitajika",
+      "errLostDate": "Tarehe ya kupotea inahitajika",
+      "errLostLocation": "Mahali kilipopotea panahitajika"
+    }
   },
-
-  "fields": {
-    "username": "Simu",
-    "password": "Nenosiri"
+  "footer": {
+    "tagline": "Jukwaa la Tanzania lililoaminika zaidi kwa kuripoti, kutafuta, na kurejesha vitu vilivyopotea kwa usalama na ufanisi.",
+    "platformNavigation": "Urambazaji wa Jukwaa",
+    "searchItems": "Tafuta Vitu",
+    "reportLostItem": "Ripoti Kitu Kilichopotea",
+    "partnerWithUs": "Shirikiana Nasi",
+    "howItWorks": "Inavyofanya Kazi",
+    "company": "Kampuni",
+    "aboutUs": "Kuhusu Sisi",
+    "faqs": "Maswali Yanayoulizwa",
+    "location": "Dar es Salaam, Tanzania",
+    "rightsReserved": "Haki zote zimehifadhiwa.",
+    "builtWith": "Imejengwa kwa uaminifu na usalama kwa Tanzania."
   },
-
-  "placeholders": {
-    "username": "255XXXXXXXXX",
-    "password": "••••••••"
+  "categoriesSection": {
+    "badge": "Aina",
+    "title": "Unaweza Kurejesha Nini?",
+    "subtitle": "Kutoka nyaraka muhimu hadi vifaa vya kielektroniki vya thamani, tunakusaidia kurejesha aina mbalimbali za mali zako za kibinafsi."
   },
-
-  "forgotPassword": "Umesahau nenosiri?",
-  "signIn": "Ingia",
-  "signingIn": "Inaingia…",
-  "newHere": "Mgeni PataChako?",
-  "createAccount": "Fungua Akaunti",
-  "footer": "Kwa kuingia unakubali Masharti na Sera zetu za Faragha.",
-
-  "lockedFallback": "Majaribio mengi yameshindwa. Akaunti yako imefungwa kwa muda.",
-  "tryAgainIn": "Jaribu tena baada ya",
-  "tooManyAttempts": "Majaribio mengi yameshindwa. Tafadhali jaribu tena baada ya {{time}}.",
-
-  "validation": {
-    "enterUsername": "Weka jina lako la mtumiaji.",
-    "emailInvalid": "Weka barua pepe halali (mf. jina@mfano.com).",
-    "mobileInvalid": "Weka namba halali ya simu kwa muundo 255XXXXXXXXX au 0XXXXXXXXX.",
-    "usernameInvalid": "Jina la mtumiaji lazima liwe herufi 3-30 (herufi, namba, \".\", \"_\", \"-\" tu, hakuna nafasi)."
+  "categoriesGrid": {
+    "items": {
+      "phones": "Simu",
+      "ids": "Vitambulisho",
+      "laptops": "Laptops",
+      "wallets": "Pochi",
+      "bags": "Mikoba",
+      "passports": "PasPoti",
+      "documents": "Nyaraka",
+      "keys": "Funguo",
+      "electronics": "Vifaa vya Kielektroniki",
+      "clothes": "Nguo",
+      "jewelry": "Vitu vya thamani kama thahabu",
+      "watches": "Saa",
+      "money": "Pesa",
+      "books": "Vitabu",
+      "vehicleItems": "Vifaa vya Gari",
+      "headphones": "Vipokea Sauti",
+      "chargerOfPhone": "Chaja ya Simu",
+      "chargerOfLaptop": "Chaja ya Laptop",
+      "chargerOfVehicle": "Chaja ya Honda",
+      "otherChargers": "Chaja Nyingine",
+      "waterBottles": "Chupa za Chai",
+      "toys": "Vichezeo",
+      "medicalItems": "Vifaa vya Matibabu",
+      "sportsItems": "Vifaa vya Michezo",
+      "petItems": "Vifaa vya Wanyama",
+      "foodContainers": "Vyombo vya Chakula",
+      "umbrellas": "Miawati",
+      "calculator": "Kikokotoo",
+      "otherItems": "Vitu Vingine"
+    }
   },
-
-  "errors": {
-    "loginFailed": "Kuingia kumeshindwa.",
-    "invalidCredentials": "Jina la mtumiaji au nenosiri si sahihi.",
-    "sessionExpired": "Kipindi chako kimeisha. Tafadhali ingia tena.",
-    "networkFailed": "Imeshindwa kuunganisha. Angalia muunganisho wako wa intaneti."
+  "faqSection": {
+    "badge": "Maswali",
+    "title": "Maswali Yanayoulizwa Sana",
+    "subtitle": "Kila kitu unachohitaji kujua kuhusu kurejesha vitu vyako vilivyopotea kwa usalama.",
+    "items": {
+      "partner": {
+        "q": "Ninawezaje kushirikiana na PataChako?",
+        "a": "Bofya \"Shirikiana Nasi\" kwenye menyu ya urambazaji na ujaze fomu ya ushirikiano. Unaweza kushirikiana na PataChako tu ikiwa wewe ni taasisi kama chuo kikuu, mmiliki wa ukumbi wa harusi, mmiliki wa jumba la biashara, au sehemu nyingine ambapo watu wengi hukusanyika."
+      },
+      "report": {
+        "q": "Ninaripotije kitu kilichopotea?",
+        "a": "Bofya \"Ripoti Kitu Kilichopotea\" kwenye menyu ya urambazaji. Jaza fomu salama na maelezo kuhusu kitu chako. Kisha subiri ulinganishaji mara kitu chako kitakapopatikana."
+      },
+      "search": {
+        "q": "Ninatafutaje kitu changu?",
+        "a": "Tumia kipengele cha \"Tafuta Vitu Vilivyopatikana\" kutafuta kwa mkoa uliopoteza kitu chako. Ukikuta kitu chako kinahusiana na mkoa fulani, unaweza kuendelea kuripoti kitu chako. Ikiwa hukipati lakini una uhakika ulipoteza kitu chako cha thamani, nenda tu kwenye kitufe cha Ripoti Kitu Kilichopotea."
+      },
+      "claim": {
+        "q": "Je, mtu yeyote anaweza kudai kitu changu?",
+        "a": "Hapana. Madai yote yanahitaji uthibitisho mkali. Lazima utoe uthibitisho wa umiliki, kama vile lostReportId. Kisha unaweza hata kumpa na rafiki yako kwa kuchukua."
+      },
+      "verify": {
+        "q": "Umiliki unathibitishwaje?",
+        "a": "Taasisi zetu washirika hufanya mchakato wa uthibitisho wa hatua nyingi, unaoweza kujumuisha ukaguzi wa vitambulisho kama vile lostReportId, na kujibu maswali maalum kuhusu kitu hicho."
+      },
+      "secure": {
+        "q": "Taarifa zangu ziko salama?",
+        "a": "Bila shaka. Tunatumia usimbaji fiche wa mwanzo hadi mwisho kwa mawasiliano yote ya data na kufuata sera kali za faragha. Maelezo yako ya mawasiliano hayaonyeshwi hadharani kamwe."
+      },
+      "noLocation": {
+        "q": "Je, ikiwa sijui mahali kamili?",
+        "a": "Toa mahali pa mwisho panapojulikana au eneo la jumla. Mfumo wetu hutumia ulinganishaji wa kijiografia kukuarifu ikiwa kitu kitapatikana karibu."
+      },
+      "retention": {
+        "q": "Vitu huhifadhiwa kwa muda gani?",
+        "a": "Vipindi vya kuhifadhi vinatofautiana kwa kila taasisi mshirika, lakini kwa kawaida vitu huhifadhiwa kwa usalama kwa siku 30 hadi 90 kabla ya kushughulikiwa kulingana na kanuni za nchi."
+      },
+      "beOrganisation": {
+        "q": "Ninawezaje kuwa taasisi kwenye PataChako?",
+        "a": "Unaweza kuwa taasisi kwenye PataChako tu ikiwa wewe ni mmiliki wa jumba la biashara, ukumbi, chuo kikuu, au sehemu yoyote ambapo watu wengi hukusanyika au matukio hutokea mara kwa mara."
+      },
+      "free": {
+        "q": "PataChako ni bure kutumia?",
+        "a": "Kuripoti na kutafuta ni bure kabisa kwa watu binafsi. Mpaka Ai inahakikisha kuwa kitu ni chakwako hatua inayofata itakuwa ndo kulipia."
+      }
+    }
+  },
+  "hero": {
+    "badge": "Jukwaa la Vitu Vilivyopotea",
+    "headingPart1": "Tunarejesha kitu kilichopotea",
+    "headingHighlight": "Kurudi nyumbani",
+    "subtext": "Jukwaa la Tanzania linaloaminika kwa kuripoti, kutafuta, na kurejesha vitu vilivyopotea kwa usalama na ufanisi kupitia taasisi zilizothibitishwa.",
+    "reportLostItem": "Ripoti Kitu Kilichopotea",
+    "searchFoundItems": "Tafuta Vitu Vilivyopatikana"
+  },
+  "howItWorks": {
+    "badge": "Inavyofanya Kazi",
+    "title": "Rahisi, Salama, na Yenye Ufanisi",
+    "subtitle": "Mchakato wetu uliorahisishwa unahakikisha vitu vyako vilivyopotea vinarejeshwa kwa usalama bila kuweka wazi taarifa zako za kibinafsi.",
+    "steps": {
+      "report": {
+        "title": "Ripoti Kitu Kilichopotea",
+        "desc": "Tuma maelezo kuhusu kitu chako kilichopotea kwa usalama kupitia jukwaa letu lililosimbwa fiche."
+      },
+      "publish": {
+        "title": "Taasisi Zinatangaza",
+        "desc": "Washirika na taasisi zilizothibitishwa hutangaza vitu vilivyopatikana kwenye hifadhidata salama."
+      },
+      "search": {
+        "title": "Tafuta Vitu Vilivyotangazwa",
+        "desc": "Tumia utafutaji wetu wa hali ya juu kupata vinavyolingana na vitu vyako vilivyopotea."
+      },
+      "verify": {
+        "title": "Thibitisha na Urejeshe",
+        "desc": "Kamilisha mchakato wetu wa uthibitisho salama ili kurejesha kitu chako kwa usalama."
+      }
+    }
+  },
+  "testimonialsSection": {
+    "badge": "Ushuhuda",
+    "title": "Inaaminika na Jamii",
+    "subtitle": "Sikia kutoka kwa watu walioweza kurejesha mali zao za thamani kwa mafanikio.",
+    "items": {
+      "shinuna": {
+        "name": "Shinuna Khamis",
+        "role": "Mwanafunzi wa Chuo Kikuu",
+        "text": "Nilipoteza kitambulisho changu cha mwanafunzi na begi la laptop kwenye basi. Ndani ya saa 24, nilikipata kimeorodheshwa kwenye PataChako na kampuni ya usafiri. Uthibitisho ulikuwa rahisi na salama."
+      },
+      "massoud": {
+        "name": "Massoud Rashid",
+        "role": "Daktari wa Macho",
+        "text": "Kama daktari wa macho nikiwa safarini kutoka Kivukoni kuelekea Kigamboni kwa ziara ya kliniki, niliacha kwa bahati mbaya vifaa vyangu vya kuchunguza macho kwenye gari na sikuweza kukumbuka nilipoviweka. Kwa bahati nzuri, mtu aliripoti kitu hicho kupitia PataChako na kukiweka kwa taasisi iliyo karibu, hivyo ikawa rahisi na salama zaidi kwangu kukirejesha."
+      },
+      "seif": {
+        "name": "Seif Ali",
+        "role": "Mhandisi wa Ujenzi",
+        "text": "Kama mhandisi wa ujenzi anayefanya kazi kwenye maeneo ya ujenzi, nasafiri mara nyingi na mara nyingi hubeba vifaa na nyaraka muhimu. Baada ya kuacha vifaa vyangu vya upimaji kwenye gari la usafiri, PataChako ilinisaidia kuripoti na kunipa utulivu wa akili kwa kujua kwamba vinaweza kurejeshwa kwa usalama."
+      }
+    }
+  },
+  "whyChoose": {
+    "badge": "Kwa Nini Utuchague",
+    "title": "Imejengwa kwa Uaminifu na Usalama",
+    "subtitle": "Tunatilia mkazo usalama wako na utulivu wa akili katika kila hatua ya mchakato wa kurejesha.",
+    "items": {
+      "secureVerification": {
+        "title": "Uthibitisho Salama",
+        "desc": "Uthibitisho wa utambulisho wa hatua nyingi huhakikisha vitu hupewa wamiliki halali tu."
+      },
+      "trustedOrganizations": {
+        "title": "Taasisi Zinazoaminika",
+        "desc": "Tunashirikiana na vituo vya polisi vilivyothibitishwa, vyuo vikuu, na vituo vya usafiri."
+      },
+      "privacyProtection": {
+        "title": "Ulinzi wa Faragha",
+        "desc": "Data yako ya kibinafsi imesimbwa fiche na haishirikiwi na watu wasioidhinishwa kamwe."
+      },
+      "fastRecovery": {
+        "title": "Urejeshaji wa Haraka",
+        "desc": "Arifa za wakati halisi hukuarifu mara moja kitu kinacholingana kinapopatikana."
+      },
+      "digitalTracking": {
+        "title": "Ufuatiliaji wa Kidijitali",
+        "desc": "Fuatilia hali ya ripoti yako na mchakato wa kurejesha kwa wakati halisi."
+      },
+      "fraudPrevention": {
+        "title": "Kuzuia Udanganyifu",
+        "desc": "Algorithms za hali ya juu na ukaguzi wa mikono huzuia madai ya udanganyifu."
+      }
+    }
+  },
+  "heroCarousel": {
+    "headingPart1": "Ona jinsi kitu kilichopotea",
+    "headingHighlight": "kinavyorudi nyumbani",
+    "subtext": "Ripoti moja, mtandao mmoja, mechi moja ya AI — tazama safari nzima.",
+    "play": "Cheza video",
+    "pause": "Simamisha video",
+    "mute": "Nyamazisha sauti",
+    "unmute": "Washa sauti",
+    "chapters": {
+      "search": {
+        "label": "Tafuta kwenye mtandao",
+        "detail": "Polisi, viwanja vya ndege na vyuo vikuu mahali pamoja"
+      },
+      "report": {
+        "label": "Ripoti kwa sekunde",
+        "detail": "Fomu ya haraka na inayoongoza — hakuna karatasi"
+      },
+      "match": {
+        "label": "AI hupata mechi",
+        "detail": "Ripoti yako inalinganishwa moja kwa moja"
+      }
+    }
+  },
+  "ownerDashboard": {
+    "greeting": "Habari, {{name}}! Karibu PataChako.",
+    "defaultName": "Mtumiaji",
+    "cards": {
+      "search": {
+        "title": "🔍 Tafuta Vitu Vilivyopatikana",
+        "desc": "Chuja kwa mkoa na upate vitu vyako vilivyopotea."
+      },
+      "report": {
+        "title": "📝 Ripoti Kitu Kilichopotea",
+        "desc": "Tuma ripoti mpya ya kitu kilichopotea."
+      },
+      "reports": {
+        "title": "📋 Ripoti Zangu",
+        "desc": "Ona ripoti zako za awali."
+      }
+    }
+  },
+  "searchPage": {
+    "defaultName": "Mtumiaji",
+    "greeting": "Habari, {{name}}! 👋",
+    "subtitle": "Tafuta vitu vilivyopatikana kote Tanzania",
+    "backToHome": "Rudi nyumbani",
+    "myReports": "Ripoti Zangu",
+    "filterLabel": "Chuja kwa mkoa",
+    "allRegions": "Mikoa Yote",
+    "search": "Tafuta",
+    "searching": "Inatafuta...",
+    "errorLoad": "Imeshindwa kupakia vitu. Tafadhali jaribu tena.",
+    "itemsFoundInRegion": "Kitu {{count}} kimepatikana katika {{region}}",
+    "itemsFoundInRegion_plural": "Vitu {{count}} vimepatikana katika {{region}}",
+    "itemsFoundAllRegions": "Kitu {{count}} kimepatikana katika mikoa yote",
+    "itemsFoundAllRegions_plural": "Vitu {{count}} vimepatikana katika mikoa yote",
+    "noItemsTitle": "Hakuna vitu vilivyopatikana",
+    "noItemsHint": "Jaribu mkoa mwingine au angalia tena baadaye.",
+    "idleTitle": "Pata kitu kilichoripotiwa",
+    "idleHint": "Chagua mkoa na ubofye Tafuta ili kuona vitu vilivyopatikana katika eneo lako.",
+    "ctaText": "Umepoteza kitu? Ruhusu AI yetu ikupatie.",
+    "reportLostItem": "Ripoti Kitu Kilichopotea"
+  },
+  "regions": {
+    "ARUSHA": "Arusha",
+    "DAR_ES_SALAAM": "Dar es Salaam",
+    "DODOMA": "Dodoma",
+    "GEITA": "Geita",
+    "IRINGA": "Iringa",
+    "KAGERA": "Kagera",
+    "KATAVI": "Katavi",
+    "KIGOMA": "Kigoma",
+    "KILIMANJARO": "Kilimanjaro",
+    "LINDI": "Lindi",
+    "MANYARA": "Manyara",
+    "MARA": "Mara",
+    "MBEYA": "Mbeya",
+    "MOROGORO": "Morogoro",
+    "MTWARA": "Mtwara",
+    "MWANZA": "Mwanza",
+    "NJOMBE": "Njombe",
+    "PWANI": "Pwani",
+    "RUKWA": "Rukwa",
+    "RUVUMA": "Ruvuma",
+    "SHINYANGA": "Shinyanga",
+    "SIMIYU": "Simiyu",
+    "SINGIDA": "Singida",
+    "TABORA": "Tabora",
+    "TANGA": "Tanga",
+    "UNGUJA_KASKAZINI": "Unguja Kaskazini",
+    "UNGUJA_KUSINI": "Unguja Kusini",
+    "UNGUJA_MJINI_MAGHARIBI": "Unguja Mjini Magharibi",
+    "PEMBA": "Pemba"
+  },
+  "profile": {
+    "title": "Wasifu Wangu",
+    "subtitle": "Simamia maelezo ya akaunti yako",
+    "roleOwner": "Mmiliki",
+    "accountInfo": "Taarifa za akaunti",
+    "fields": {
+      "fullName": "Jina kamili",
+      "email": "Barua pepe",
+      "mobile": "Namba ya simu"
+    },
+    "placeholders": {
+      "fullName": "Jina lako kamili",
+      "email": "wewe@mfano.com",
+      "mobile": "+255 7XX XXX XXX"
+    },
+    "location": {
+      "heading": "Mahali Ulipo",
+      "optional": "(hiari)",
+      "placeholder": "Tafuta eneo lako…",
+      "hint": "Buruta ramani au tafuta ili kuweka kuratibu zako."
+    },
+    "saveChanges": "Hifadhi mabadiliko",
+    "saving": "Inahifadhi...",
+    "success": "Wasifu umesasishwa kikamilifu!",
+    "errors": {
+      "nameRequired": "Jina linahitajika",
+      "emailRequired": "Barua pepe inahitajika",
+      "emailInvalid": "Weka barua pepe halali",
+      "numberInvalid": "Lazima iwe namba halali",
+      "updateFailed": "Imeshindwa kusasisha wasifu."
+    }
+  },
+  "reportItem": {
+    "title": "Ripoti Kitu Kilichopotea",
+    "stepOf": "Hatua {{current}} kati ya {{total}}",
+    "steps": {
+      "basic": "Taarifa za Msingi",
+      "location": "Maelezo ya Mahali",
+      "images": "Picha"
+    },
+    "fields": {
+      "itemName": "Jina la Kitu",
+      "category": "Aina",
+      "description": "Maelezo",
+      "dominantColor": "Rangi Kuu",
+      "region": "Mkoa",
+      "area": "Eneo / Kitongoji",
+      "dateLost": "Tarehe ya Kupotea",
+      "lostLocation": "Mahali Kilipopotea (Alama ya Ramani)"
+    },
+    "placeholders": {
+      "itemName": "mfano, Samsung Galaxy S22 Ultra, HP Pavilion Laptop, Kitambulisho cha Taifa",
+      "category": "Chagua aina",
+      "description": "Jumuisha sifa muhimu kwa ulinganishaji sahihi wa AI:\n• Chapa, modeli, au muundo\n• Alama za kipekee (mikwaruzo, stika, skrini iliyovunjika)\n• Rangi au mtindo wa kifuniko\n• Maelezo ya kitambulisho (Jina, Namba ya NIDA/Kitambulisho cha Mwanafunzi)\n• Vitu vilivyomo ndani (ikiwa ni begi au pochi)",
+      "dominantColor": "mfano, Nyeusi, Fedha, Bluu Iliyokolea",
+      "region": "Chagua mkoa",
+      "area": "mf., Magufuli Hostel, Block B234",
+      "lostLocation": "Tafuta jengo, barabara, au alama ya karibu..."
+    },
+    "upload": {
+      "hint": "Pakia picha za kitu kilichopotea au picha za mfano ili kuboresha usahihi wa ulinganishaji wa AI.",
+      "optional": "(hiari)",
+      "dropHere": "Achia picha hapa",
+      "clickOrDrag": "Bofya au buruta picha hapa",
+      "formats": "PNG, JPG, WEBP — hadi 5MB kila moja",
+      "imagesSelected": "Picha {{count}} imechaguliwa",
+      "imagesSelected_plural": "Picha {{count}} zimechaguliwa",
+      "removeImage": "Ondoa picha"
+    },
+    "saving": {
+      "title": "Inahifadhi Ripoti...",
+      "subtitle": "Inaingiza maelezo kwenye rejista yetu ya AI"
+    },
+    "success": {
+      "title": "Ripoti ya Kupotea Imewasilishwa Kikamilifu!",
+      "text1": "Injini yetu ya AI inatafuta kwa bidii. Mara taasisi itakaposajili kitu kinacholingana, tutakujulisha mara moja kupitia",
+      "emailWord": "barua pepe",
+      "text2": "yako.",
+      "automatedTitle": "Ulinganishaji wa AI wa Kiotomatiki",
+      "automatedText1": "Huhitaji kuangalia tena mara kwa mara. Tutakujulisha kupitia barua pepe yako. Na mara utakapojulishwa, nenda kwenye",
+      "myReportWord": "Ripoti Zangu",
+      "automatedText2": "ili kudai kitu chako.",
+      "goToDashboard": "Nenda Dashibodi",
+      "viewMyReports": "Ona Ripoti Zangu"
+    },
+    "submitReport": "Tuma Ripoti",
+    "submitting": "Inatuma...",
+    "errors": {
+      "itemName": "Jina la kitu linahitajika",
+      "category": "Tafadhali chagua aina",
+      "description": "Maelezo yanahitajika",
+      "region": "Mkoa unahitajika",
+      "area": "Eneo linahitajika",
+      "lostDate": "Tarehe ya kupotea inahitajika",
+      "pickLocation": "Tafadhali chagua mahali kwenye ramani.",
+      "submitFailed": "Kuna kitu kilienda vibaya wakati wa kuwasilisha ripoti."
+    }
+  },
+  "ctaSection": {
+    "heading": "Anza Safari Yako ya Kurejesha Leo",
+    "subtext": "Usiruhusu kitu kilichopotea kuvuruga maisha yako. Jiunge na maelfu ya Watanzania wanaotumaini PataChako kwa urejeshaji salama na wa haraka.",
+    "reportLostItem": "Ripoti Kitu Kilichopotea",
+    "searchFoundItems": "Tafuta Vitu Vilivyopatikana"
+  },
+  "reportModal": {
+    "title": "Ripoti Kitu Kilichopotea",
+    "stepOf": "Hatua {{current}} kati ya {{total}}",
+    "steps": {
+      "basic": "Taarifa za Msingi",
+      "location": "Maelezo ya Mahali",
+      "images": "Picha"
+    },
+    "fields": {
+      "itemName": "Jina la Kitu",
+      "category": "Aina",
+      "description": "Maelezo ya Kina",
+      "dominantColor": "Rangi Kuu",
+      "region": "Mkoa",
+      "area": "Eneo / Wilaya Maalum",
+      "lostDate": "Tarehe ya Kupotea",
+      "lostLocation": "Mahali Hasa Palipopotea"
+    },
+    "placeholders": {
+      "itemName": "mfano, Laptop, iPhone 13",
+      "category": "Chagua aina ya kitu",
+      "description": "Toa namba za serial za kipekee, mchoro wa mikwaruzo, au usanidi...",
+      "dominantColor": "mf., Nyeusi Isiyong'aa",
+      "region": "Chagua mkoa",
+      "area": "mfano, Ubungo maji, Mwendo kasi",
+      "lostLocation": "mfano., COICT Chumba B-12"
+    },
+    "ready": {
+      "title": "Tayari kwa Uthibitisho wa AI",
+      "subtitle": "Data yako ya kiufundi na faharasa za maelezo zitafananishwa moja kwa moja dhidi ya hifadhidata hai."
+    },
+    "submitAndMatch": "Tuma na Linganisha",
+    "retrySubmit": "Jaribu Kutuma Tena",
+    "ai": {
+      "title": "AI inalinganisha kitu chako…",
+      "errNetwork": "Mawasiliano ya mtandao yameshindwa kutekelezwa"
+    },
+    "aiStages": {
+      "ingest": "Inapokea data ya ripoti",
+      "nlp": "Inaendesha NLP kwenye maelezo",
+      "embed": "Inatengeneza embeddings za kisemantiki",
+      "image": "Inakagua faharasa ya ufanano wa picha",
+      "geo": "Inalinganisha eneo la kijiografia",
+      "color": "Inalinganisha sifa za rangi kuu",
+      "category": "Inapima ulinganifu wa aina",
+      "rank": "Inapanga mechi zinazowezekana",
+      "score": "Inakokotoa alama ya mwisho ya uhakika",
+      "done": "Inakamilisha na kuhifadhi matokeo"
+    },
+    "badges": {
+      "excellent": "Mechi Bora Kabisa",
+      "high": "Mechi ya Juu",
+      "possible": "Mechi Inayowezekana",
+      "low": "Mechi ya Chini"
+    },
+    "result": {
+      "submittedBadge": "Ripoti Imewasilishwa Kikamilifu",
+      "noMatchTitle": "Hakuna Mechi Zilizopatikana Mara Moja",
+      "noMatchText1": "Ripoti yako imewasilishwa kikamilifu chini ya Kitambulisho",
+      "noMatchText2": ". Mfumo utaendelea kuchunguza mfululizo.",
+      "dashboard": "Dashibodi",
+      "myReports": "Ripoti Zangu",
+      "registeredItem": "Kitu Kikuu Kilichosajiliwa",
+      "lostItemFallback": "Kazi ya Kitu Kilichopotea",
+      "highestMatch": "Asilimia ya Mechi ya Juu Kabisa",
+      "totalMatches": "Jumla ya Mechi Zilizothibitishwa Mtandaoni: {{count}}",
+      "matchRank": "Nafasi ya Mechi #{{number}}",
+      "goToMyReports": "Nenda kwa Ripoti Zangu",
+      "scoreLabels": {
+        "name": "Ulinganifu wa Jina",
+        "description": "Uzito wa Maelezo",
+        "location": "Ukaribu wa Kijiografia",
+        "date": "Tofauti ya Tarehe",
+        "color": "Kipimo cha Rangi"
+      }
+    },
+    "errors": {
+      "itemName": "Jina la kitu linahitajika",
+      "category": "Tafadhali chagua aina",
+      "description": "Maelezo yanahitajika",
+      "region": "Mkoa unahitajika",
+      "area": "Eneo linahitajika",
+      "lostDate": "Tarehe ya kupotea inahitajika",
+      "lostLocation": "Mahali kilipopotea panahitajika",
+      "statusCodeMismatch": "Hitilafu ya mpangilio wa msimbo wa biashara. Tafadhali thibitisha ramani za hali.",
+      "networkFailed": "Mawasiliano ya mtandao yameshindwa kutekelezwa",
+      "emptyResponse": "Mtandao ulirudisha jibu tupu kabisa.",
+      "missingEnvelope": "Muunganisho ulifanikiwa, lakini sifa za bahasha ya data zinakosekana."
+    }
+  },
+  "claimItem": {
+    "loading": "Inapakia maelezo ya mechi…",
+    "unknownOrganisation": "Taasisi Isiyojulikana",
+    "success": {
+      "title": "Dai Limewasilishwa!",
+      "pendingReview": "Inasubiri Ukaguzi",
+      "detailsHeading": "Maelezo Muhimu",
+      "lostReportIdLabel": "Kitambulisho cha Ripoti Yako:",
+      "organisationLabel": "Taasisi:",
+      "shareHint1": "Unaweza kushiriki",
+      "shareHintBold": "Kitambulisho cha Ripoti",
+      "shareHint2": "na rafiki ili achukue kitu kwa niaba yako.",
+      "pendingText": "Dai lako limetumwa kwa taasisi. Wataikagua na kukujibu.",
+      "processedText": "Taasisi imeshughulikia dai lako.",
+      "myReports": "Ripoti Zangu",
+      "backToSearch": "Rudi kwa Utafutaji"
+    },
+    "error": {
+      "title": "Imekwisha daiwa",
+      "noMatchYet": "Ripoti hii haijalinganishwa na kitu chochote kilichopatikana bado.",
+      "backToMyReports": "Rudi kwa Ripoti Zangu",
+      "goToSearch": "Nenda kwa Utafutaji"
+    },
+    "ownClaimed": {
+      "title": "Imekwisha Daiwa",
+      "text": "Umekwisha dai kitu hiki. Unaweza kuona hali ya dai lako katika Ripoti Zangu.",
+      "myReports": "Ripoti Zangu",
+      "backToSearch": "Rudi kwa Utafutaji"
+    },
+    "unavailable": {
+      "title": "Kitu Hakipatikani Tena",
+      "text": "Kitu hiki kilicholingana hakipatikani tena kudaiwa. Huenda kimekwisha chukuliwa au kufungwa na taasisi.",
+      "myReports": "Ripoti Zangu",
+      "backToSearch": "Rudi kwa Utafutaji"
+    },
+    "matchCard": {
+      "title": "Tumepata mechi!",
+      "subtitle": "Kitu chako kilichopotea huenda kimepatikana na taasisi.",
+      "organisationFallback": "Taasisi",
+      "itemFallback": "Kitu Kilicholingana",
+      "aiConfidence": "Uhakika wa AI",
+      "matchWord": "mechi",
+      "claimButton": "Dai Kitu Hiki",
+      "submittingClaim": "Inawasilisha Dai…",
+      "disclaimer": "Kwa kudai, unathibitisha kuwa kitu hiki ni chako. Taasisi itathibitisha ombi lako."
+    },
+    "errors": {
+      "reportNotFound": "Ripoti haipatikani.",
+      "loadFailed": "Imeshindwa kupakia ripoti",
+      "noMatchedItem": "Hakuna kitu kilicholingana cha kudai.",
+      "claimFailed": "Dai halikuweza kukamilika. Tafadhali jaribu tena.",
+      "claimFailedShort": "Dai limeshindwa"
+    }
+  },
+  "editReport": {
+    "title": "Hariri Ripoti",
+    "subtitlePart1": "Unaweza kuhariri ripoti hii wakati hali yake ni",
+    "subtitlePart2": ". Jaza tu sehemu unazotaka kubadilisha.",
+    "backToMyReports": "Rudi kwa Ripoti Zangu",
+    "pinnedLocation": "Mahali Palipowekwa Alama",
+    "accountLocked": "Akaunti Imefungwa",
+    "saveChanges": "Hifadhi Mabadiliko",
+    "fields": {
+      "itemName": "Jina la Kitu",
+      "category": "Aina",
+      "description": "Maelezo",
+      "region": "Mkoa",
+      "area": "Eneo",
+      "dateLost": "Tarehe ya Kupotea",
+      "dominantColor": "Rangi Kuu",
+      "lostLocation": "Mahali Kilipopotea (Alama ya Ramani)",
+      "images": "Picha"
+    },
+    "placeholders": {
+      "itemName": "Weka jina la kitu kilichopotea",
+      "category": "Chagua aina",
+      "description": "Eleza kitu chako kilichopotea",
+      "region": "Chagua mkoa",
+      "area": "mf., Kijitonyama",
+      "dominantColor": "mf., Nyeusi, Fedha",
+      "lostLocation": "Tafuta jengo, barabara, au alama ya karibu..."
+    },
+    "imagesOptional": "(hiari)",
+    "imageUpload": {
+      "clickToAdd": "Bofya kuongeza picha",
+      "formats": "PNG, JPG, WEBP",
+      "removeImage": "Ondoa picha"
+    },
+    "success": {
+      "title": "Ripoti Imesasishwa!",
+      "subtitle": "Ripoti yako imesasishwa kikamilifu. Inaelekeza…"
+    },
+    "errors": {
+      "itemNameLength": "Jina la kitu lazima liwe kati ya herufi 2 na 105",
+      "descriptionTooLong": "Maelezo ni marefu mno (kiwango cha juu ni herufi 2000)",
+      "areaTooLong": "Eneo ni kubwa mno (kiwango cha juu ni herufi 150)",
+      "dateInFuture": "Tarehe ya kupotea haiwezi kuwa ya baadaye",
+      "fixHighlighted": "Tafadhali rekebisha sehemu zilizoangaziwa."
+    }
+  },
+  "partnerSendOtp": {
+    "title": "Shirikiana Nasi",
+    "stepLabel": "Hatua 1 kati ya 2 — Thibitisha barua pepe yako",
+    "goHome": "Nenda nyumbani",
+    "instructions": "Weka anwani ya barua pepe unayotaka tutumie kwa ombi lako la ushirikiano. Tutatuma msimbo wa mara moja ili kuithibitisha.",
+    "emailLabel": "Barua Pepe",
+    "emailPlaceholder": "wewe@mfano.com",
+    "sendOtp": "Tuma OTP",
+    "sending": "Inatuma OTP…",
+    "accountLocked": "Akaunti Imefungwa",
+    "otpInfo": "OTP inaisha baada ya dakika {{expiry}}. Upeo wa majaribio {{attempts}}. Muda wa kusubiri kutuma tena sekunde {{cooldown}}, hadi {{daily}} kwa siku.",
+    "otpInfoFallback": "OTP yako ni halali kwa muda mfupi. Vikomo vya kasi vinatumika kwa maombi ya kutuma tena.",
+    "errors": {
+      "emailRequired": "Barua pepe inahitajika.",
+      "emailInvalid": "Weka barua pepe halali.",
+      "fillAll": "Tafadhali jaza sehemu zote kwa usahihi."
+    }
+  },
+  "register": {
+    "goHome": "Nenda nyumbani",
+    "activeBadge": "Inaendelea",
+    "steps": {
+      "personal": "Binafsi",
+      "security": "Usalama",
+      "location": "Mahali"
+    },
+    "leftPanel": {
+      "headingLine1": "Jiunge na Mtandao",
+      "headingLine2": "wa Tanzania",
+      "headingLine3": "wa Kupata Vitu",
+      "subtext": "Fungua akaunti yako ya bure na uunganishe tena na kile kilicho muhimu zaidi — kwa msaada wa washirika waliohakikiwa kitaifa."
+    },
+    "stats": {
+      "itemsFound": "Vitu Vilivyopatikana",
+      "success": "Mafanikio",
+      "partners": "Washirika"
+    },
+    "titles": {
+      "personal": "Taarifa Binafsi",
+      "security": "Linda Akaunti Yako",
+      "location": "Mahali Ulipo"
+    },
+    "subtitles": {
+      "personal": "Tuambie taarifa zako za msingi ili kuanza.",
+      "security": "Weka nenosiri imara ili kulinda akaunti yako.",
+      "location": "Hiari — inasaidia kukulinganisha na vitu vya karibu vilivyopotea."
+    },
+    "fields": {
+      "fullName": "Jina Kamili",
+      "email": "Barua Pepe",
+      "mobile": "Namba ya Simu",
+      "password": "Nenosiri",
+      "confirmPassword": "Thibitisha Nenosiri",
+      "yourLocation": "Mahali Ulipo"
+    },
+    "placeholders": {
+      "fullName": "mf. Amina Hassan",
+      "email": "wewe@mfano.com",
+      "mobile": "7XX XXX XXX",
+      "password": "Angalau herufi 8, herufi 1 kubwa, 1 ndogo, 1 namba",
+      "confirmPassword": "Weka nenosiri tena",
+      "location": "Tafuta eneo lako…"
+    },
+    "strength": {
+      "enterPassword": "Weka nenosiri",
+      "tooWeak": "Dhaifu sana",
+      "weakLength": "Dhaifu – tumia angalau herufi 8",
+      "strong": "Nenosiri imara",
+      "good": "Nenosiri zuri",
+      "couldBeStronger": "Inaweza kuwa imara zaidi – ongeza herufi kubwa/namba"
+    },
+    "matchIndicator": {
+      "match": "✓ Manenosiri yanalingana",
+      "noMatch": "✕ Manenosiri hayalingani"
+    },
+    "buttons": {
+      "continue": "Endelea",
+      "back": "Nyuma",
+      "creating": "Inaunda…",
+      "createAccount": "Fungua Akaunti ✓"
+    },
+    "locationHint": "Kuongeza mahali ulipo husaidia kukulinganisha na vitu vya karibu. Hii ni hiari kabisa.",
+    "smsNotice": {
+      "label": "SMS OTP:",
+      "message": " Tutatuma msimbo wa uthibitisho kwa SMS kwenye namba yako ya simu (+255 {{mobile}})."
+    },
+    "loginPrompt": "Tayari una akaunti?",
+    "signIn": "Ingia",
+    "footer": "Kwa kujiandikisha unakubali Masharti na Sera zetu za Faragha.",
+    "errors": {
+      "nameRequired": "Jina kamili linahitajika.",
+      "emailRequired": "Barua pepe inahitajika.",
+      "emailInvalid": "Tafadhali weka barua pepe halali.",
+      "mobileRequired": "Namba ya simu inahitajika.",
+      "mobileInvalid": "Weka namba halali ya simu ya tarakimu 9 (inaanza na 6 au 7, mf. 712345678).",
+      "passwordRequired": "Nenosiri linahitajika.",
+      "passwordTooShort": "Nenosiri lazima liwe na angalau herufi 8.",
+      "passwordWeak": "Nenosiri lazima lijumuishe herufi moja kubwa, moja ndogo, na namba moja.",
+      "confirmPasswordRequired": "Tafadhali thibitisha nenosiri lako.",
+      "passwordsDoNotMatch": "Manenosiri hayalingani.",
+      "genericFailure": "Usajili umeshindwa. Tafadhali jaribu tena."
+    }
+  },
+  "login": {
+    "goHome": "Nenda nyumbani",
+    "title": "Karibu tena",
+    "subtitle": "Ingia kwenye akaunti yako ya PataChako",
+    "leftPanel": {
+      "headingLine1": "Jukwaa la Tanzania",
+      "headingLine2": "la Kupata Vitu",
+      "headingLine3": "Vilivyopotea",
+      "subtext": "Tunaunganisha watu na kile kilicho muhimu zaidi — kilichothibitishwa, salama, na kuaminiwa kote nchini."
+    },
+    "features": {
+      "verifiedPartners": {
+        "title": "Washirika Waliohakikiwa",
+        "sub": "Polisi, viwanja vya ndege na vyuo vikuu"
+      },
+      "smartMatching": {
+        "title": "Ulinganishaji Mahiri",
+        "sub": "Utambuzi wa vitu kwa msaada wa AI"
+      },
+      "nationwide": {
+        "title": "Ufikiaji wa Kitaifa",
+        "sub": "Mikoa yote ya Tanzania"
+      }
+    },
+    "stats": {
+      "itemsFound": "Vitu Vilivyopatikana",
+      "successRate": "Kiwango cha Mafanikio",
+      "partners": "Washirika"
+    },
+    "fields": {
+      "username": "Simu",
+      "password": "Nenosiri"
+    },
+    "placeholders": {
+      "username": "255XXXXXXXXX",
+      "password": "••••••••"
+    },
+    "forgotPassword": "Umesahau nenosiri?",
+    "signIn": "Ingia",
+    "signingIn": "Inaingia…",
+    "newHere": "Mgeni PataChako?",
+    "createAccount": "Fungua Akaunti",
+    "footer": "Kwa kuingia unakubali Masharti na Sera zetu za Faragha.",
+    "lockedFallback": "Majaribio mengi yameshindwa. Akaunti yako imefungwa kwa muda.",
+    "tryAgainIn": "Jaribu tena baada ya",
+    "tooManyAttempts": "Majaribio mengi yameshindwa. Tafadhali jaribu tena baada ya {{time}}.",
+    "validation": {
+      "enterUsername": "Weka jina lako la mtumiaji.",
+      "emailInvalid": "Weka barua pepe halali (mf. jina@mfano.com).",
+      "mobileInvalid": "Weka namba halali ya simu kwa muundo 255XXXXXXXXX au 0XXXXXXXXX.",
+      "usernameInvalid": "Jina la mtumiaji lazima liwe herufi 3-30 (herufi, namba, \".\", \"_\", \"-\" tu, hakuna nafasi)."
+    },
+    "errors": {
+      "loginFailed": "Kuingia kumeshindwa.",
+      "invalidCredentials": "Jina la mtumiaji au nenosiri si sahihi.",
+      "sessionExpired": "Kipindi chako kimeisha. Tafadhali ingia tena.",
+      "networkFailed": "Imeshindwa kuunganisha. Angalia muunganisho wako wa intaneti."
+    }
+  },
+  "resetPassword": {
+    "goHome": "Nenda nyumbani",
+    "title": "Weka upya nenosiri lako",
+    "subtitlePart1": "Weka OTP iliyotumwa kwa",
+    "yourEmailFallback": "barua pepe yako",
+    "fields": {
+      "otp": "Msimbo wa OTP",
+      "newPassword": "Nenosiri Jipya"
+    },
+    "placeholders": {
+      "otp": "000000",
+      "password": "••••••••"
+    },
+    "resetButton": "Weka Upya Nenosiri",
+    "resetting": "Inaweka upya…",
+    "rememberPassword": "Unakumbuka nenosiri lako?",
+    "signIn": "Ingia",
+    "footer": "Kwa usalama, tumia nenosiri imara lenye angalau herufi 8.",
+    "errors": {
+      "invalidOtp": "Msimbo wa OTP si sahihi. Tafadhali jaribu tena.",
+      "genericFailure": "Imeshindwa kuweka upya nenosiri. Tafadhali jaribu tena."
+    }
+  },
+  "forgotPassword": {
+    "goHome": "Nenda nyumbani",
+    "title": "Umesahau nenosiri?",
+    "subtitle": "Weka barua pepe yako na tutakutumia OTP ili kuweka upya nenosiri.",
+    "emailLabel": "Barua pepe",
+    "emailPlaceholder": "wewe@mfano.com",
+    "sendButton": "Tuma OTP",
+    "sending": "Inatuma…",
+    "rememberPassword": "Unakumbuka nenosiri lako?",
+    "signIn": "Ingia",
+    "footer": "Ikiwa hukupokea barua pepe, angalia folda yako ya barua taka au ujaribu tena.",
+    "success": "OTP imetumwa kwenye barua pepe yako. Inaelekeza...",
+    "errors": {
+      "emailRequired": "Tafadhali weka barua pepe yako.",
+      "emailInvalid": "Tafadhali weka barua pepe halali.",
+      "profileNotFound": "Wasifu haupatikani.",
+      "genericFailure": "Imeshindwa kutuma OTP. Tafadhali jaribu tena."
+    }
+  },
+  "verifyOtp": {
+    "goHome": "Nenda nyumbani",
+    "title": "Thibitisha namba yako ya simu",
+    "subtitlePart1": "Tumetuma msimbo wa tarakimu 6 kwa SMS kwa",
+    "yourMobileFallback": "namba yako ya simu",
+    "otpLabel": "Msimbo wa OTP wa SMS",
+    "otpPlaceholder": "000000",
+    "verifyButton": "Thibitisha Akaunti",
+    "verifying": "Inathibitisha…",
+    "resendButton": "Tuma OTP ya SMS Tena",
+    "resendSuccess": "OTP mpya imetumwa kwa SMS kwa {{target}}.",
+    "alreadyVerified": "Imekwisha thibitishwa?",
+    "signIn": "Ingia",
+    "footer": "Ikiwa hukupokea ujumbe wa SMS, angalia mawimbi yako ya mtandao au omba OTP mpya.",
+    "errors": {
+      "invalidOtp": "OTP si sahihi. Tafadhali jaribu tena.",
+      "resendFailed": "Imeshindwa kutuma OTP tena."
+    }
+  },
+  "reports": {
+    "title": "Ripoti Zangu",
+    "subtitle": "Ripoti zako zote za vitu vilivyopotea mahali pamoja",
+    "noReports": "Hakuna ripoti bado",
+    "noReportsHint": "Hujatoa ripoti yoyote ya kitu kilichopotea. Anza kwa kutafuta vitu vilivyopatikana.",
+    "goToSearch": "Nenda kwa utafutaji",
+    "reportCount": "ripoti {{count}}",
+    "reportCount_plural": "ripoti {{count}}",
+    "withMatches": "{{count}} zenye mechi za AI",
+    "loadMore": "Pakia zaidi",
+    "lostDate": "Ilipotea",
+    "matchNumber": "Mechi #{{number}}",
+    "claimThisItem": "Dai Kitu Hiki",
+    "deleteClaim": "Futa dai",
+    "loadFailed": "Imeshindwa kupakia ripoti. Tafadhali jaribu tena.",
+    "deleteFailed": "Imeshindwa kufuta ripoti.",
+    "scoreLabels": {
+      "finalScore": "Alama za mwisho",
+      "descriptionScore": "Maelezo",
+      "nameScore": "Ulinganisho wa jina",
+      "locationScore": "Mahali",
+      "dateScore": "Tarehe",
+      "colorScore": "Rangi"
+    },
+    "status": {
+      "notClaimed": "Haijadaiwa",
+      "matched": "Imelinganishwa",
+      "alreadyClaimed": "Imekwisha daiwa",
+      "closed": "Imefungwa",
+      "found": "Imepatikana"
+    },
+    "actions": {
+      "claimItem": "Dai Kitu",
+      "edit": "Hariri",
+      "deleteReport": "Futa ripoti hii",
+      "editDisabled": "Ripoti inaweza kuhaririwa tu wakati hali ni REPORTED",
+      "deleteDisabled": "Ripoti inaweza kufutwa tu wakati hali ni REPORTED"
+    },
+    "deleteModal": {
+      "title": "Futa Ripoti",
+      "warning": "Kitendo hiki hakiwezi kurudishwa.",
+      "message": "Futa kabisa ripoti yako ya {{itemName}}? Itaondolewa kwenye ripoti zako na kuacha kulinganishwa na AI.",
+      "success": "Ripoti imefutwa kikamilifu."
+    },
+    "aiMatches": "Mechi {{count}} ya AI imepatikana",
+    "aiMatches_plural": "Mechi {{count}} za AI zimepatikana",
+    "bestScore": "Alama bora: {{score}}"
   }
-},
-"resetPassword": {
-  "goHome": "Nenda nyumbani",
-  "title": "Weka upya nenosiri lako",
-  "subtitlePart1": "Weka OTP iliyotumwa kwa",
-  "yourEmailFallback": "barua pepe yako",
-  "fields": {
-    "otp": "Msimbo wa OTP",
-    "newPassword": "Nenosiri Jipya"
-  },
-  "placeholders": {
-    "otp": "000000",
-    "password": "••••••••"
-  },
-  "resetButton": "Weka Upya Nenosiri",
-  "resetting": "Inaweka upya…",
-  "rememberPassword": "Unakumbuka nenosiri lako?",
-  "signIn": "Ingia",
-  "footer": "Kwa usalama, tumia nenosiri imara lenye angalau herufi 8.",
-  "errors": {
-    "invalidOtp": "Msimbo wa OTP si sahihi. Tafadhali jaribu tena.",
-    "genericFailure": "Imeshindwa kuweka upya nenosiri. Tafadhali jaribu tena."
-  }
-},
-"forgotPassword": {
-  "goHome": "Nenda nyumbani",
-  "title": "Umesahau nenosiri?",
-  "subtitle": "Weka barua pepe yako na tutakutumia OTP ili kuweka upya nenosiri.",
-  "emailLabel": "Barua pepe",
-  "emailPlaceholder": "wewe@mfano.com",
-  "sendButton": "Tuma OTP",
-  "sending": "Inatuma…",
-  "rememberPassword": "Unakumbuka nenosiri lako?",
-  "signIn": "Ingia",
-  "footer": "Ikiwa hukupokea barua pepe, angalia folda yako ya barua taka au ujaribu tena.",
-  "success": "OTP imetumwa kwenye barua pepe yako. Inaelekeza...",
-  "errors": {
-    "emailRequired": "Tafadhali weka barua pepe yako.",
-    "emailInvalid": "Tafadhali weka barua pepe halali.",
-    "profileNotFound": "Wasifu haupatikani.",
-    "genericFailure": "Imeshindwa kutuma OTP. Tafadhali jaribu tena."
-  }
-},
-"verifyOtp": {
-  "goHome": "Nenda nyumbani",
-  "title": "Thibitisha namba yako ya simu",
-  "subtitlePart1": "Tumetuma msimbo wa tarakimu 6 kwa SMS kwa",
-  "yourMobileFallback": "namba yako ya simu",
-  "otpLabel": "Msimbo wa OTP wa SMS",
-  "otpPlaceholder": "000000",
-  "verifyButton": "Thibitisha Akaunti",
-  "verifying": "Inathibitisha…",
-  "resendButton": "Tuma OTP ya SMS Tena",
-  "resendSuccess": "OTP mpya imetumwa kwa SMS kwa {{target}}.",
-  "alreadyVerified": "Imekwisha thibitishwa?",
-  "signIn": "Ingia",
-  "footer": "Ikiwa hukupokea ujumbe wa SMS, angalia mawimbi yako ya mtandao au omba OTP mpya.",
-  "errors": {
-    "invalidOtp": "OTP si sahihi. Tafadhali jaribu tena.",
-    "resendFailed": "Imeshindwa kutuma OTP tena."
-  }
-},
-"reports": {
-  "title": "Ripoti Zangu",
-  "subtitle": "Ripoti zako zote za vitu vilivyopotea mahali pamoja",
-  "noReports": "Hakuna ripoti bado",
-  "noReportsHint": "Hujatoa ripoti yoyote ya kitu kilichopotea. Anza kwa kutafuta vitu vilivyopatikana.",
-  "goToSearch": "Nenda kwa utafutaji",
-  "reportCount": "ripoti {{count}}",
-  "reportCount_plural": "ripoti {{count}}",
-  "withMatches": "{{count}} zenye mechi za AI",
-  "loadMore": "Pakia zaidi",
-  "lostDate": "Ilipotea",
-  "matchNumber": "Mechi #{{number}}",
-  "claimThisItem": "Dai Kitu Hiki",
-  "deleteClaim": "Futa dai",
-  "loadFailed": "Imeshindwa kupakia ripoti. Tafadhali jaribu tena.",
-  "deleteFailed": "Imeshindwa kufuta ripoti.",
-  "scoreLabels": {
-    "finalScore": "Alama za mwisho",
-    "descriptionScore": "Maelezo",
-    "nameScore": "Ulinganisho wa jina",
-    "locationScore": "Mahali",
-    "dateScore": "Tarehe",
-    "colorScore": "Rangi"
-  },
-  "status": {
-    "notClaimed": "Haijadaiwa",
-    "matched": "Imelinganishwa",
-    "alreadyClaimed": "Imekwisha daiwa",
-    "closed": "Imefungwa",
-    "found": "Imepatikana"
-  },
-  "actions": {
-    "claimItem": "Dai Kitu",
-    "edit": "Hariri",
-    "deleteReport": "Futa ripoti hii",
-    "editDisabled": "Ripoti inaweza kuhaririwa tu wakati hali ni REPORTED",
-    "deleteDisabled": "Ripoti inaweza kufutwa tu wakati hali ni REPORTED"
-  },
-  "deleteModal": {
-    "title": "Futa Ripoti",
-    "warning": "Kitendo hiki hakiwezi kurudishwa.",
-    "message": "Futa kabisa ripoti yako ya {{itemName}}? Itaondolewa kwenye ripoti zako na kuacha kulinganishwa na AI.",
-    "success": "Ripoti imefutwa kikamilifu."
-  },
-  "aiMatches": "Mechi {{count}} ya AI imepatikana",
-  "aiMatches_plural": "Mechi {{count}} za AI zimepatikana",
-  "bestScore": "Alama bora: {{score}}"
 }
-  }

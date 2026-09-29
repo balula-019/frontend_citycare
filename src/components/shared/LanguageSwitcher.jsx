@@ -22,7 +22,7 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
             aria-label={l.full}
             className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
               current === l.code
-                ? 'bg-[#1a56db] text-white shadow-sm'
+                ? 'bg-[#0f766e] text-white shadow-sm'
                 : 'text-gray-500 hover:text-gray-800'
             }`}
           >
@@ -46,7 +46,7 @@ export default function LanguageSwitcher({ variant = 'pills' }) {
             key={l.code}
             onClick={() => change(l.code)}
             className={`block w-full text-left px-3 py-2 text-sm hover:bg-gray-50 ${
-              current === l.code ? 'text-[#1a56db] font-bold' : 'text-gray-600'
+              current === l.code ? 'text-[#0f766e] font-bold' : 'text-gray-600'
             }`}
           >
             {l.full}
