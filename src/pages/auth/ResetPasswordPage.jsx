@@ -5,7 +5,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { resetPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
-import logoSrc from '/src/assets/pata-logo.png';
+import logoSrc from '/src/assets/citycare-logo.png';
 
 export default function ResetPasswordPage() {
   const { t } = useTranslation();

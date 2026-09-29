@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { forgotPassword } from '../../api/auth';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
-import logoSrc from '/src/assets/pata-logo.png';
+import logoSrc from '/src/assets/citycare-logo.png';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

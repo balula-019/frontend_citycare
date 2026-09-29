@@ -31,8 +31,8 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
-      icon: '/pata-logo-v2.png',
-      badge: '/pata-logo-v2.png',
+      icon: '/citycare-logo.png',
+      badge: '/citycare-logo.png',
       // Reports collapse onto one notification rather than stacking up.
       tag: payload.reportId ? `report-${payload.reportId}` : 'city-care',
       renotify: true,

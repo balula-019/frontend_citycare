@@ -4,7 +4,7 @@ import { Loader2, CheckCircle2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import Button from '../components/shared/Button';
 import { apiClient } from '../api/client';
 import { useAuth } from '../context/AuthContext';
-import logoSrc from '/src/assets/pata-logo.png'; // same logo as login page
+import logoSrc from '/src/assets/citycare-logo.png';
 
 export default function ChangePasswordPage() {
   const navigate = useNavigate();

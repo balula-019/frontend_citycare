@@ -727,15 +727,10 @@
       "location": "Location"
     },
     "leftPanel": {
-      "headingLine1": "Join Tanzania's",
-      "headingLine2": "Trusted Lost",
-      "headingLine3": "& Found Network",
-      "subtext": "Create your free account and reconnect with what matters most — backed by verified partners nationwide."
-    },
-    "stats": {
-      "itemsFound": "Items Found",
-      "success": "Success",
-      "partners": "Partners"
+      "headingLine1": "Join City Care",
+      "headingLine2": "and help fix",
+      "headingLine3": "your city.",
+      "subtext": "Create a free account to report the problems you see and follow what happens to them."
     },
     "titles": {
       "personal": "Personal Details",
@@ -808,29 +803,10 @@
     "title": "Welcome back",
     "subtitle": "Sign in to your PataChako account",
     "leftPanel": {
-      "headingLine1": "Tanzania's",
-      "headingLine2": "Lost & Found",
-      "headingLine3": "Platform",
-      "subtext": "Reuniting people with what matters most — verified, secure, and trusted across the nation."
-    },
-    "features": {
-      "verifiedPartners": {
-        "title": "Verified Partners",
-        "sub": "Police, airports & universities"
-      },
-      "smartMatching": {
-        "title": "Smart Matching",
-        "sub": "AI-powered item recognition"
-      },
-      "nationwide": {
-        "title": "Nationwide Coverage",
-        "sub": "All regions of Tanzania"
-      }
-    },
-    "stats": {
-      "itemsFound": "Items Found",
-      "successRate": "Success Rate",
-      "partners": "Partners"
+      "headingLine1": "Safer cities,",
+      "headingLine2": "stronger",
+      "headingLine3": "communities.",
+      "subtext": "Photograph a problem in your city and City Care sends the verified report to the authority responsible for fixing it."
     },
     "fields": {
       "username": " Phone",

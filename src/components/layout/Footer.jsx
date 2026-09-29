@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { FaInstagram, FaFacebook, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
 import { MapPin } from 'lucide-react';
-import logoSrc from '/src/assets/pata-logo.png';
+import logoSrc from '/src/assets/citycare-logo.png';
 
 const Footer = () => {
   const { user } = useAuth();

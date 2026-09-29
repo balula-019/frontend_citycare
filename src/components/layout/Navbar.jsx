@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Button from '../shared/Button';
 import LanguageSwitcher from '../shared/LanguageSwitcher';
 import { useAuth } from '../../context/AuthContext';
-import logoSrc from '/src/assets/pata-logo.png';
+import logoSrc from '/src/assets/citycare-logo.png';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

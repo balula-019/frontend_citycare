@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, Shield, MapPin, Search, Lock } from 'lucide-react';
+import { Eye, EyeOff, Lock } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/shared/Button';
 import Input from '../../components/shared/Input';
-import logoSrc from '/src/assets/pata-logo.png';
+import logoSrc from '/src/assets/citycare-logo.png';
 
 // ---- Rate limiting config ----
 const MAX_ATTEMPTS = 5;
@@ -244,18 +244,6 @@ export default function LoginPage() {
     }
   };
 
-  const featureItems = [
-    { icon: Shield, labelKey: 'login.features.verifiedPartners.title', subKey: 'login.features.verifiedPartners.sub' },
-    { icon: Search, labelKey: 'login.features.smartMatching.title',   subKey: 'login.features.smartMatching.sub' },
-    { icon: MapPin, labelKey: 'login.features.nationwide.title',      subKey: 'login.features.nationwide.sub' },
-  ];
-
-  const statItems = [
-    ['10K+', t('login.stats.itemsFound')],
-    ['98%',  t('login.stats.successRate')],
-    ['200+', t('login.stats.partners')],
-  ];
-
   return (
     <div className="h-screen flex bg-white overflow-hidden">
 
@@ -268,53 +256,19 @@ export default function LoginPage() {
         <div className="absolute top-1/2 -right-32 w-[380px] h-[380px] rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
         <div className="absolute -bottom-28 -left-20 w-[320px] h-[320px] rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
 
-        <div className="relative z-10 px-10 flex-1 flex flex-col justify-between">
-          <div>
-            <h2
-              className="text-4xl font-extrabold text-white leading-tight tracking-tight mb-4"
-              style={{ fontFamily: "'Sora', sans-serif" }}
-            >
-              {t('login.leftPanel.headingLine1')}<br />
-              {t('login.leftPanel.headingLine2')}<br />
-              {t('login.leftPanel.headingLine3')}
-            </h2>
-            <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              {t('login.leftPanel.subtext')}
-            </p>
-
-            <div className="flex flex-col gap-2.5">
-              {featureItems.map(({ icon: Icon, labelKey, subKey }) => (
-                <div
-                  key={labelKey}
-                  className="flex items-center gap-4 rounded-2xl px-5 py-3.5"
-                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
-                >
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: 'rgba(255,255,255,0.15)' }}
-                  >
-                    <Icon size={16} color="white" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">{t(labelKey)}</p>
-                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{t(subKey)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div
-            className="rounded-2xl px-6 py-4 flex justify-between mt-4"
-            style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+        <div className="relative z-10 px-10 flex-1 flex flex-col justify-center">
+          <img src={logoSrc} alt="City Care" className="w-24 h-24 object-contain mb-6" />
+          <h2
+            className="text-4xl font-extrabold text-white leading-tight tracking-tight mb-4"
+            style={{ fontFamily: "'Sora', sans-serif" }}
           >
-            {statItems.map(([val, lbl]) => (
-              <div key={lbl} className="text-center">
-                <p className="text-xl font-extrabold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>{val}</p>
-                <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{lbl}</p>
-              </div>
-            ))}
-          </div>
+            {t('login.leftPanel.headingLine1')}<br />
+            {t('login.leftPanel.headingLine2')}<br />
+            {t('login.leftPanel.headingLine3')}
+          </h2>
+          <p className="text-sm leading-relaxed max-w-[320px]" style={{ color: 'rgba(255,255,255,0.65)' }}>
+            {t('login.leftPanel.subtext')}
+          </p>
         </div>
       </div>
 
@@ -334,7 +288,7 @@ export default function LoginPage() {
               >
                 <img
                   src={logoSrc}
-                  alt="PataChako"
+                  alt="City Care"
                   className="w-36 h-36 object-contain drop-shadow-xl cursor-pointer"
                 />
               </button>

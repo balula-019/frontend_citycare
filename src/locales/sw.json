@@ -728,15 +728,10 @@
       "location": "Mahali"
     },
     "leftPanel": {
-      "headingLine1": "Jiunge na Mtandao",
-      "headingLine2": "wa Tanzania",
-      "headingLine3": "wa Kupata Vitu",
-      "subtext": "Fungua akaunti yako ya bure na uunganishe tena na kile kilicho muhimu zaidi — kwa msaada wa washirika waliohakikiwa kitaifa."
-    },
-    "stats": {
-      "itemsFound": "Vitu Vilivyopatikana",
-      "success": "Mafanikio",
-      "partners": "Washirika"
+      "headingLine1": "Jiunge na City Care",
+      "headingLine2": "na saidia kuboresha",
+      "headingLine3": "mji wako.",
+      "subtext": "Fungua akaunti bila malipo ili kutoa taarifa za matatizo unayoyaona na kufuatilia yanayotokea."
     },
     "titles": {
       "personal": "Taarifa Binafsi",
@@ -809,29 +804,10 @@
     "title": "Karibu tena",
     "subtitle": "Ingia kwenye akaunti yako ya PataChako",
     "leftPanel": {
-      "headingLine1": "Jukwaa la Tanzania",
-      "headingLine2": "la Kupata Vitu",
-      "headingLine3": "Vilivyopotea",
-      "subtext": "Tunaunganisha watu na kile kilicho muhimu zaidi — kilichothibitishwa, salama, na kuaminiwa kote nchini."
-    },
-    "features": {
-      "verifiedPartners": {
-        "title": "Washirika Waliohakikiwa",
-        "sub": "Polisi, viwanja vya ndege na vyuo vikuu"
-      },
-      "smartMatching": {
-        "title": "Ulinganishaji Mahiri",
-        "sub": "Utambuzi wa vitu kwa msaada wa AI"
-      },
-      "nationwide": {
-        "title": "Ufikiaji wa Kitaifa",
-        "sub": "Mikoa yote ya Tanzania"
-      }
-    },
-    "stats": {
-      "itemsFound": "Vitu Vilivyopatikana",
-      "successRate": "Kiwango cha Mafanikio",
-      "partners": "Washirika"
+      "headingLine1": "Miji salama,",
+      "headingLine2": "jamii",
+      "headingLine3": "imara.",
+      "subtext": "Piga picha ya tatizo katika mji wako na City Care itapeleka ripoti iliyothibitishwa kwa mamlaka inayohusika kulitatua."
     },
     "fields": {
       "username": "Simu",

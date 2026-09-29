@@ -6,7 +6,7 @@ import {
   UserCircle, Lock
 } from 'lucide-react';
 import { createAccount } from '../../api/auth';
-import logoSrc from '/src/assets/pata-logo.png';
+import logoSrc from '/src/assets/citycare-logo.png';
 import LocationPicker from '../../components/shared/LocationPicker/components/LocationPicker';
 
 const STEPS = [
@@ -238,11 +238,11 @@ export default function RegisterPage() {
 
         <div className="relative z-10 flex flex-col h-full px-10 py-12">
           <div>
-            <div className="flex items-center gap-2 mb-8">
-              <span className="text-xl font-black text-white tracking-wider" style={{ fontFamily: "'Sora', sans-serif" }}>
-                PATACHAKO
+            <div className="flex items-center gap-2.5 mb-8">
+              <img src={logoSrc} alt="" className="w-10 h-10 object-contain" />
+              <span className="text-xl font-black text-white tracking-wide" style={{ fontFamily: "'Sora', sans-serif" }}>
+                CITY CARE
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             </div>
 
             <h2 className="text-3xl font-extrabold text-white leading-snug tracking-tight mb-3" style={{ fontFamily: "'Sora', sans-serif" }}>
@@ -299,22 +299,6 @@ export default function RegisterPage() {
             ))}
           </div>
 
-          <div className="rounded-xl px-4 py-3.5 flex justify-between bg-white/5 border border-white/10 mt-auto">
-            {[
-              ['12K+', t('register.stats.itemsFound')],
-              ['98%', t('register.stats.success')],
-              ['200+', t('register.stats.partners')],
-            ].map(([val, lbl]) => (
-              <div key={lbl} className="text-center flex-1">
-                <p className="text-base font-extrabold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
-                  {val}
-                </p>
-                <p className="text-[10px] tracking-wide uppercase font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                  {lbl}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 

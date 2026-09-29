@@ -69,7 +69,7 @@ const showBrowserNotification = ({ title, body, tag, onClick }) => {
     const notification = new Notification(title, {
       body,
       tag,
-      icon: '/pata-logo-v2.png',
+      icon: '/citycare-logo.png',
     });
 
     notification.onclick = () => {
