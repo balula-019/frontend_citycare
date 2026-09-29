@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local environment. Vite exposes every VITE_ variable to the browser, so these
+# never belong in the repository.
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
