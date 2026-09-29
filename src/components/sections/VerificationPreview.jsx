@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Check, MapPin, Building2, ScanLine, Image as ImageIcon } from 'lucide-react';
+import { Check, MapPin, Building2, ScanLine } from 'lucide-react';
+import reportPhoto from '/src/assets/report-pothole.jpg';
 
 /*
   Mock of what the backend returns for a submitted report: the image
@@ -34,16 +35,19 @@ const VerificationPreview = () => {
         </div>
 
         {/* Photo with scanning pass */}
-        <div className="relative mb-4 h-44 overflow-hidden rounded-2xl bg-gradient-to-br from-primary-deep via-primary to-[#1f6f68]">
-          <div className="absolute inset-0 dot-grid opacity-40" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/70">
-            <ImageIcon size={26} />
-            <span className="text-xs font-medium">
-              {t('cc.preview.photoCaption', 'Pothole on Nyerere Road')}
-            </span>
-          </div>
+        <div className="relative mb-4 h-44 overflow-hidden rounded-2xl bg-primary-deep">
+          <img
+            src={reportPhoto}
+            alt={t('cc.preview.photoCaption', 'Pothole on Nyerere Road')}
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/55 to-transparent" />
+          <span className="absolute left-3 top-3 text-xs font-semibold text-white drop-shadow">
+            {t('cc.preview.photoCaption', 'Pothole on Nyerere Road')}
+          </span>
           <div className="animate-scan absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-transparent via-white/25 to-transparent" />
-          <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/35 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+          <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
             <MapPin size={11} />
             Ilala, Dar es Salaam
           </div>
