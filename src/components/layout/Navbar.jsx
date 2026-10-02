@@ -24,15 +24,15 @@ export default function Navbar() {
   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
   const userType = storedUser.user_type;
 
-  // ✅ PUBLIC (guest) — sees Partner With Us
+  // PUBLIC (guest)
   const publicLinks = [
-    { name: t('nav.home'),          href: '/' },
-    { name: t('nav.about'),         href: '#about',  isHash: true },
+    { name: t('nav.home'),           href: '/' },
+    { name: t('nav.about'),          href: '#about',  isHash: true },
     { name: t('nav.partnerWithUs'), href: '/partner-with-us' },
-    { name: t('nav.contact'),       href: '#footer', isHash: true },
+    { name: t('nav.contact'),        href: '#footer', isHash: true },
   ];
 
-  // ✅ OWNER — no Partner With Us
+  // OWNER
   const ownerLinks = [
     { name: t('nav.owner.dashboard'), href: '/owner/dashboard' },
     { name: t('nav.owner.search'),    href: '/owner/search'    },
@@ -41,7 +41,7 @@ export default function Navbar() {
     { name: t('nav.owner.profile'),   href: '/owner/profile'   },
   ];
 
-  // ✅ ORGANISATION — no Partner With Us
+  // ORGANISATION
   const orgLinks = [
     { name: t('nav.org.dashboard'), href: '/org/dashboard' },
     { name: t('nav.org.publish'),   href: '/org/publish'   },
@@ -50,7 +50,7 @@ export default function Navbar() {
     { name: t('nav.org.profile'),   href: '/org/profile'   },
   ];
 
-  // ✅ ADMIN — dedicated review section
+  // ADMIN
   const adminLinks = [
     { name: t('nav.admin.dashboard'),        href: '/admin/dashboard'        },
     { name: t('nav.admin.manageUsers'),      href: '/admin/manage-users'     },
@@ -206,18 +206,21 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2 text-dark"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile Right Bar: Language Switcher + Hamburger Button */}
+          <div className="flex lg:hidden items-center gap-3">
+            <LanguageSwitcher variant="pills" />
+            <button
+              className="p-2 text-dark focus:outline-none"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile Nav Dropdown */}
       <div
         className={`lg:hidden transition-all duration-300 ease-in-out overflow-hidden ${
           isMenuOpen ? 'max-h-[42rem] opacity-100' : 'max-h-0 opacity-0'
@@ -260,14 +263,6 @@ export default function Navbar() {
               </Link>
             );
           })}
-
-          {/* ✅ Language switcher — mobile */}
-          <div className="pt-3 flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">
-              {t('nav.language') || 'Language'}
-            </span>
-            <LanguageSwitcher variant="pills" />
-          </div>
 
           <div className="pt-4 border-t border-border space-y-3">
             {user ? (
